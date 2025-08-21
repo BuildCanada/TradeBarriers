@@ -14,7 +14,7 @@ const emojiFaviconSvg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10
   </svg>`;
 
 const faviconDataUrl = `data:image/svg+xml,${encodeURIComponent(emojiFaviconSvg)}`;
-const title = `<YOUR PROJECT NAME > - Build Canada 🏗️${canadianFlagEmoji}`;
+const title = `Interprovincial Trade Barriers Tracker - Build Canada 🏗️${canadianFlagEmoji}`;
 const description = "Track the progress of Canada's government initiatives";
 export const metadata: Metadata = {
   metadataBase: new URL(
