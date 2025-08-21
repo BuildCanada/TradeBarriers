@@ -5,18 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Commitment, CommitmentStatus } from '@/lib/types';
-import { getStatusColor, getDaysUntilDeadline } from '@/lib/utils';
+import { COMMITMENT_STATUSES, DEADLINE_TYPES, getDaysUntilDeadline, JURISDICTIONS } from '@/lib/utils';
 
-interface FiltersPanelProps {
+type FiltersPanelProps = {
     commitments: Commitment[];
     onFiltersChange: (filteredCommitments: Commitment[]) => void;
-}
+};
 
-interface Filters {
+type Filters = {
     statuses: CommitmentStatus[];
     deadlineTypes: string[];
     jurisdictions: string[];
-}
+};
 
 export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPanelProps) {
     const [filters, setFilters] = useState<Filters>({
@@ -24,17 +24,6 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
         deadlineTypes: [],
         jurisdictions: []
     });
-
-    // Get unique values for filter options
-    const allStatuses: CommitmentStatus[] = ['Awaiting Sponsorship', 'Under Negotiation', 'Agreement Reached', 'Partially Implemented', 'Implemented'];
-    const deadlineTypes = ['Overdue', 'Due Soon (30 days)', 'On Track', 'No Deadline'];
-
-    // Get unique jurisdictions from all commitments
-    const allJurisdictions = Array.from(new Set(
-        commitments.flatMap(commitment =>
-            commitment.jurisdictionStatuses?.map(js => js.name) || []
-        )
-    )).sort();
 
     // Memoize the filtering function to prevent unnecessary re-renders
     const applyFilters = useCallback((currentFilters: Filters, currentCommitments: Commitment[]) => {
@@ -64,8 +53,8 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
         // Filter by jurisdictions
         if (currentFilters.jurisdictions.length > 0) {
             filtered = filtered.filter(commitment =>
-                commitment.jurisdictionStatuses?.some(js =>
-                    currentFilters.jurisdictions.includes(js.name)
+                commitment.jurisdictions?.some(js =>
+                    currentFilters.jurisdictions.includes(js)
                 )
             );
         }
@@ -82,9 +71,9 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
     const toggleFilter = (filterType: keyof Filters, value: string) => {
         setFilters(prev => ({
             ...prev,
-            [filterType]: prev[filterType].includes(value as any)
+            [filterType]: prev[filterType].includes(value as any) // eslint-disable-line @typescript-eslint/no-explicit-any
                 ? prev[filterType].filter(v => v !== value)
-                : [...prev[filterType], value as any]
+                : [...prev[filterType], value as any] // eslint-disable-line @typescript-eslint/no-explicit-any
         }));
     };
 
@@ -126,20 +115,16 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
                     <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
                         Status
                     </h3>
-                    <div className="space-y-2">
-                        {allStatuses.map(status => (
-                            <label key={status} className="flex items-center space-x-2 cursor-pointer">
+                    <div>
+                        {COMMITMENT_STATUSES.map(status => (
+                            <label key={status} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md">
                                 <input
                                     type="checkbox"
                                     checked={filters.statuses.includes(status)}
                                     onChange={() => toggleFilter('statuses', status)}
                                     className="rounded border-[#d3c7b9] text-[#8b2332] focus:ring-[#8b2332]"
                                 />
-                                <div className="flex items-center space-x-2">
-                                    <Badge className={`${getStatusColor(status)} border text-xs`}>
-                                        {status}
-                                    </Badge>
-                                </div>
+                                <span className="text-sm text-gray-700">{status}</span>
                             </label>
                         ))}
                     </div>
@@ -150,9 +135,9 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
                     <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
                         Deadline
                     </h3>
-                    <div className="space-y-2">
-                        {deadlineTypes.map(type => (
-                            <label key={type} className="flex items-center space-x-2 cursor-pointer">
+                    <div>
+                        {DEADLINE_TYPES.map(type => (
+                            <label key={type} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md">
                                 <input
                                     type="checkbox"
                                     checked={filters.deadlineTypes.includes(type)}
@@ -170,11 +155,12 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
                     <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
                         Jurisdictions
                     </h3>
-                    <div className="max-h-48 overflow-y-auto space-y-2 pr-2">
-                        {allJurisdictions.map(jurisdiction => (
-                            <label key={jurisdiction} className="flex items-center space-x-2 cursor-pointer">
+                    <div>
+                        {JURISDICTIONS.map((jurisdiction: string) => (
+                            <label key={jurisdiction} className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md">
                                 <input
                                     type="checkbox"
+                                    aria-checked={filters.jurisdictions.includes(jurisdiction)}
                                     checked={filters.jurisdictions.includes(jurisdiction)}
                                     onChange={() => toggleFilter('jurisdictions', jurisdiction)}
                                     className="rounded border-[#d3c7b9] text-[#8b2332] focus:ring-[#8b2332]"
