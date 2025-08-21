@@ -1,0 +1,47 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+firestore-debug.log*
+*.log
+
+# env files
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# credentials
+promisetrackerapp-firebase-adminsdk-fbsvc-6a44bafc23.json
+
+__pycache__
+*.pyc
+*storybook.log
+
+# JSON outputs
+scripts/JSON_outputs
+
+firebase-service-account.json
+storybook-static
+
+# LLM tools
+.claude
+
+.DS_Store
