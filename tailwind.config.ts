@@ -94,6 +94,23 @@ const config: Config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+      safelist: [
+        // Status colors from getStatusColor function
+        "bg-gray-100", "text-gray-800", "border-gray-300",
+        "bg-blue-100", "text-blue-800", "border-blue-300",
+        "bg-yellow-100", "text-yellow-800", "border-yellow-300",
+        "bg-orange-100", "text-orange-800", "border-orange-300",
+        "bg-green-100", "text-green-800", "border-green-300",
+
+        // Government status colors from getGovernmentStatusColor function
+        "bg-gray-50", "text-gray-600", "text-gray-700", "border-gray-200",
+        "bg-blue-50", "text-blue-700", "border-blue-200",
+        "bg-yellow-50", "text-yellow-700", "border-yellow-200",
+        "bg-purple-50", "text-purple-700", "border-purple-200",
+        "bg-green-50", "text-green-700", "border-green-200",
+        "bg-orange-50", "text-orange-700", "border-orange-200",
+        "bg-red-50", "text-red-700", "border-red-200",
+      ],
     },
   },
   plugins: [require("tailwindcss-animate")],
