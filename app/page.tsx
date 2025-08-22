@@ -4,11 +4,10 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { Calendar } from "lucide-react";
 import { Commitment } from "@/lib/types";
 import { mockCommitments, getCommitmentStats } from "@/lib/mock-data";
 import { toast } from "@/components/ui/use-toast";
@@ -20,8 +19,7 @@ export default function MainPage() {
   const [data, setData] = useState<Commitment[]>([]); // All the commitments
   const [filteredData, setFilteredData] = useState<Commitment[]>([]); // Filtered commitments for display
   const [stats, setStats] = useState(getCommitmentStats(mockCommitments)); // Stats based on the commitments
-  const [selectedCommitment, setSelectedCommitment] =
-    useState<Commitment | null>(null); // The commitment that will be displayed in the modal
+  const [selectedCommitment, setSelectedCommitment] = useState<Commitment | null>(null); // The commitment that will be displayed in the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -144,12 +142,7 @@ export default function MainPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredData.map((item) => {
                 const daysUntilDeadline = getDaysUntilDeadline(item.deadline);
-                const isOverdue =
-                  daysUntilDeadline !== null && daysUntilDeadline < 0;
-                const isDueSoon =
-                  daysUntilDeadline !== null &&
-                  daysUntilDeadline <= 30 &&
-                  daysUntilDeadline >= 0;
+                const isOverdue = daysUntilDeadline !== null && daysUntilDeadline < 0;
 
                 return (
                   <Card
@@ -163,33 +156,11 @@ export default function MainPage() {
                           <CardTitle className="text-xl text-[#272727] mb-2">
                             {item.title}
                           </CardTitle>
-                          <CardDescription className="text-base text-gray-700 mb-3">
-                            {item.summary}
-                          </CardDescription>
                         </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <Badge
-                            className={`${getStatusColor(item.status)} border font-medium`}
-                          >
-                            {item.status}
-                          </Badge>
-                          {daysUntilDeadline !== null && (
-                            <div
-                              className={`text-sm px-3 py-1 rounded-full border ${
-                                isOverdue
-                                  ? "bg-red-50 text-red-700 border-red-200"
-                                  : isDueSoon
-                                    ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                                    : "bg-green-50 text-green-700 border-green-200"
-                              }`}
-                            >
-                              {isOverdue
-                                ? `${Math.abs(daysUntilDeadline)} days overdue`
-                                : isDueSoon
-                                  ? `${daysUntilDeadline} days left`
-                                  : `${daysUntilDeadline} days left`}
-                            </div>
-                          )}
+                      </div>
+                      <div className="w-fit">
+                        <div className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}>
+                          {item.status}
                         </div>
                       </div>
                     </CardHeader>
@@ -221,12 +192,15 @@ export default function MainPage() {
 
                       {/* Footer Info */}
                       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#d3c7b9]">
-                        <div className="text-sm text-gray-600">
-                          <span className="font-medium">Deadline:</span>{" "}
-                          {formatDate(item.deadline)}
-                        </div>
-                        <div className="text-xs text-gray-500 font-founders uppercase tracking-wide">
-                          Click to view details
+                        <div className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-600" />
+                            <span className="font-medium">Deadline:</span>{" "}
+                            {formatDate(item.deadline)}
+                            {isOverdue && (
+                              <span className="text-red-600"> (Overdue)</span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </CardContent>
@@ -252,11 +226,7 @@ export default function MainPage() {
         </div>
 
         {/* Commitment Modal */}
-        <CommitmentModal
-          commitment={selectedCommitment}
-          isOpen={isModalOpen}
-          onClose={closeModal}
-        />
+        <CommitmentModal commitment={selectedCommitment} isOpen={isModalOpen} onClose={closeModal} />
       </div>
     </div>
   );

@@ -3,7 +3,8 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Commitment } from '@/lib/types';
-import { getStatusColor, getGovernmentStatusColor, formatDate } from '@/lib/utils';
+import { getStatusColor, getGovernmentStatusColor, formatDate, getDaysUntilDeadline } from '@/lib/utils';
+import { Calendar, MapPin, ExternalLink } from 'lucide-react';
 
 interface CommitmentModalProps {
     commitment: Commitment | null;
@@ -13,6 +14,9 @@ interface CommitmentModalProps {
 
 export default function CommitmentModal({ commitment, isOpen, onClose }: CommitmentModalProps) {
     if (!commitment) return null;
+
+    const daysUntilDeadline = getDaysUntilDeadline(commitment.deadline);
+    const isOverdue = daysUntilDeadline !== null && daysUntilDeadline < 0;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -24,6 +28,21 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                 </DialogHeader>
 
                 <div className="space-y-6">
+                    <div className={`w-fit text-xs p-1 rounded-md border ${getStatusColor(commitment.status)}`}>
+                        {commitment.status}
+                    </div>
+
+                    <div className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                        <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-gray-600" />
+                            <span className="font-medium">Deadline:</span>{" "}
+                            {formatDate(commitment.deadline)}
+                            {isOverdue && (
+                                <span className="text-red-600"> (Overdue)</span>
+                            )}
+                        </div>
+                    </div>
+
                     {/* Summary */}
                     <div>
                         <h3 className="text-lg font-semibold text-[#272727] mb-2">Summary</h3>
@@ -36,26 +55,15 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                         <p className="text-gray-700">{commitment.description}</p>
                     </div>
 
-                    {/* Status and Deadline */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <h3 className="text-lg font-semibold text-[#272727] mb-2">Status</h3>
-                            <Badge className={`${getStatusColor(commitment.status)} border font-medium text-base px-3 py-1`}>
-                                {commitment.status}
-                            </Badge>
-                        </div>
-                        <div>
-                            <h3 className="text-lg font-semibold text-[#272727] mb-2">Deadline</h3>
-                            <p className="text-gray-700">{formatDate(commitment.deadline)}</p>
-                        </div>
-                    </div>
-
                     {/* Jurisdiction Status Table */}
                     <div>
-                        <h3 className="text-lg font-semibold text-[#272727] mb-4">Jurisdiction Status</h3>
-                        <div className="border border-[#d3c7b9] rounded-lg overflow-hidden">
+                        <h3 className="text-lg font-semibold text-[#272727] mb-4 flex items-center gap-2">
+                            <MapPin className="w-5 h-5 text-gray-600" />
+                            Jurisdiction Status
+                        </h3>
+                        <div className="border border-gray-200 rounded-lg overflow-hidden">
                             <table className="w-full">
-                                <thead className="bg-gray-50 border-b border-[#d3c7b9]">
+                                <thead className="bg-gray-50 border-b border-gray-200">
                                     <tr>
                                         <th className="text-left p-3 font-semibold text-gray-700 font-founders uppercase tracking-wide text-sm">
                                             Jurisdiction
@@ -72,7 +80,7 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                                     {commitment.jurisdictionStatuses?.map((jurisdiction, index) => (
                                         <tr
                                             key={jurisdiction.name}
-                                            className={`border-b border-[#d3c7b9] ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                                            className={`border-b border-gray-200 ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                                                 }`}
                                         >
                                             <td className="p-3 font-medium text-gray-900">
@@ -111,8 +119,9 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                                     href={commitment.sourceUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-sm text-[#8b2332] hover:text-[#6b1a1a] underline font-medium font-founders uppercase tracking-wide"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#8b2332] hover:bg-[#6b1a1a] text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"
                                 >
+                                    <ExternalLink className="w-4 h-4" />
                                     View Source
                                 </a>
                             )}
