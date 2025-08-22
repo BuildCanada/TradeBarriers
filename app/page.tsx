@@ -104,7 +104,7 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.awaitingSponsorship}
                   </div>
-                  <div className="text-sm text-gray-600">Awaiting</div>
+                  <div className="text-sm text-gray-600">Awaiting Sponsorship</div>
                 </CardContent>
               </Card>
               <Card className="bg-white border-[#d3c7b9]">
@@ -112,7 +112,7 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.underNegotiation}
                   </div>
-                  <div className="text-sm text-gray-600">Negotiating</div>
+                  <div className="text-sm text-gray-600">Under Negotiation</div>
                 </CardContent>
               </Card>
               <Card className="bg-white border-[#d3c7b9]">
@@ -120,7 +120,7 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.partiallyImplemented}
                   </div>
-                  <div className="text-sm text-gray-600">Partial</div>
+                  <div className="text-sm text-gray-600">Partially Implemented</div>
                 </CardContent>
               </Card>
               <Card className="bg-white border-[#d3c7b9]">
@@ -128,7 +128,10 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.implemented}
                   </div>
-                  <div className="text-sm text-gray-600">Complete</div>
+                  <div className="text-sm text-gray-600">
+                    Implemented
+                    <span className="text-sm text-gray-600"> ({((stats.implemented / stats.total) * 100).toFixed(0)}%)</span>
+                  </div>
                 </CardContent>
               </Card>
             </div>
