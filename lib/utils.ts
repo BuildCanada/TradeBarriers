@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { CommitmentStatus, JurisdictionStatusType } from "./types";
+import { Commitment, CommitmentStatus, JurisdictionStatusType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -99,3 +99,15 @@ export const getDaysUntilDeadline = (deadline: string | null) => {
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   return diffDays;
 };
+
+// Get the total number of commitments in each status. Returns an object.
+export const getCommitmentStats = (commitments: Commitment[]) => {
+  return {
+    total: commitments.length,
+    awaitingSponsorship: commitments.filter((c) => c.status === "Awaiting Sponsorship").length,
+    underNegotiation: commitments.filter((c) => c.status === "Under Negotiation").length,
+    agreementReached: commitments.filter((c) => c.status === "Agreement Reached").length,
+    partiallyImplemented: commitments.filter((c) => c.status === "Partially Implemented").length,
+    implemented: commitments.filter((c) => c.status === "Implemented").length,
+  }
+}

@@ -263,26 +263,3 @@ export const mockCommitments: Commitment[] = [
         updatedAt: "2024-12-12",
     },
 ]
-
-export const getCommitmentStats = (commitments: Commitment[]) => {
-    return {
-        total: commitments.length,
-        awaitingSponsorship: commitments.filter((c) => c.status === "Awaiting Sponsorship").length,
-        underNegotiation: commitments.filter((c) => c.status === "Under Negotiation").length,
-        agreementReached: commitments.filter((c) => c.status === "Agreement Reached").length,
-        partiallyImplemented: commitments.filter((c) => c.status === "Partially Implemented").length,
-        implemented: commitments.filter((c) => c.status === "Implemented").length,
-    }
-}
-
-export const getUniqueJurisdictions = (commitments: Commitment[]) => {
-    const jurisdictions = new Set<string>()
-    commitments.forEach((commitment) => {
-        commitment.jurisdictions.forEach((jurisdiction) => {
-            if (jurisdiction !== "All Provinces") {
-                jurisdictions.add(jurisdiction)
-            }
-        })
-    })
-    return Array.from(jurisdictions).sort()
-}
