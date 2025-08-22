@@ -104,7 +104,7 @@ export default function MainPage() {
         <div className="w-80 flex-shrink-0 p-6 ">
           <div className="mb-8">
             <NavButton />
-            <h1 className="text-4xl lg:text-5xl font-bold text-[#272727] mb-3 font-soehne">
+            <h1 className="text-4xl lg:text-5xl font-bold mb-3 font-soehne">
               Trade Barriers Tracker
             </h1>
             <p className="text-gray-600">
@@ -127,9 +127,9 @@ export default function MainPage() {
         <div className="flex-1 p-6">
           {/* Overview Stats */}
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-[#272727] mb-4">Overview</h2>
+            <h2 className="text-xl font-semibold mb-4">Overview</h2>
             <div className="grid grid-cols-5 gap-4">
-              <Card className="bg-white border-[#d3c7b9]">
+              <Card className="bg-white border-[#cdc4bd]">
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-primary">
                     {stats.total}
@@ -137,7 +137,7 @@ export default function MainPage() {
                   <div className="text-sm text-gray-600">Total</div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-[#d3c7b9]">
+              <Card className="bg-white border-[#cdc4bd]">
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-primary">
                     {stats.awaitingSponsorship}
@@ -145,7 +145,7 @@ export default function MainPage() {
                   <div className="text-sm text-gray-600">Awaiting Sponsorship</div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-[#d3c7b9]">
+              <Card className="bg-white border-[#cdc4bd]">
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-primary">
                     {stats.underNegotiation}
@@ -153,7 +153,7 @@ export default function MainPage() {
                   <div className="text-sm text-gray-600">Under Negotiation</div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-[#d3c7b9]">
+              <Card className="bg-white border-[#cdc4bd]">
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-primary">
                     {stats.partiallyImplemented}
@@ -161,7 +161,7 @@ export default function MainPage() {
                   <div className="text-sm text-gray-600">Partially Implemented</div>
                 </CardContent>
               </Card>
-              <Card className="bg-white border-[#d3c7b9]">
+              <Card className="bg-white border-[#cdc4bd]">
                 <CardContent className="p-4">
                   <div className="text-2xl font-bold text-primary">
                     {stats.implemented}
@@ -191,7 +191,7 @@ export default function MainPage() {
                     placeholder="Search commitments..."
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className="pl-10 pr-4 py-2 border border-[#d3c7b9] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-64"
+                    className="pl-10 pr-4 py-2 border border-[#cdc4bd] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-64"
                   />
                 </div>
               </div>
@@ -211,7 +211,7 @@ export default function MainPage() {
                 return (
                   <Card
                     key={item.id}
-                    className="bg-white border-[#d3c7b9] hover:shadow-lg transition-shadow cursor-pointer"
+                    className="bg-white border-[#cdc4bssd] hover:shadow-lg transition-shadow cursor-pointer flex flex-col"
                     onClick={() => handleCardClick(item)}
                   >
                     <CardHeader className="pb-4">
@@ -229,7 +229,7 @@ export default function MainPage() {
                       </div>
                     </CardHeader>
 
-                    <CardContent className="pt-0">
+                    <CardContent className="pt-0 flex-1 flex flex-col">
                       {/* Quick Jurisdiction Overview */}
                       <div className="mb-4">
                         <h4 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide font-founders">
@@ -255,7 +255,7 @@ export default function MainPage() {
                       </div>
 
                       {/* Footer Info */}
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#d3c7b9]">
+                      <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#cdc4bd]">
                         <div className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}>
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-600" />
@@ -275,7 +275,7 @@ export default function MainPage() {
 
             {/* Empty State */}
             {filteredData.length === 0 && (
-              <Card className="bg-white border-[#d3c7b9] text-center py-12">
+              <Card className="bg-white border-[#cdc4bd] text-center py-12">
                 <CardContent>
                   <div className="text-gray-500 text-lg">
                     No commitments match your filters
