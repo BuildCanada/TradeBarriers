@@ -93,15 +93,12 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
         <Card className="bg-white border-[#d3c7b9] h-fit">
             <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg text-[#272727] font-founders uppercase tracking-wide">
-                        Filters
-                    </CardTitle>
                     {getActiveFiltersCount() > 0 && (
                         <Button
                             variant="outline"
                             size="sm"
                             onClick={clearAllFilters}
-                            className="text-xs font-founders uppercase tracking-wide border-[#d3c7b9] text-gray-600 hover:bg-gray-50"
+                            className="text-xs mx-auto font-founders uppercase tracking-wide border-[#d3c7b9] text-gray-600 hover:bg-gray-50"
                         >
                             Clear All
                         </Button>

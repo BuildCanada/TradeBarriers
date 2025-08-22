@@ -9,11 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
 import { Commitment } from "@/lib/types";
-import { mockCommitments, getCommitmentStats } from "@/lib/mock-data";
+import { mockCommitments } from "@/lib/mock-data";
 import { toast } from "@/components/ui/use-toast";
 import CommitmentModal from "@/components/CommitmentModal";
 import FiltersPanel from "@/components/FiltersPanel";
-import { getStatusColor, getDaysUntilDeadline, formatDate } from "@/lib/utils";
+import { getStatusColor, getDaysUntilDeadline, formatDate, getCommitmentStats } from "@/lib/utils";
+import NavButton from "@/components/NavButton";
 
 export default function MainPage() {
   const [data, setData] = useState<Commitment[]>([]); // All the commitments
@@ -61,73 +62,80 @@ export default function MainPage() {
 
   return (
     <div className="min-h-screen bg-[#f6ebe3]">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-12">
-          <h1 className="text-4xl lg:text-5xl font-bold text-[#272727] mb-4 font-soehne">
-            Interprovincial Trade Agreements Tracker
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl">
-            Monitoring interprovincial trade reform progress across Canada
-          </p>
-        </div>
+      <div className="flex">
+        {/* Left Column - Branding, Title, and Filters */}
+        <div className="w-80 flex-shrink-0 p-6 ">
+          <div className="mb-8">
+            <NavButton />
+            <h1 className="text-4xl lg:text-5xl font-bold text-[#272727] mb-3 font-soehne">
+              Trade Barriers Tracker
+            </h1>
+            <p className="text-gray-600">
+              A non-partisan platform tracking progress of interprovincial trade reform commitments across Canada.
+            </p>
+          </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-          <Card className="bg-white border-[#d3c7b9]">
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#8b2332]">
-                {stats.total}
-              </div>
-              <div className="text-sm text-gray-600">Total Commitments</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border-[#d3c7b9]">
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#8b2332]">
-                {stats.awaitingSponsorship}
-              </div>
-              <div className="text-sm text-gray-600">Awaiting Sponsorship</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border-[#d3c7b9]">
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#8b2332]">
-                {stats.underNegotiation}
-              </div>
-              <div className="text-sm text-gray-600">Under Negotiation</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border-[#d3c7b9]">
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#8b2332]">
-                {stats.partiallyImplemented}
-              </div>
-              <div className="text-sm text-gray-600">Partially Implemented</div>
-            </CardContent>
-          </Card>
-          <Card className="bg-white border-[#d3c7b9]">
-            <CardContent className="p-6">
-              <div className="text-2xl font-bold text-[#8b2332]">
-                {stats.implemented}
-              </div>
-              <div className="text-sm text-gray-600">Fully Implemented</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Content with Filters */}
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Side Panel */}
-          <div className="lg:w-80 flex-shrink-0">
+          {/* Filters Panel */}
+          <div>
+            <h3 className="text-xl font-semibold mb-4">Filters</h3>
             <FiltersPanel
               commitments={data}
               onFiltersChange={handleFiltersChange}
             />
           </div>
+        </div>
 
-          {/* Commitments Grid */}
-          <div className="flex-1">
+        {/* Right Column - Main Content */}
+        <div className="flex-1 p-6">
+          {/* Overview Stats */}
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-[#272727] mb-4">Overview</h2>
+            <div className="grid grid-cols-5 gap-4">
+              <Card className="bg-white border-[#d3c7b9]">
+                <CardContent className="p-4">
+                  <div className="text-2xl font-bold text-primary">
+                    {stats.total}
+                  </div>
+                  <div className="text-sm text-gray-600">Total</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-[#d3c7b9]">
+                <CardContent className="p-4">
+                  <div className="text-2xl font-bold text-primary">
+                    {stats.awaitingSponsorship}
+                  </div>
+                  <div className="text-sm text-gray-600">Awaiting</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-[#d3c7b9]">
+                <CardContent className="p-4">
+                  <div className="text-2xl font-bold text-primary">
+                    {stats.underNegotiation}
+                  </div>
+                  <div className="text-sm text-gray-600">Negotiating</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-[#d3c7b9]">
+                <CardContent className="p-4">
+                  <div className="text-2xl font-bold text-primary">
+                    {stats.partiallyImplemented}
+                  </div>
+                  <div className="text-sm text-gray-600">Partial</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-white border-[#d3c7b9]">
+                <CardContent className="p-4">
+                  <div className="text-2xl font-bold text-primary">
+                    {stats.implemented}
+                  </div>
+                  <div className="text-sm text-gray-600">Complete</div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+
+          {/* Commitments Section */}
+          <div>
             <div className="mb-6">
               <h2 className="text-xl font-semibold text-[#272727] mb-2">
                 Commitments ({filteredData.length})

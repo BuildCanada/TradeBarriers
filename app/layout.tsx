@@ -59,10 +59,7 @@ export default function RootLayout({
         <div className="border-2 border-black m-5">
           <main className="container mx-auto bg-background site-main-content">
             <div className="min-h-screen">
-              <div className="container px-4 py-6">
-                <NavButton />
-                <div className="col-span-3">{children}</div>
-              </div>
+              <div className="col-span-3">{children}</div>
             </div>
           </main>
 

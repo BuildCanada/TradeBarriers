@@ -22,7 +22,7 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
         <Dialog open={isOpen} onOpenChange={onClose}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl text-[#272727] font-soehne">
+                    <DialogTitle className="text-2xl font-soehne">
                         {commitment.title}
                     </DialogTitle>
                 </DialogHeader>
@@ -104,7 +104,7 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                     </div>
 
                     {/* Footer Info */}
-                    <div className="pt-4 border-t border-[#d3c7b9]">
+                    <div className="pt-4 border-t border-gray-200">
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                             <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                                 <div>
@@ -119,7 +119,7 @@ export default function CommitmentModal({ commitment, isOpen, onClose }: Commitm
                                     href={commitment.sourceUrl}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 px-4 py-2 bg-[#8b2332] hover:bg-[#6b1a1a] text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"
+                                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"
                                 >
                                     <ExternalLink className="w-4 h-4" />
                                     View Source
