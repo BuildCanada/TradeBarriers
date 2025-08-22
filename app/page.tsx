@@ -15,6 +15,7 @@ import CommitmentModal from "@/components/CommitmentModal";
 import FiltersPanel from "@/components/FiltersPanel";
 import { getStatusColor, getDaysUntilDeadline, formatDate, getCommitmentStats } from "@/lib/utils";
 import NavButton from "@/components/NavButton";
+import { Search } from "lucide-react";
 
 export default function MainPage() {
   const [data, setData] = useState<Commitment[]>([]); // All the commitments
@@ -22,6 +23,7 @@ export default function MainPage() {
   const [stats, setStats] = useState(getCommitmentStats(mockCommitments)); // Stats based on the commitments
   const [selectedCommitment, setSelectedCommitment] = useState<Commitment | null>(null); // The commitment that will be displayed in the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Search query for filtering by name
 
   useEffect(() => {
     fetch("/trade-barriers/api/commitments")
@@ -51,14 +53,49 @@ export default function MainPage() {
     setSelectedCommitment(null);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+
+    // Re-apply filters with new search query
+    if (data.length > 0) {
+      let filtered = data;
+
+      // Apply search filter
+      if (query.trim()) {
+        filtered = data.filter(item =>
+          item.title.toLowerCase().includes(query.toLowerCase())
+        );
+      }
+
+      setFilteredData(filtered);
+      setStats(getCommitmentStats(filtered));
+    }
+  };
+
   // Memoize the callback to prevent infinite loops
   const handleFiltersChange = useCallback(
     (filteredCommitments: Commitment[]) => {
-      setFilteredData(filteredCommitments);
-      setStats(getCommitmentStats(filteredCommitments));
+      // Apply both filters and search
+      let finalFiltered = filteredCommitments;
+
+      if (searchQuery.trim()) {
+        finalFiltered = filteredCommitments.filter(item =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+
+      setFilteredData(finalFiltered);
+      setStats(getCommitmentStats(finalFiltered));
     },
-    [],
+    [searchQuery],
   );
+
+  const clearAllFilters = useCallback(() => {
+    setSearchQuery(""); // Clear search query
+    setFilteredData(data); // Reset to show all data
+    setStats(getCommitmentStats(data)); // Reset stats
+  }, [data]);
 
   return (
     <div className="min-h-screen bg-[#f6ebe3]">
@@ -81,6 +118,7 @@ export default function MainPage() {
             <FiltersPanel
               commitments={data}
               onFiltersChange={handleFiltersChange}
+              onClearAll={clearAllFilters}
             />
           </div>
         </div>
@@ -140,9 +178,24 @@ export default function MainPage() {
           {/* Commitments Section */}
           <div>
             <div className="mb-6">
-              <h2 className="text-xl font-semibold text-[#272727] mb-2">
-                Commitments ({filteredData.length})
-              </h2>
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-semibold text-[#272727]">
+                  Commitments ({filteredData.length})
+                </h2>
+
+                {/* Search Bar */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search commitments..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="pl-10 pr-4 py-2 border border-[#d3c7b9] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-64"
+                  />
+                </div>
+              </div>
+
               {filteredData.length !== data.length && (
                 <p className="text-sm text-gray-600">
                   Showing {filteredData.length} of {data.length} commitments

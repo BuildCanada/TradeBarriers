@@ -10,6 +10,7 @@ import { COMMITMENT_STATUSES, DEADLINE_TYPES, getDaysUntilDeadline, JURISDICTION
 type FiltersPanelProps = {
     commitments: Commitment[];
     onFiltersChange: (filteredCommitments: Commitment[]) => void;
+    onClearAll?: () => void;
 };
 
 type Filters = {
@@ -18,7 +19,7 @@ type Filters = {
     jurisdictions: string[];
 };
 
-export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPanelProps) {
+export default function FiltersPanel({ commitments, onFiltersChange, onClearAll }: FiltersPanelProps) {
     const [filters, setFilters] = useState<Filters>({
         statuses: [],
         deadlineTypes: [],
@@ -83,6 +84,11 @@ export default function FiltersPanel({ commitments, onFiltersChange }: FiltersPa
             deadlineTypes: [],
             jurisdictions: []
         });
+
+        // Call parent's clearAll function if provided
+        if (onClearAll) {
+            onClearAll();
+        }
     };
 
     const getActiveFiltersCount = () => {
