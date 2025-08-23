@@ -54,6 +54,13 @@ export default function AdminPage() {
     setIsAddModalOpen(false); // Close the modal after successful addition
   };
 
+  const handleAgreementDeleted = (deletedId: string) => {
+    setData(data.filter((agreement) => agreement.id !== deletedId));
+    setFilteredData(
+      filteredData.filter((agreement) => agreement.id !== deletedId),
+    );
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-[#f6ebe3] p-6">
@@ -96,7 +103,11 @@ export default function AdminPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <AgreementsList agreements={filteredData} />
+              <AgreementsList
+                agreements={filteredData}
+                onAgreementDeleted={handleAgreementDeleted}
+                isAdmin={true}
+              />
             </div>
           </div>
 

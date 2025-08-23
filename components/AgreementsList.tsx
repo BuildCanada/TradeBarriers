@@ -2,18 +2,36 @@ import { Agreement } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getStatusColor, getDaysUntilDeadline, formatDate } from "@/lib/utils";
 import { useState } from "react";
-import { Calendar } from "lucide-react";
+import { Calendar, Trash2 } from "lucide-react";
 import AgreementModal from "./AgreementModal";
+import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export default function AgreementsList({
   agreements,
+  onAgreementDeleted,
+  isAdmin = false,
 }: {
   agreements: Agreement[];
+  onAgreementDeleted?: (deletedId: string) => void;
+  isAdmin?: boolean;
 }) {
   const [selectedAgreement, setSelectedAgreement] = useState<Agreement | null>(
     null,
   ); // The agreement that will be displayed in the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [agreementToDelete, setAgreementToDelete] = useState<Agreement | null>(
+    null,
+  );
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleCardClick = (agreement: Agreement) => {
     setSelectedAgreement(agreement);
@@ -25,6 +43,49 @@ export default function AgreementsList({
     setSelectedAgreement(null);
   };
 
+  const handleDeleteClick = (e: React.MouseEvent, agreement: Agreement) => {
+    e.stopPropagation(); // Prevent opening the modal
+    setAgreementToDelete(agreement);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!agreementToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(
+        `/trade-barriers/api/agreements/${agreementToDelete.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      toast({
+        title: "Success!",
+        description: "Agreement has been deleted successfully.",
+      });
+
+      // Call the callback to update the parent component
+      if (onAgreementDeleted) {
+        onAgreementDeleted(agreementToDelete.id);
+      }
+    } catch (error) {
+      console.error("Error deleting agreement:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete agreement. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsDeleting(false);
+      setAgreementToDelete(null);
+    }
+  };
+
   return (
     <>
       {agreements.map((item) => {
@@ -34,9 +95,23 @@ export default function AgreementsList({
         return (
           <Card
             key={item.id}
-            className="bg-white border-[#cdc4bssd] hover:shadow-lg transition-shadow cursor-pointer flex flex-col"
+            className="bg-white border-[#cdc4bssd] hover:shadow-lg transition-shadow cursor-pointer flex flex-col relative group"
             onClick={() => handleCardClick(item)}
           >
+            {/* Delete Button - Only visible on hover and when admin */}
+            {isAdmin && (
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => handleDeleteClick(e, item)}
+                  className="h-8 w-8 bg-primary hover:bg-primary/90"
+                >
+                  <Trash2 className="h-4 w-4 p-1" />
+                </Button>
+              </div>
+            )}
+
             <CardHeader className="pb-4">
               <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                 <div className="flex-1">
@@ -103,6 +178,37 @@ export default function AgreementsList({
         isOpen={isModalOpen}
         onClose={closeModal}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog
+        open={!!agreementToDelete}
+        onOpenChange={() => setAgreementToDelete(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Agreement</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete &quot;{agreementToDelete?.title}
+              &quot;? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setAgreementToDelete(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleDeleteConfirm}
+              disabled={isDeleting}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
