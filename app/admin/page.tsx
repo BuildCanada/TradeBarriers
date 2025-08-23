@@ -12,11 +12,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  Commitment,
-  CommitmentStatus,
+  Agreement,
+  AgreementStatus,
   JurisdictionStatusType,
 } from "@/lib/types";
-import { COMMITMENT_STATUSES, JURISDICTIONS } from "@/lib/utils";
+import { AGREEMENT_STATUSES, JURISDICTIONS } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 import NavButton from "@/components/NavButton";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -29,7 +29,7 @@ export default function AdminPage() {
     title: "",
     summary: "",
     description: "",
-    status: "" as CommitmentStatus,
+    status: "" as AgreementStatus,
     deadline: "",
     sourceUrl: "",
     jurisdictions: [] as string[],
@@ -135,26 +135,25 @@ export default function AdminPage() {
         return;
       }
 
-      // Create the commitment object
-      const newCommitment: Omit<Commitment, "id" | "createdAt" | "updatedAt"> =
-        {
-          title: formData.title,
-          summary: formData.summary,
-          description: formData.description,
-          status: formData.status,
-          deadline: formData.deadline || null,
-          sourceUrl: formData.sourceUrl || null,
-          jurisdictions: formData.jurisdictions,
-          jurisdictionStatuses: formData.jurisdictionStatuses,
-        };
+      // Create the agreement object
+      const newAgreement: Omit<Agreement, "id" | "createdAt" | "updatedAt"> = {
+        title: formData.title,
+        summary: formData.summary,
+        description: formData.description,
+        status: formData.status,
+        deadline: formData.deadline || null,
+        sourceUrl: formData.sourceUrl || null,
+        jurisdictions: formData.jurisdictions,
+        jurisdictionStatuses: formData.jurisdictionStatuses,
+      };
 
-      // Send the commitment to the API
-      const response = await fetch("/trade-barriers/api/commitments", {
+      // Send the agreement to the API
+      const response = await fetch("/trade-barriers/api/agreements", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newCommitment),
+        body: JSON.stringify(newAgreement),
       });
 
       if (!response.ok) {
@@ -178,7 +177,7 @@ export default function AdminPage() {
 
       toast({
         title: "Success!",
-        description: "Commitment has been added successfully.",
+        description: "Agreement has been added successfully.",
       });
 
       // Reset form
@@ -186,17 +185,17 @@ export default function AdminPage() {
         title: "",
         summary: "",
         description: "",
-        status: "" as CommitmentStatus,
+        status: "" as AgreementStatus,
         deadline: "",
         sourceUrl: "",
         jurisdictions: [],
         jurisdictionStatuses: [],
       });
     } catch (error) {
-      console.error("Error submitting commitment:", error);
+      console.error("Error submitting agreement:", error);
 
       // Extract error message based on error type
-      let errorMessage = "Failed to add commitment. Please try again.";
+      let errorMessage = "Failed to add agreement. Please try again.";
 
       if (error instanceof Error) {
         errorMessage = error.message;
@@ -224,7 +223,7 @@ export default function AdminPage() {
             <div className="flex items-center gap-4 mb-4">
               <NavButton />
               <h1 className="text-3xl font-bold font-soehne">
-                Add New Commitment
+                Add New Agreement
               </h1>
               <div className="ml-auto flex items-center gap-4">
                 <span className="text-sm text-gray-600">
@@ -243,13 +242,13 @@ export default function AdminPage() {
             </div>
           </div>
           <p className="text-gray-600 text-center">
-            Use this form to add new trade barrier commitments to the system.
+            Use this form to add new trade barrier agreements to the system.
           </p>
 
           <Card className="bg-white border-[#d3c7b9]">
             <CardHeader>
               <CardTitle className="text-xl text-[#272727]">
-                Commitment Details
+                Agreement Details
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -265,7 +264,7 @@ export default function AdminPage() {
                       onChange={(e) =>
                         handleInputChange("title", e.target.value)
                       }
-                      placeholder="Brief title for the commitment"
+                      placeholder="Brief title for the agreement"
                       className="border-[#d3c7b9]"
                       required
                     />
@@ -278,7 +277,7 @@ export default function AdminPage() {
                     <Select
                       value={formData.status}
                       onValueChange={(value) =>
-                        handleInputChange("status", value as CommitmentStatus)
+                        handleInputChange("status", value as AgreementStatus)
                       }
                       required
                     >
@@ -286,7 +285,7 @@ export default function AdminPage() {
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
-                        {COMMITMENT_STATUSES.map((status) => (
+                        {AGREEMENT_STATUSES.map((status) => (
                           <SelectItem key={status} value={status}>
                             {status}
                           </SelectItem>
@@ -305,7 +304,7 @@ export default function AdminPage() {
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       handleInputChange("summary", e.target.value)
                     }
-                    placeholder="One sentence summary of the commitment"
+                    placeholder="One sentence summary of the agreement"
                     className="border-[#d3c7b9]"
                     required
                   />
@@ -479,7 +478,7 @@ export default function AdminPage() {
                     disabled={isSubmitting}
                     className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2"
                   >
-                    {isSubmitting ? "Adding..." : "Add Commitment"}
+                    {isSubmitting ? "Adding..." : "Add Agreement"}
                   </Button>
                 </div>
               </form>

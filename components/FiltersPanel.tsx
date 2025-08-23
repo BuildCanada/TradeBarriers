@@ -4,28 +4,28 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Commitment, CommitmentStatus } from "@/lib/types";
+import { Agreement, AgreementStatus } from "@/lib/types";
 import {
-  COMMITMENT_STATUSES,
+  AGREEMENT_STATUSES,
   DEADLINE_TYPES,
   getDaysUntilDeadline,
   JURISDICTIONS,
 } from "@/lib/utils";
 
 type FiltersPanelProps = {
-  commitments: Commitment[];
-  onFiltersChange: (filteredCommitments: Commitment[]) => void;
+  agreements: Agreement[];
+  onFiltersChange: (filteredAgreements: Agreement[]) => void;
   onClearAll?: () => void;
 };
 
 type Filters = {
-  statuses: CommitmentStatus[];
+  statuses: AgreementStatus[];
   deadlineTypes: string[];
   jurisdictions: string[];
 };
 
 export default function FiltersPanel({
-  commitments,
+  agreements,
   onFiltersChange,
   onClearAll,
 }: FiltersPanelProps) {
@@ -37,20 +37,20 @@ export default function FiltersPanel({
 
   // Memoize the filtering function to prevent unnecessary re-renders
   const applyFilters = useCallback(
-    (currentFilters: Filters, currentCommitments: Commitment[]) => {
-      let filtered = [...currentCommitments];
+    (currentFilters: Filters, currentAgreements: Agreement[]) => {
+      let filtered = [...currentAgreements];
 
       // Filter by status
       if (currentFilters.statuses.length > 0) {
-        filtered = filtered.filter((commitment) =>
-          currentFilters.statuses.includes(commitment.status),
+        filtered = filtered.filter((agreement) =>
+          currentFilters.statuses.includes(agreement.status),
         );
       }
 
       // Filter by deadline type
       if (currentFilters.deadlineTypes.length > 0) {
-        filtered = filtered.filter((commitment) => {
-          const daysUntilDeadline = getDaysUntilDeadline(commitment.deadline);
+        filtered = filtered.filter((agreement) => {
+          const daysUntilDeadline = getDaysUntilDeadline(agreement.deadline);
 
           if (
             currentFilters.deadlineTypes.includes("Overdue") &&
@@ -83,8 +83,8 @@ export default function FiltersPanel({
 
       // Filter by jurisdictions
       if (currentFilters.jurisdictions.length > 0) {
-        filtered = filtered.filter((commitment) =>
-          commitment.jurisdictions?.some((js) =>
+        filtered = filtered.filter((agreement) =>
+          agreement.jurisdictions?.some((js) =>
             currentFilters.jurisdictions.includes(js),
           ),
         );
@@ -97,9 +97,9 @@ export default function FiltersPanel({
 
   // Apply filters and notify parent
   useEffect(() => {
-    const filtered = applyFilters(filters, commitments);
+    const filtered = applyFilters(filters, agreements);
     onFiltersChange(filtered);
-  }, [filters, commitments, applyFilters, onFiltersChange]);
+  }, [filters, agreements, applyFilters, onFiltersChange]);
 
   const toggleFilter = (filterType: keyof Filters, value: string) => {
     setFilters((prev) => ({
@@ -155,7 +155,7 @@ export default function FiltersPanel({
             Status
           </h3>
           <div>
-            {COMMITMENT_STATUSES.map((status) => (
+            {AGREEMENT_STATUSES.map((status) => (
               <label
                 key={status}
                 className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md"

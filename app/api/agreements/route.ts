@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/client";
 
-// GET request to get all commitments
+// GET request to get all agreements
 export async function GET() {
   const supabase = await createClient();
-  const { data, error } = await supabase.from("commitments").select("*");
+  const { data, error } = await supabase
+    .from(process.env.DATABASE_TABLE_NAME!)
+    .select("*");
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -22,7 +24,7 @@ export async function GET() {
   return NextResponse.json(transformedData);
 }
 
-// POST request to add a new commitment
+// POST request to add a new Agreement
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -38,27 +40,29 @@ export async function POST(request: Request) {
     } = body;
 
     const supabase = await createClient();
-    const { error } = await supabase.from("commitments").insert({
-      title,
-      summary,
-      description,
-      jurisdictions,
-      jurisdiction_statuses: jurisdictionStatuses,
-      deadline,
-      status,
-      source_url: sourceUrl,
-    });
+    const { error } = await supabase
+      .from(process.env.DATABASE_TABLE_NAME!)
+      .insert({
+        title,
+        summary,
+        description,
+        jurisdictions,
+        jurisdiction_statuses: jurisdictionStatuses,
+        deadline,
+        status,
+        source_url: sourceUrl,
+      });
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json(
-      { message: "Commitment created successfully" },
+      { message: "Agreement created successfully" },
       { status: 201 },
     );
   } catch (error) {
-    console.error("Commitment creation error:", error);
+    console.error("Agreement creation error:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 },

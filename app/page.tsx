@@ -1,56 +1,58 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar } from "lucide-react";
-import { Commitment } from "@/lib/types";
-import { mockCommitments } from "@/lib/mock-data";
+import { Agreement } from "@/lib/types";
+import { mockAgreements } from "@/lib/mock-data";
 import { toast } from "@/components/ui/use-toast";
-import CommitmentModal from "@/components/CommitmentModal";
+import AgreementModal from "@/components/AgreementModal";
 import FiltersPanel from "@/components/FiltersPanel";
-import { getStatusColor, getDaysUntilDeadline, formatDate, getCommitmentStats } from "@/lib/utils";
+import {
+  getStatusColor,
+  getDaysUntilDeadline,
+  formatDate,
+  getAgreementStats,
+} from "@/lib/utils";
 import NavButton from "@/components/NavButton";
 import { Search } from "lucide-react";
 
 export default function MainPage() {
-  const [data, setData] = useState<Commitment[]>([]); // All the commitments
-  const [filteredData, setFilteredData] = useState<Commitment[]>([]); // Filtered commitments for display
-  const [stats, setStats] = useState(getCommitmentStats(mockCommitments)); // Stats based on the commitments
-  const [selectedCommitment, setSelectedCommitment] = useState<Commitment | null>(null); // The commitment that will be displayed in the modal
+  const [data, setData] = useState<Agreement[]>([]); // All the agreements
+  const [filteredData, setFilteredData] = useState<Agreement[]>([]); // Filtered agreements for display
+  const [stats, setStats] = useState(getAgreementStats(mockAgreements)); // Stats based on the agreements
+  const [selectedAgreement, setSelectedAgreement] = useState<Agreement | null>(
+    null,
+  ); // The agreement that will be displayed in the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState(""); // Search query for filtering by name
 
   useEffect(() => {
-    fetch("/trade-barriers/api/commitments")
+    fetch("/trade-barriers/api/agreements")
       .then((res) => res.json())
       .then((data) => {
         setData(data);
         setFilteredData(data); // Default to no filters applied
-        setStats(getCommitmentStats(data));
+        setStats(getAgreementStats(data));
       })
       .catch(() => {
-        console.error("Error fetching commitments");
+        console.error("Error fetching agreements");
         toast({
           title: "Error",
-          description: "Failed to fetch commitments. Please try again later.",
+          description: "Failed to fetch agreements. Please try again later.",
           variant: "destructive",
         });
       });
   }, []);
 
-  const handleCardClick = (commitment: Commitment) => {
-    setSelectedCommitment(commitment);
+  const handleCardClick = (agreement: Agreement) => {
+    setSelectedAgreement(agreement);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedCommitment(null);
+    setSelectedAgreement(null);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,30 +65,30 @@ export default function MainPage() {
 
       // Apply search filter
       if (query.trim()) {
-        filtered = data.filter(item =>
-          item.title.toLowerCase().includes(query.toLowerCase())
+        filtered = data.filter((item) =>
+          item.title.toLowerCase().includes(query.toLowerCase()),
         );
       }
 
       setFilteredData(filtered);
-      setStats(getCommitmentStats(filtered));
+      setStats(getAgreementStats(filtered));
     }
   };
 
   // Memoize the callback to prevent infinite loops
   const handleFiltersChange = useCallback(
-    (filteredCommitments: Commitment[]) => {
+    (filteredAgreements: Agreement[]) => {
       // Apply both filters and search
-      let finalFiltered = filteredCommitments;
+      let finalFiltered = filteredAgreements;
 
       if (searchQuery.trim()) {
-        finalFiltered = filteredCommitments.filter(item =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        finalFiltered = filteredAgreements.filter((item) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()),
         );
       }
 
       setFilteredData(finalFiltered);
-      setStats(getCommitmentStats(finalFiltered));
+      setStats(getAgreementStats(finalFiltered));
     },
     [searchQuery],
   );
@@ -94,7 +96,7 @@ export default function MainPage() {
   const clearAllFilters = useCallback(() => {
     setSearchQuery(""); // Clear search query
     setFilteredData(data); // Reset to show all data
-    setStats(getCommitmentStats(data)); // Reset stats
+    setStats(getAgreementStats(data)); // Reset stats
   }, [data]);
 
   return (
@@ -108,7 +110,8 @@ export default function MainPage() {
               Trade Barriers Tracker
             </h1>
             <p className="text-gray-600">
-              A non-partisan platform tracking progress of interprovincial trade reform commitments across Canada.
+              A non-partisan platform tracking progress of interprovincial trade
+              reform agreements across Canada.
             </p>
           </div>
 
@@ -116,7 +119,7 @@ export default function MainPage() {
           <div>
             <h3 className="text-xl font-semibold mb-4">Filters</h3>
             <FiltersPanel
-              commitments={data}
+              agreements={data}
               onFiltersChange={handleFiltersChange}
               onClearAll={clearAllFilters}
             />
@@ -142,7 +145,9 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.awaitingSponsorship}
                   </div>
-                  <div className="text-sm text-gray-600">Awaiting Sponsorship</div>
+                  <div className="text-sm text-gray-600">
+                    Awaiting Sponsorship
+                  </div>
                 </CardContent>
               </Card>
               <Card className="bg-white border-[#cdc4bd]">
@@ -158,7 +163,9 @@ export default function MainPage() {
                   <div className="text-2xl font-bold text-primary">
                     {stats.partiallyImplemented}
                   </div>
-                  <div className="text-sm text-gray-600">Partially Implemented</div>
+                  <div className="text-sm text-gray-600">
+                    Partially Implemented
+                  </div>
                 </CardContent>
               </Card>
               <Card className="bg-white border-[#cdc4bd]">
@@ -168,19 +175,22 @@ export default function MainPage() {
                   </div>
                   <div className="text-sm text-gray-600">
                     Implemented
-                    <span className="text-sm text-gray-600"> ({((stats.implemented / stats.total) * 100).toFixed(0)}%)</span>
+                    <span className="text-sm text-gray-600">
+                      {" "}
+                      ({((stats.implemented / stats.total) * 100).toFixed(0)}%)
+                    </span>
                   </div>
                 </CardContent>
               </Card>
             </div>
           </div>
 
-          {/* Commitments Section */}
+          {/* Agreements Section */}
           <div>
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <h2 className="text-xl font-semibold text-[#272727]">
-                  Commitments ({filteredData.length})
+                  Agreements ({filteredData.length})
                 </h2>
 
                 {/* Search Bar */}
@@ -188,7 +198,7 @@ export default function MainPage() {
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
                     type="text"
-                    placeholder="Search commitments..."
+                    placeholder="Search agreements..."
                     value={searchQuery}
                     onChange={handleSearchChange}
                     className="pl-10 pr-4 py-2 border border-[#cdc4bd] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-64"
@@ -198,7 +208,7 @@ export default function MainPage() {
 
               {filteredData.length !== data.length && (
                 <p className="text-sm text-gray-600">
-                  Showing {filteredData.length} of {data.length} commitments
+                  Showing {filteredData.length} of {data.length} agreements
                 </p>
               )}
             </div>
@@ -206,7 +216,8 @@ export default function MainPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {filteredData.map((item) => {
                 const daysUntilDeadline = getDaysUntilDeadline(item.deadline);
-                const isOverdue = daysUntilDeadline !== null && daysUntilDeadline < 0;
+                const isOverdue =
+                  daysUntilDeadline !== null && daysUntilDeadline < 0;
 
                 return (
                   <Card
@@ -223,7 +234,9 @@ export default function MainPage() {
                         </div>
                       </div>
                       <div className="w-fit">
-                        <div className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}>
+                        <div
+                          className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}
+                        >
                           {item.status}
                         </div>
                       </div>
@@ -256,7 +269,9 @@ export default function MainPage() {
 
                       {/* Footer Info */}
                       <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#cdc4bd]">
-                        <div className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}>
+                        <div
+                          className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}
+                        >
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-600" />
                             <span className="font-medium">Deadline:</span>{" "}
@@ -278,7 +293,7 @@ export default function MainPage() {
               <Card className="bg-white border-[#cdc4bd] text-center py-12">
                 <CardContent>
                   <div className="text-gray-500 text-lg">
-                    No commitments match your filters
+                    No agreements match your filters
                   </div>
                   <div className="text-gray-400 text-sm mt-2">
                     Try adjusting your filter criteria
@@ -289,8 +304,12 @@ export default function MainPage() {
           </div>
         </div>
 
-        {/* Commitment Modal */}
-        <CommitmentModal commitment={selectedCommitment} isOpen={isModalOpen} onClose={closeModal} />
+        {/* Agreement Modal */}
+        <AgreementModal
+          agreement={selectedAgreement}
+          isOpen={isModalOpen}
+          onClose={closeModal}
+        />
       </div>
     </div>
   );

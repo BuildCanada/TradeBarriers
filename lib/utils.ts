@@ -1,13 +1,13 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Commitment, CommitmentStatus, JurisdictionStatusType } from "./types";
+import { Agreement, AgreementStatus, JurisdictionStatusType } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 // Constants
-export const COMMITMENT_STATUSES: CommitmentStatus[] = [
+export const AGREEMENT_STATUSES: AgreementStatus[] = [
   "Awaiting Sponsorship",
   "Under Negotiation",
   "Agreement Reached",
@@ -37,7 +37,7 @@ export const JURISDICTIONS = [
 ];
 
 // Status color mapping. Returns a string of tailwind classes.
-export const getStatusColor = (status: CommitmentStatus) => {
+export const getStatusColor = (status: AgreementStatus) => {
   switch (status) {
     case "Awaiting Sponsorship":
       return "bg-gray-100 text-gray-800 border-gray-300";
@@ -100,14 +100,20 @@ export const getDaysUntilDeadline = (deadline: string | null) => {
   return diffDays;
 };
 
-// Get the total number of commitments in each status. Returns an object.
-export const getCommitmentStats = (commitments: Commitment[]) => {
+// Get the total number of agreements in each status. Returns an object.
+export const getAgreementStats = (agreements: Agreement[]) => {
   return {
-    total: commitments.length,
-    awaitingSponsorship: commitments.filter((c) => c.status === "Awaiting Sponsorship").length,
-    underNegotiation: commitments.filter((c) => c.status === "Under Negotiation").length,
-    agreementReached: commitments.filter((c) => c.status === "Agreement Reached").length,
-    partiallyImplemented: commitments.filter((c) => c.status === "Partially Implemented").length,
-    implemented: commitments.filter((c) => c.status === "Implemented").length,
-  }
-}
+    total: agreements.length,
+    awaitingSponsorship: agreements.filter(
+      (c) => c.status === "Awaiting Sponsorship",
+    ).length,
+    underNegotiation: agreements.filter((c) => c.status === "Under Negotiation")
+      .length,
+    agreementReached: agreements.filter((c) => c.status === "Agreement Reached")
+      .length,
+    partiallyImplemented: agreements.filter(
+      (c) => c.status === "Partially Implemented",
+    ).length,
+    implemented: agreements.filter((c) => c.status === "Implemented").length,
+  };
+};
