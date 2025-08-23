@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SimpleAnalytics } from "@/components/SimpleAnalytics";
-import NavButton from "@/components/NavButton";
 
 // SVG for the emoji favicon: 🏗️🇨🇦 using separate text elements, further reduced font
 // and Unicode escape for the Canadian flag emoji.
@@ -50,9 +49,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning className="bg-background">
       <body className={`text-neutral-800 bg-background`}>
