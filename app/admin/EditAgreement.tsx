@@ -172,7 +172,6 @@ export default function EditAgreement({
       );
 
       if (!response.ok) {
-        // Try to get error message from response body
         let errorMessage = `HTTP ${response.status}: ${response.statusText}`;
 
         try {
@@ -190,7 +189,7 @@ export default function EditAgreement({
         throw new Error(errorMessage);
       }
 
-      // Get the updated agreement data
+      // Update the local agreement with the new agreement data
       const finalUpdatedAgreement = {
         ...agreement,
         ...updatedAgreement,
@@ -202,7 +201,7 @@ export default function EditAgreement({
         description: "Agreement has been updated successfully.",
       });
 
-      // Call the callback to update the parent component
+      // Update the parent component
       if (onAgreementUpdated) {
         onAgreementUpdated(finalUpdatedAgreement);
       }
@@ -274,6 +273,7 @@ export default function EditAgreement({
           </div>
         </div>
 
+        {/* Summary */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Summary *
@@ -289,6 +289,7 @@ export default function EditAgreement({
           />
         </div>
 
+        {/* Description */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Description *
@@ -304,6 +305,7 @@ export default function EditAgreement({
           />
         </div>
 
+        {/* Deadline and Source URL */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
