@@ -26,7 +26,7 @@ export default function AgreementsList({
   };
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <>
       {agreements.map((item) => {
         const daysUntilDeadline = getDaysUntilDeadline(item.deadline);
         const isOverdue = daysUntilDeadline !== null && daysUntilDeadline < 0;
@@ -103,6 +103,6 @@ export default function AgreementsList({
         isOpen={isModalOpen}
         onClose={closeModal}
       />
-    </div>
+    </>
   );
 }

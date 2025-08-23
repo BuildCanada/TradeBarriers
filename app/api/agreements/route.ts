@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     } = body;
 
     const supabase = await createClient();
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from(process.env.DATABASE_TABLE_NAME!)
       .insert({
         title,
@@ -51,14 +51,15 @@ export async function POST(request: Request) {
         deadline,
         status,
         source_url: sourceUrl,
-      });
+      })
+      .select();
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
     }
 
     return NextResponse.json(
-      { message: "Agreement created successfully" },
+      { message: "Agreement created successfully", data: data[0] },
       { status: 201 },
     );
   } catch (error) {
