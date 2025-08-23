@@ -2,7 +2,7 @@ import { Agreement } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getStatusColor, getDaysUntilDeadline, formatDate } from "@/lib/utils";
 import { useState } from "react";
-import { Calendar, Trash2 } from "lucide-react";
+import { Calendar, Trash2, Edit } from "lucide-react";
 import AgreementModal from "./AgreementModal";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -14,14 +14,17 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import EditAgreement from "@/app/admin/EditAgreement";
 
 export default function AgreementsList({
   agreements,
   onAgreementDeleted,
+  onAgreementUpdated,
   isAdmin = false,
 }: {
   agreements: Agreement[];
   onAgreementDeleted?: (deletedId: string) => void;
+  onAgreementUpdated?: (updatedAgreement: Agreement) => void;
   isAdmin?: boolean;
 }) {
   const [selectedAgreement, setSelectedAgreement] = useState<Agreement | null>(
@@ -32,6 +35,9 @@ export default function AgreementsList({
     null,
   );
   const [isDeleting, setIsDeleting] = useState(false);
+  const [agreementToEdit, setAgreementToEdit] = useState<Agreement | null>(
+    null,
+  );
 
   const handleCardClick = (agreement: Agreement) => {
     setSelectedAgreement(agreement);
@@ -46,6 +52,11 @@ export default function AgreementsList({
   const handleDeleteClick = (e: React.MouseEvent, agreement: Agreement) => {
     e.stopPropagation(); // Prevent opening the modal
     setAgreementToDelete(agreement);
+  };
+
+  const handleEditClick = (e: React.MouseEvent, agreement: Agreement) => {
+    e.stopPropagation(); // Prevent opening the modal
+    setAgreementToEdit(agreement);
   };
 
   const handleDeleteConfirm = async () => {
@@ -100,14 +111,22 @@ export default function AgreementsList({
           >
             {/* Delete Button - Only visible on hover and when admin */}
             {isAdmin && (
-              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => handleEditClick(e, item)}
+                  className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 text-white border-blue-500"
+                >
+                  <Edit className="h-4 w-4 p-2" />
+                </Button>
                 <Button
                   variant="destructive"
                   size="sm"
                   onClick={(e) => handleDeleteClick(e, item)}
                   className="h-8 w-8 bg-primary hover:bg-primary/90"
                 >
-                  <Trash2 className="h-4 w-4 p-1" />
+                  <Trash2 className="h-4 w-4 p-2" />
                 </Button>
               </div>
             )}
@@ -207,6 +226,29 @@ export default function AgreementsList({
               {isDeleting ? "Deleting..." : "Delete"}
             </Button>
           </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Edit Agreement Modal */}
+      <Dialog
+        open={!!agreementToEdit}
+        onOpenChange={() => setAgreementToEdit(null)}
+      >
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white border-[#d3c7b9] p-6 rounded-md">
+          <DialogHeader>
+            <DialogTitle>Edit Agreement</DialogTitle>
+          </DialogHeader>
+          {agreementToEdit && (
+            <EditAgreement
+              agreement={agreementToEdit}
+              onAgreementUpdated={(updatedAgreement) => {
+                if (onAgreementUpdated) {
+                  onAgreementUpdated(updatedAgreement);
+                }
+                setAgreementToEdit(null); // Close the modal
+              }}
+            />
+          )}
         </DialogContent>
       </Dialog>
     </>

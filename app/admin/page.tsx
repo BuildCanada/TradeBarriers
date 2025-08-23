@@ -61,6 +61,19 @@ export default function AdminPage() {
     );
   };
 
+  const handleAgreementUpdated = (updatedAgreement: Agreement) => {
+    setData(
+      data.map((agreement) =>
+        agreement.id === updatedAgreement.id ? updatedAgreement : agreement,
+      ),
+    );
+    setFilteredData(
+      filteredData.map((agreement) =>
+        agreement.id === updatedAgreement.id ? updatedAgreement : agreement,
+      ),
+    );
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-[#f6ebe3] p-6">
@@ -106,6 +119,7 @@ export default function AdminPage() {
               <AgreementsList
                 agreements={filteredData}
                 onAgreementDeleted={handleAgreementDeleted}
+                onAgreementUpdated={handleAgreementUpdated}
                 isAdmin={true}
               />
             </div>
