@@ -64,7 +64,7 @@ export default function ResetPasswordPage() {
 
       // Password updated successfully
       alert("Password updated successfully! You can now sign in.");
-      router.push("/trade-barriers/admin/login");
+      router.push("/admin/login");
     } catch (error) {
       console.error("Error:", error);
       setError(error instanceof Error ? error.message : "An error occurred");
