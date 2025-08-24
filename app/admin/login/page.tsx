@@ -46,7 +46,6 @@ export default function AdminLoginPage() {
     }
   };
 
-  // Show loading state while checking authentication
   if (loading) {
     return (
       <div className="min-h-screen bg-[#f6ebe3] p-6 flex items-center justify-center">
