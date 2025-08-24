@@ -97,7 +97,8 @@ export default function AdminPage() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <div className="flex items-center gap-4 mb-4">
+            {/* Desktop layout - keep as is */}
+            <div className="hidden md:flex items-center gap-4 mb-4">
               <NavButton />
               <h1 className="text-3xl font-bold font-soehne">
                 Admin Dashboard
@@ -117,11 +118,36 @@ export default function AdminPage() {
                 </Button>
               </div>
             </div>
+
+            {/* Mobile layout - welcome text on its own row */}
+            <div className="md:hidden">
+              <div className="flex items-center gap-4 mb-4">
+                <NavButton />
+                <h1 className="text-3xl font-bold font-soehne">
+                  Admin Dashboard
+                </h1>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-600">
+                  Welcome, {user?.email}
+                </span>
+                <Button
+                  onClick={handleLogout}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </Button>
+              </div>
+            </div>
           </div>
 
           {/* Main Content - Agreements List */}
           <div>
-            <div className="flex items-center justify-between mb-6">
+            {/* Desktop layout */}
+            <div className="hidden md:flex items-center justify-between mb-6">
               <div className="flex items-center gap-4">
                 <h2 className="text-2xl font-semibold">Agreements</h2>
                 <Button
@@ -135,6 +161,32 @@ export default function AdminPage() {
 
               {/* Search Bar */}
               <div className="relative w-80">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  type="text"
+                  placeholder="Search agreements by title..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="pl-10 border-[#d3c7b9] bg-white"
+                />
+              </div>
+            </div>
+
+            {/* Mobile layout - search bar on its own row */}
+            <div className="md:hidden mb-6">
+              <div className="flex items-center gap-4 mb-4">
+                <h2 className="text-2xl font-semibold">Agreements</h2>
+                <Button
+                  onClick={() => setIsAddModalOpen(true)}
+                  className="bg-primary hover:bg-primary/90 text-white font-medium px-4 py-2 flex items-center gap-2"
+                >
+                  <Plus className="h-4 w-4" />
+                  Add
+                </Button>
+              </div>
+
+              {/* Search Bar - full width on mobile */}
+              <div className="relative w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                 <Input
                   type="text"
