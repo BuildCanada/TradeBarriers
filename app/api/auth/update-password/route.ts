@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/client";
+import { createAdminClient } from "@/lib/supabase/adminClient";
 
 // Decode JWT token and extract user ID
 function decodeJWT(token: string) {
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
 
     const userId = decodeJWT(accessToken);
 
-    const supabase = await createClient();
+    const supabase = await createAdminClient();
 
     // Update the user's password using the user ID
     const { error } = await supabase.auth.admin.updateUserById(userId, {
