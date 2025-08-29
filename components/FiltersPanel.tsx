@@ -85,7 +85,7 @@ export default function FiltersPanel({
       if (currentFilters.jurisdictions.length > 0) {
         filtered = filtered.filter((agreement) =>
           agreement.jurisdictions?.some((js) =>
-            currentFilters.jurisdictions.includes(js),
+            currentFilters.jurisdictions.includes(js.name),
           ),
         );
       }

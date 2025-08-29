@@ -27,8 +27,7 @@ export interface Agreement {
   title: string;
   summary: string;
   description: string;
-  jurisdictions: string[];
-  jurisdictionStatuses?: JurisdictionStatus[];
+  jurisdictions: JurisdictionStatus[];
   deadline: string | null;
   status: AgreementStatus;
   sourceUrl: string | null;

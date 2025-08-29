@@ -155,7 +155,7 @@ export default function AgreementsList({
                   Participating Jurisdictions
                 </h4>
                 <div className="flex flex-wrap gap-1">
-                  {item.jurisdictionStatuses
+                  {item.jurisdictions
                     ?.filter(
                       (js) =>
                         !["Declined", "Unknown", "Not Applicable"].includes(
@@ -171,8 +171,8 @@ export default function AgreementsList({
                         {jurisdictionStatus.name}
                       </span>
                     ))}
-                  {item.jurisdictionStatuses &&
-                    item.jurisdictionStatuses.filter(
+                  {item.jurisdictions &&
+                    item.jurisdictions.filter(
                       (js) =>
                         !["Declined", "Unknown", "Not Applicable"].includes(
                           js.status,
@@ -180,7 +180,7 @@ export default function AgreementsList({
                     ).length > 3 && (
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
                         +
-                        {item.jurisdictionStatuses.filter(
+                        {item.jurisdictions.filter(
                           (js) =>
                             !["Declined", "Unknown", "Not Applicable"].includes(
                               js.status,

@@ -13,9 +13,10 @@ import {
 import {
   Agreement,
   AgreementStatus,
+  JurisdictionStatus,
   JurisdictionStatusType,
 } from "@/lib/types";
-import { AGREEMENT_STATUSES, JURISDICTIONS } from "@/lib/utils";
+import { AGREEMENT_STATUSES } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
 
 export default function EditAgreement({
@@ -32,12 +33,7 @@ export default function EditAgreement({
     status: "Awaiting Sponsorship" as AgreementStatus, // Set a default value
     deadline: "",
     sourceUrl: "",
-    jurisdictions: [] as string[],
-    jurisdictionStatuses: [] as Array<{
-      name: string;
-      status: JurisdictionStatusType;
-      notes: string;
-    }>,
+    jurisdictions: [] as JurisdictionStatus[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,53 +49,16 @@ export default function EditAgreement({
         deadline: agreement.deadline || "",
         sourceUrl: agreement.sourceUrl || "",
         jurisdictions: agreement.jurisdictions,
-        jurisdictionStatuses: agreement.jurisdictionStatuses || [],
       };
       setFormData(initialFormData);
     }
   }, [agreement]);
 
-  const handleInputChange = (field: string, value: string | string[]) => {
+  const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
-  };
-
-  const handleJurisdictionToggle = (jurisdiction: string) => {
-    setFormData((prev) => {
-      const isSelected = prev.jurisdictions.includes(jurisdiction);
-      let newJurisdictions: string[];
-
-      if (isSelected) {
-        newJurisdictions = prev.jurisdictions.filter((j) => j !== jurisdiction);
-        // Remove from jurisdictionStatuses as well
-        const newJurisdictionStatuses = prev.jurisdictionStatuses.filter(
-          (js) => js.name !== jurisdiction,
-        );
-        return {
-          ...prev,
-          jurisdictions: newJurisdictions,
-          jurisdictionStatuses: newJurisdictionStatuses,
-        };
-      } else {
-        newJurisdictions = [...prev.jurisdictions, jurisdiction];
-        // Add to jurisdictionStatuses with default values
-        const newJurisdictionStatuses = [
-          ...prev.jurisdictionStatuses,
-          {
-            name: jurisdiction,
-            status: "Unknown" as JurisdictionStatusType,
-            notes: "",
-          },
-        ];
-        return {
-          ...prev,
-          jurisdictions: newJurisdictions,
-          jurisdictionStatuses: newJurisdictionStatuses,
-        };
-      }
-    });
   };
 
   const handleJurisdictionStatusChange = (
@@ -109,7 +68,7 @@ export default function EditAgreement({
   ) => {
     setFormData((prev) => ({
       ...prev,
-      jurisdictionStatuses: prev.jurisdictionStatuses.map((js) =>
+      jurisdictions: prev.jurisdictions.map((js) =>
         js.name === jurisdictionName ? { ...js, [field]: value } : js,
       ),
     }));
@@ -156,7 +115,6 @@ export default function EditAgreement({
         deadline: formData.deadline || null,
         sourceUrl: formData.sourceUrl || null,
         jurisdictions: formData.jurisdictions,
-        jurisdictionStatuses: formData.jurisdictionStatuses,
       };
 
       // Send the updated agreement to the API
@@ -333,29 +291,6 @@ export default function EditAgreement({
           </div>
         </div>
 
-        {/* Jurisdictions */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-3">
-            Select Jurisdictions *
-          </label>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            {JURISDICTIONS.map((jurisdiction) => (
-              <label
-                key={jurisdiction}
-                className="flex items-center space-x-2 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  checked={formData.jurisdictions.includes(jurisdiction)}
-                  onChange={() => handleJurisdictionToggle(jurisdiction)}
-                  className="rounded border-[#d3c7b9] text-primary focus:ring-primary hover:bg-primary/10"
-                />
-                <span className="text-sm text-gray-700">{jurisdiction}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
         {/* Jurisdiction Statuses */}
         {formData.jurisdictions.length > 0 && (
           <div>
@@ -363,7 +298,7 @@ export default function EditAgreement({
               Jurisdiction Status Details
             </label>
             <div className="space-y-3">
-              {formData.jurisdictionStatuses.map((js) => (
+              {formData.jurisdictions.map((js) => (
                 <div
                   key={js.name}
                   className="p-3 border border-[#d3c7b9] rounded-md"

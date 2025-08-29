@@ -8,8 +8,7 @@ export const mockAgreements: Agreement[] = [
       "Standardize driver qualifications and vehicle specifications for long-combination vehicles across all provinces.",
     description:
       "This comprehensive initiative aims to create uniform standards for long-combination vehicles (LCVs) across participating provinces. The agreement covers driver qualification requirements, vehicle specifications including length and weight limits, safety equipment standards, and operational guidelines. By harmonizing these standards, the initiative will reduce regulatory barriers that currently prevent efficient interprovincial transportation of goods, ultimately lowering costs for businesses and consumers while maintaining safety standards.",
-    jurisdictions: ["Alberta", "British Columbia", "Saskatchewan", "Manitoba"],
-    jurisdictionStatuses: [
+    jurisdictions: [
       {
         name: "Alberta",
         status: "Complete",
@@ -94,8 +93,7 @@ export const mockAgreements: Agreement[] = [
       "Implement harmonized construction codes across Canada to eliminate regulatory barriers.",
     description:
       "This initiative establishes a unified national construction code framework that eliminates the need for construction companies to navigate different building standards across provinces. The harmonized code covers structural requirements, fire safety standards, accessibility provisions, and energy efficiency requirements. Implementation includes mutual recognition of building permits, standardized inspection processes, and unified certification for construction professionals.",
-    jurisdictions: ["Ontario", "Quebec", "Nova Scotia", "New Brunswick"],
-    jurisdictionStatuses: [
+    jurisdictions: [
       {
         name: "Alberta",
         status: "Declined",
@@ -176,14 +174,6 @@ export const mockAgreements: Agreement[] = [
     description:
       "This agreement standardizes the interpretation of sunrise and sunset times for commercial trucking operations, eliminating confusion and compliance issues for drivers crossing provincial boundaries. The initiative includes unified rest period requirements, standardized logbook procedures, and coordinated enforcement protocols to ensure consistent application of hours of service regulations.",
     jurisdictions: [
-      "Alberta",
-      "Saskatchewan",
-      "Manitoba",
-      "New Brunswick",
-      "Nova Scotia",
-      "Prince Edward Island",
-    ],
-    jurisdictionStatuses: [
       {
         name: "Alberta",
         status: "Implementing",
@@ -265,8 +255,7 @@ export const mockAgreements: Agreement[] = [
       "Establish uniform maximum weight standards for heavy-duty tow trucks.",
     description:
       "This initiative creates standardized weight limits and operational guidelines for heavy-duty tow trucks operating across provincial boundaries. The agreement covers maximum gross vehicle weights, axle load distributions, equipment specifications, and operator certification requirements to ensure safe and efficient cross-border towing operations.",
-    jurisdictions: ["Ontario", "Quebec", "Manitoba"],
-    jurisdictionStatuses: [
+    jurisdictions: [
       {
         name: "Alberta",
         status: "Declined",
@@ -346,8 +335,7 @@ export const mockAgreements: Agreement[] = [
       "High-priority initiative to eliminate double taxation on digital services across provinces.",
     description:
       "This critical initiative addresses the growing need to prevent double taxation of digital services as businesses increasingly operate across provincial boundaries. The framework would establish uniform tax treatment for cloud services, digital advertising, software licensing, and online marketplace transactions.",
-    jurisdictions: [],
-    jurisdictionStatuses: [
+    jurisdictions: [
       {
         name: "Alberta",
         status: "Unknown",
@@ -427,8 +415,7 @@ export const mockAgreements: Agreement[] = [
       "Critical need for standardized emergency response resource sharing during natural disasters.",
     description:
       "This essential initiative would establish protocols for sharing emergency response resources including personnel, equipment, and expertise during natural disasters and other emergencies. The framework would include mutual aid agreements, resource inventory systems, cost-sharing mechanisms, and coordinated command structures.",
-    jurisdictions: [],
-    jurisdictionStatuses: [
+    jurisdictions: [
       {
         name: "Alberta",
         status: "Unknown",

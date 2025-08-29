@@ -97,30 +97,28 @@ export default function AgreementModal({
                   </tr>
                 </thead>
                 <tbody>
-                  {agreement.jurisdictionStatuses?.map(
-                    (jurisdiction, index) => (
-                      <tr
-                        key={jurisdiction.name}
-                        className={`border-b border-gray-200 ${
-                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                        }`}
-                      >
-                        <td className="p-3 font-medium text-gray-900">
-                          {jurisdiction.name}
-                        </td>
-                        <td className="p-3">
-                          <Badge
-                            className={`${getGovernmentStatusColor(jurisdiction.status)} border text-xs`}
-                          >
-                            {jurisdiction.status}
-                          </Badge>
-                        </td>
-                        <td className="p-3 text-gray-600 text-sm">
-                          {jurisdiction.notes}
-                        </td>
-                      </tr>
-                    ),
-                  )}
+                  {agreement.jurisdictions?.map((jurisdiction, index) => (
+                    <tr
+                      key={jurisdiction.name}
+                      className={`border-b border-gray-200 ${
+                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                      }`}
+                    >
+                      <td className="p-3 font-medium text-gray-900">
+                        {jurisdiction.name}
+                      </td>
+                      <td className="p-3">
+                        <Badge
+                          className={`${getGovernmentStatusColor(jurisdiction.status)} border text-xs`}
+                        >
+                          {jurisdiction.status}
+                        </Badge>
+                      </td>
+                      <td className="p-3 text-gray-600 text-sm">
+                        {jurisdiction.notes}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
