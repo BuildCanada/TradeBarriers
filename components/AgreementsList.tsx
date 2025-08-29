@@ -155,19 +155,40 @@ export default function AgreementsList({
                   Participating Jurisdictions
                 </h4>
                 <div className="flex flex-wrap gap-1">
-                  {item.jurisdictions.slice(0, 3).map((jurisdiction) => (
-                    <span
-                      key={jurisdiction}
-                      className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                    >
-                      {jurisdiction}
-                    </span>
-                  ))}
-                  {item.jurisdictions.length > 3 && (
-                    <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                      +{item.jurisdictions.length - 3} more
-                    </span>
-                  )}
+                  {item.jurisdictionStatuses
+                    ?.filter(
+                      (js) =>
+                        !["Declined", "Unknown", "Not Applicable"].includes(
+                          js.status,
+                        ),
+                    )
+                    .slice(0, 3)
+                    .map((jurisdictionStatus) => (
+                      <span
+                        key={jurisdictionStatus.name}
+                        className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                      >
+                        {jurisdictionStatus.name}
+                      </span>
+                    ))}
+                  {item.jurisdictionStatuses &&
+                    item.jurisdictionStatuses.filter(
+                      (js) =>
+                        !["Declined", "Unknown", "Not Applicable"].includes(
+                          js.status,
+                        ),
+                    ).length > 3 && (
+                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                        +
+                        {item.jurisdictionStatuses.filter(
+                          (js) =>
+                            !["Declined", "Unknown", "Not Applicable"].includes(
+                              js.status,
+                            ),
+                        ).length - 3}{" "}
+                        more
+                      </span>
+                    )}
                 </div>
               </div>
 
