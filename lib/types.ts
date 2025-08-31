@@ -5,7 +5,7 @@ export type AgreementStatus =
   | "Partially Implemented"
   | "Implemented";
 
-export type JurisdictionStatusType =
+export type JurisdictionStatus =
   | "Unknown"
   | "Aware"
   | "Considering"
@@ -16,9 +16,9 @@ export type JurisdictionStatusType =
   | "Declined"
   | "Not Applicable";
 
-export interface JurisdictionStatus {
+export interface Jurisdiction {
   name: string;
-  status: JurisdictionStatusType;
+  status: JurisdictionStatus;
   notes: string;
 }
 
@@ -27,7 +27,7 @@ export interface Agreement {
   title: string;
   summary: string;
   description: string;
-  jurisdictions: JurisdictionStatus[];
+  jurisdictions: Jurisdiction[];
   deadline: string | null;
   status: AgreementStatus;
   sourceUrl: string | null;

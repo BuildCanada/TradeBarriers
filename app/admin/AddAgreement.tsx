@@ -13,8 +13,8 @@ import {
 import {
   Agreement,
   AgreementStatus,
+  Jurisdiction,
   JurisdictionStatus,
-  JurisdictionStatusType,
 } from "@/lib/types";
 import { AGREEMENT_STATUSES } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
@@ -35,65 +35,65 @@ export default function AddAgreement({
       {
         name: "Alberta",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "New Brunswick",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Ontario",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Saskatchewan",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
-      { name: "Yukon", notes: "", status: "Unknown" as JurisdictionStatusType },
+      { name: "Yukon", notes: "", status: "Unknown" as JurisdictionStatus },
       {
         name: "Prince Edward Island",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Newfoundland and Labrador",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "British Columbia",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Northwest Territories",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Manitoba",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Nova Scotia",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Quebec",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
       {
         name: "Nunavut",
         notes: "",
-        status: "Unknown" as JurisdictionStatusType,
+        status: "Unknown" as JurisdictionStatus,
       },
-    ] as JurisdictionStatus[],
+    ] as Jurisdiction[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -207,67 +207,67 @@ export default function AddAgreement({
           {
             name: "Alberta",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "New Brunswick",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Ontario",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Saskatchewan",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Yukon",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Prince Edward Island",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Newfoundland and Labrador",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "British Columbia",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Northwest Territories",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Manitoba",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Nova Scotia",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Quebec",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
           {
             name: "Nunavut",
             notes: "",
-            status: "Unknown" as JurisdictionStatusType,
+            status: "Unknown" as JurisdictionStatus,
           },
         ],
       });
@@ -421,7 +421,7 @@ export default function AddAgreement({
                           handleJurisdictionStatusChange(
                             js.name,
                             "status",
-                            value as JurisdictionStatusType,
+                            value as JurisdictionStatus,
                           )
                         }
                       >

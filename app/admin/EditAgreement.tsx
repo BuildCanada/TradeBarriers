@@ -13,8 +13,8 @@ import {
 import {
   Agreement,
   AgreementStatus,
+  Jurisdiction,
   JurisdictionStatus,
-  JurisdictionStatusType,
 } from "@/lib/types";
 import { AGREEMENT_STATUSES } from "@/lib/utils";
 import { toast } from "@/components/ui/use-toast";
@@ -33,7 +33,7 @@ export default function EditAgreement({
     status: "Awaiting Sponsorship" as AgreementStatus, // Set a default value
     deadline: "",
     sourceUrl: "",
-    jurisdictions: [] as JurisdictionStatus[],
+    jurisdictions: [] as Jurisdiction[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -317,7 +317,7 @@ export default function EditAgreement({
                           handleJurisdictionStatusChange(
                             js.name,
                             "status",
-                            value as JurisdictionStatusType,
+                            value as JurisdictionStatus,
                           )
                         }
                       >

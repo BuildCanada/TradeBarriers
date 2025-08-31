@@ -1,6 +1,11 @@
 import { Agreement } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { getStatusColor, getDaysUntilDeadline, formatDate } from "@/lib/utils";
+import {
+  getStatusColor,
+  getDaysUntilDeadline,
+  formatDate,
+  getParticipatingJurisdictions,
+} from "@/lib/utils";
 import { useState } from "react";
 import { Calendar, Trash2, Edit } from "lucide-react";
 import AgreementModal from "./AgreementModal";
@@ -155,14 +160,9 @@ export default function AgreementsList({
                   Participating Jurisdictions
                 </h4>
                 <div className="flex flex-wrap gap-1">
-                  {item.jurisdictions
-                    ?.filter(
-                      (js) =>
-                        !["Declined", "Unknown", "Not Applicable"].includes(
-                          js.status,
-                        ),
-                    )
-                    .slice(0, 3)
+                  {/* Individual badges */}
+                  {getParticipatingJurisdictions(item.jurisdictions)
+                    ?.slice(0, 3)
                     .map((jurisdictionStatus) => (
                       <span
                         key={jurisdictionStatus.name}
@@ -171,21 +171,15 @@ export default function AgreementsList({
                         {jurisdictionStatus.name}
                       </span>
                     ))}
+
+                  {/* "More" badge */}
                   {item.jurisdictions &&
-                    item.jurisdictions.filter(
-                      (js) =>
-                        !["Declined", "Unknown", "Not Applicable"].includes(
-                          js.status,
-                        ),
-                    ).length > 3 && (
+                    getParticipatingJurisdictions(item.jurisdictions).length >
+                      3 && (
                       <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
                         +
-                        {item.jurisdictions.filter(
-                          (js) =>
-                            !["Declined", "Unknown", "Not Applicable"].includes(
-                              js.status,
-                            ),
-                        ).length - 3}{" "}
+                        {getParticipatingJurisdictions(item.jurisdictions)
+                          .length - 3}{" "}
                         more
                       </span>
                     )}
