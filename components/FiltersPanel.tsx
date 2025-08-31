@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Agreement, AgreementStatus } from "@/lib/types";
 import {
   AGREEMENT_STATUSES,
+  checkIfParticipating,
   DEADLINE_TYPES,
   getDaysUntilDeadline,
   JURISDICTIONS,
@@ -84,8 +85,10 @@ export default function FiltersPanel({
       // Filter by jurisdictions
       if (currentFilters.jurisdictions.length > 0) {
         filtered = filtered.filter((agreement) =>
-          agreement.jurisdictions?.some((js) =>
-            currentFilters.jurisdictions.includes(js.name),
+          agreement.jurisdictions?.some(
+            (js) =>
+              currentFilters.jurisdictions.includes(js.name) &&
+              checkIfParticipating([js]),
           ),
         );
       }

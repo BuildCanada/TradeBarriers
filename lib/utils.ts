@@ -1,6 +1,11 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Agreement, AgreementStatus, JurisdictionStatusType } from "./types";
+import {
+  Agreement,
+  AgreementStatus,
+  Jurisdiction,
+  JurisdictionStatus,
+} from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -55,7 +60,7 @@ export const getStatusColor = (status: AgreementStatus) => {
 };
 
 // Government status color mapping. Returns a string of tailwind classes.
-export const getGovernmentStatusColor = (status: JurisdictionStatusType) => {
+export const getGovernmentStatusColor = (status: JurisdictionStatus) => {
   switch (status) {
     case "Unknown":
       return "bg-gray-100 text-gray-700 border-gray-300";
@@ -116,4 +121,24 @@ export const getAgreementStats = (agreements: Agreement[]) => {
     ).length,
     implemented: agreements.filter((c) => c.status === "Implemented").length,
   };
+};
+
+export const checkIfParticipating = (jurisdictions: Jurisdiction[]) => {
+  return jurisdictions.some(
+    (jurisdiction) =>
+      jurisdiction.status !== "Declined" &&
+      jurisdiction.status !== "Not Applicable" &&
+      jurisdiction.status !== "Unknown",
+  );
+};
+
+export const getParticipatingJurisdictions = (
+  jurisdictions: Jurisdiction[],
+) => {
+  return jurisdictions.filter(
+    (jurisdiction) =>
+      jurisdiction.status !== "Declined" &&
+      jurisdiction.status !== "Not Applicable" &&
+      jurisdiction.status !== "Unknown",
+  );
 };
