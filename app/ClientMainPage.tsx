@@ -112,7 +112,7 @@ export default function ClientMainPage({
         {/* Overview Stats */}
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Overview</h2>
-          <div className="grid grid-cols-4 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
             <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
                 <div className="text-2xl font-bold text-primary">
@@ -142,6 +142,14 @@ export default function ClientMainPage({
             <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
                 <div className="text-2xl font-bold text-primary">
+                  {stats.agreementReached}
+                </div>
+                <div className="text-sm text-gray-600">Agreement Reached</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold text-primary">
                   {stats.partiallyImplemented}
                 </div>
                 <div className="text-sm text-gray-600">
@@ -149,7 +157,7 @@ export default function ClientMainPage({
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-[#cdc4bd] col-span-4 md:col-span-1">
+            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
                 <div className="text-2xl font-bold text-primary">
                   {stats.implemented}
