@@ -135,7 +135,7 @@ export default function FiltersPanel({
   };
 
   return (
-    <Card className="bg-white border-[#d3c7b9] h-fit">
+    <Card className="bg-background border-border h-fit">
       <CardHeader className="pb-4">
         <div className="flex items-center justify-between">
           {getActiveFiltersCount() > 0 && (
@@ -143,7 +143,7 @@ export default function FiltersPanel({
               variant="outline"
               size="sm"
               onClick={clearAllFilters}
-              className="text-xs mx-auto font-founders uppercase tracking-wide border-[#d3c7b9] text-gray-600 hover:bg-gray-50"
+              className="text-xs mx-auto font-mono uppercase tracking-wide border-border text-foreground hover:bg-muted"
             >
               Clear All
             </Button>
@@ -154,22 +154,22 @@ export default function FiltersPanel({
       <CardContent className="space-y-6">
         {/* Status Filters */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
-            Status
+          <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide font-mono">
+            STATUS
           </h3>
           <div>
             {AGREEMENT_STATUSES.map((status) => (
               <label
                 key={status}
-                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md"
+                className="flex items-center space-x-2 cursor-pointer hover:bg-muted py-1"
               >
                 <input
                   type="checkbox"
                   checked={filters.statuses.includes(status)}
                   onChange={() => toggleFilter("statuses", status)}
-                  className="rounded border-[#d3c7b9] text-[#8b2332] focus:ring-[#8b2332]"
+                  className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-gray-700">{status}</span>
+                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{status}</span>
               </label>
             ))}
           </div>
@@ -177,22 +177,22 @@ export default function FiltersPanel({
 
         {/* Deadline Type Filters */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
-            Deadline
+          <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide font-mono">
+            DEADLINE
           </h3>
           <div>
             {DEADLINE_TYPES.map((type) => (
               <label
                 key={type}
-                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md"
+                className="flex items-center space-x-2 cursor-pointer hover:bg-muted py-1"
               >
                 <input
                   type="checkbox"
                   checked={filters.deadlineTypes.includes(type)}
                   onChange={() => toggleFilter("deadlineTypes", type)}
-                  className="rounded border-[#d3c7b9] text-[#8b2332] focus:ring-[#8b2332]"
+                  className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-gray-700">{type}</span>
+                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{type}</span>
               </label>
             ))}
           </div>
@@ -200,23 +200,23 @@ export default function FiltersPanel({
 
         {/* Jurisdiction Filters */}
         <div>
-          <h3 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide font-founders">
-            Jurisdictions
+          <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide font-mono">
+            JURISDICTIONS
           </h3>
           <div>
             {JURISDICTIONS.map((jurisdiction: string) => (
               <label
                 key={jurisdiction}
-                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 py-1 rounded-md"
+                className="flex items-center space-x-2 cursor-pointer hover:bg-muted py-1"
               >
                 <input
                   type="checkbox"
                   aria-checked={filters.jurisdictions.includes(jurisdiction)}
                   checked={filters.jurisdictions.includes(jurisdiction)}
                   onChange={() => toggleFilter("jurisdictions", jurisdiction)}
-                  className="rounded border-[#d3c7b9] text-[#8b2332] focus:ring-[#8b2332]"
+                  className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-gray-700">{jurisdiction}</span>
+                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{jurisdiction}</span>
               </label>
             ))}
           </div>
@@ -224,16 +224,16 @@ export default function FiltersPanel({
 
         {/* Active Filters Summary */}
         {getActiveFiltersCount() > 0 && (
-          <div className="pt-4 border-t border-[#d3c7b9]">
-            <div className="text-xs text-gray-500 font-founders uppercase tracking-wide mb-2">
-              Active Filters: {getActiveFiltersCount()}
+          <div className="pt-4 border-t border-border">
+            <div className="text-xs text-muted-foreground font-mono uppercase tracking-wide mb-2">
+              ACTIVE FILTERS: {getActiveFiltersCount()}
             </div>
             <div className="flex flex-wrap gap-1">
               {filters.statuses.map((status) => (
                 <Badge
                   key={status}
                   variant="outline"
-                  className="text-xs border-[#d3c7b9] text-gray-600"
+                  className="text-xs border-border text-foreground font-mono uppercase tracking-wide"
                 >
                   {status}
                 </Badge>
@@ -242,7 +242,7 @@ export default function FiltersPanel({
                 <Badge
                   key={type}
                   variant="outline"
-                  className="text-xs border-[#d3c7b9] text-gray-600"
+                  className="text-xs border-border text-foreground font-mono uppercase tracking-wide"
                 >
                   {type}
                 </Badge>
@@ -251,7 +251,7 @@ export default function FiltersPanel({
                 <Badge
                   key={jurisdiction}
                   variant="outline"
-                  className="text-xs border-[#d3c7b9] text-gray-600"
+                  className="text-xs border-border text-foreground font-mono uppercase tracking-wide"
                 >
                   {jurisdiction}
                 </Badge>

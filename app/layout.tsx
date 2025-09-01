@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SimpleAnalytics } from "@/components/SimpleAnalytics";
+import AutoHideScrollbar from "@/components/AutoHideScrollbar";
 
 // SVG for the emoji favicon: 🏗️🇨🇦 using separate text elements, further reduced font
 // and Unicode escape for the Canadian flag emoji.
@@ -51,35 +52,30 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="bg-background">
-      <body className={`text-neutral-800 bg-background`}>
-        <div className="border-2 border-black m-5">
-          <main className="container mx-auto bg-background site-main-content">
+    <html lang="en" suppressHydrationWarning className="dark">
+      <body className="bg-background text-foreground font-mono">
+        <div className="min-h-screen">
+          <main className="bg-background">
             <div className="min-h-screen">
-              <div className="col-span-3">{children}</div>
+              <div>{children}</div>
             </div>
           </main>
 
-          <footer
-            className="mt-16 px-4 py-8 text-neutral-300"
-            style={{ backgroundColor: "#272727" }}
-          >
-            <div className="container mx-auto">
-              <div className="mb-8">
-                <p className="text-white">
-                  🏗️🇨🇦 A{" "}
-                  {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-                  <a href="/" className="underline decoration-white">
-                    Build Canada
-                  </a>{" "}
-                  project.
-                </p>
-              </div>
+          <footer className="border-t border-border bg-background px-4 py-6">
+            <div className="text-center">
+              <p className="text-bloomberg-text text-sm font-mono uppercase tracking-wider">
+                🏗️🇨🇦 A{" "}
+                <a href="/" className="text-bloomberg-blue hover:underline">
+                  BUILD CANADA
+                </a>{" "}
+                PROJECT
+              </p>
             </div>
           </footer>
         </div>
         <Toaster />
         <SimpleAnalytics />
+        <AutoHideScrollbar />
       </body>
     </html>
   );

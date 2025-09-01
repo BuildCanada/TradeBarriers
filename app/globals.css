@@ -44,15 +44,16 @@
 }
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 26, 26, 26;
+  --background-end-rgb: 26, 26, 26;
 
-  --bc-beige: #f6ebe3;
-  --bc-logo-red: #932f2;
-  --bc-border-dark: #585858; /* For the tab borders */
-  --bc-border-light: #cdc4bd;
-  --bc-tab-hover-bg: #cdc4bd; /* A light gray for tab hover */
+  /* Bloomberg-style colors */
+  --bloomberg-dark: #1a1a1a;
+  --bloomberg-blue: #1e90ff;
+  --bloomberg-red: #dc143c;
+  --bloomberg-gray: #404040;
+  --bloomberg-border: #333333;
 }
 
 @layer utilities {
@@ -70,39 +71,40 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
+    /* Dark theme Bloomberg-style */
+    --background: 0 0% 11%;
+    --foreground: 0 0% 95%;
+    --card: 0 0% 13%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 210 100% 56%;
+    --primary-foreground: 0 0% 11%;
+    --secondary: 0 0% 16%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 0 0% 16%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 16%;
+    --accent-foreground: 0 0% 95%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 0 0% 60%;
+    --input: 0 0% 16%;
+    --ring: 210 100% 56%;
+    --chart-1: 210 100% 56%;
+    --chart-2: 0 84% 56%;
+    --chart-3: 45 93% 47%;
+    --chart-4: 120 84% 56%;
+    --chart-5: 280 84% 56%;
+    --radius: 0;
+    --sidebar-background: 0 0% 11%;
+    --sidebar-foreground: 0 0% 85%;
+    --sidebar-primary: 210 100% 56%;
+    --sidebar-primary-foreground: 0 0% 11%;
+    --sidebar-accent: 0 0% 16%;
+    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-border: 0 0% 60%;
+    --sidebar-ring: 210 100% 56%;
   }
 }
 
@@ -117,15 +119,10 @@
 
 @layer base {
   body {
-    @apply bg-[#f6ebe3];
-    font-family:
-      "Soehne",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      "Roboto",
-      sans-serif;
+    @apply bg-background text-foreground;
+    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
     font-weight: 400;
+    letter-spacing: 0.025em;
   }
 
   h1,
@@ -134,24 +131,20 @@
   h4,
   h5,
   h6 {
-    color: #272727;
-    font-family:
-      "Soehne",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      "Roboto",
-      sans-serif;
+    color: hsl(var(--foreground));
+    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
     font-weight: 500;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
   }
 
   button {
-    color: #272727;
-    font-family:
-      "Founders Grotesk Mono", "Menlo", "Ubuntu Mono", monospace; /* System monospace fallback */
-    letter-spacing: 0.07em;
+    color: hsl(var(--foreground));
+    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+    letter-spacing: 0.05em;
     line-height: 150%;
     text-transform: uppercase;
+    font-weight: 500;
   }
 }
 
@@ -163,4 +156,90 @@
 
 .white-checkmark[data-state="checked"] svg {
   color: white !important;
+}
+
+/* Force overlay scrollbar to not take up space */
+html {
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
+}
+
+html::-webkit-scrollbar {
+  width: 0; /* Remove default scrollbar space */
+}
+
+/* Custom overlay scrollbar */
+html::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 6px;
+  height: 100vh;
+  background: transparent;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Custom scrollbar implementation */
+::-webkit-scrollbar {
+  width: 6px;
+  position: absolute;
+  z-index: 9999;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  width: 0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.0);
+  border-radius: 0;
+  border: none;
+  transition: background-color 2s ease-out;
+  position: absolute;
+  right: 0;
+}
+
+/* Slow fade transitions */
+html:not(.scrolling):not(.mouse-active) ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.0) !important;
+  transition: background-color 3s ease-out;
+}
+
+html.scrolling ::-webkit-scrollbar-thumb,
+html.mouse-active ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.8) !important;
+  transition: background-color 1s ease-in;
+}
+
+/* Force overlay positioning */
+@supports selector(::-webkit-scrollbar) {
+  body {
+    margin-right: 0 !important;
+    padding-right: 0 !important;
+  }
+  
+  ::-webkit-scrollbar {
+    position: fixed;
+    right: 0;
+    z-index: 10000;
+  }
+}
+
+/* Firefox overlay scrollbar */
+@supports (scrollbar-width: thin) {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 3s ease-out;
+  }
+  
+  html.scrolling,
+  html.mouse-active {
+    scrollbar-color: rgba(255, 255, 255, 0.8) transparent;
+    transition: scrollbar-color 1s ease-in;
+  }
 }
