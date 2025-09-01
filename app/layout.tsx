@@ -52,7 +52,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground font-mono">
         <div className="min-h-screen">
           <main className="bg-background">
@@ -63,7 +63,7 @@ export default function RootLayout({
 
           <footer className="border-t border-border bg-background px-4 py-6">
             <div className="text-center">
-              <p className="text-bloomberg-text text-sm font-mono uppercase tracking-wider">
+              <p className="text-foreground text-sm font-mono uppercase tracking-wider">
                 🏗️🇨🇦 A{" "}
                 <a href="/" className="text-bloomberg-blue hover:underline">
                   BUILD CANADA

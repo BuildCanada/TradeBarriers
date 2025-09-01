@@ -71,25 +71,25 @@
 
 @layer base {
   :root {
-    /* Dark theme Bloomberg-style */
-    --background: 0 0% 11%;
-    --foreground: 0 0% 95%;
-    --card: 0 0% 13%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 13%;
-    --popover-foreground: 0 0% 95%;
+    /* Light theme Bloomberg-style */
+    --background: 36 20% 91%;
+    --foreground: 0 0% 25%;
+    --card: 36 20% 93%;
+    --card-foreground: 0 0% 25%;
+    --popover: 36 20% 93%;
+    --popover-foreground: 0 0% 25%;
     --primary: 210 100% 56%;
-    --primary-foreground: 0 0% 11%;
-    --secondary: 0 0% 16%;
-    --secondary-foreground: 0 0% 95%;
-    --muted: 0 0% 16%;
-    --muted-foreground: 0 0% 65%;
-    --accent: 0 0% 16%;
-    --accent-foreground: 0 0% 95%;
+    --primary-foreground: 36 20% 91%;
+    --secondary: 36 15% 85%;
+    --secondary-foreground: 0 0% 25%;
+    --muted: 36 15% 85%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 36 15% 85%;
+    --accent-foreground: 0 0% 25%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 95%;
+    --destructive-foreground: 36 20% 91%;
     --border: 0 0% 60%;
-    --input: 0 0% 16%;
+    --input: 36 15% 85%;
     --ring: 210 100% 56%;
     --chart-1: 210 100% 56%;
     --chart-2: 0 84% 56%;
@@ -97,12 +97,12 @@
     --chart-4: 120 84% 56%;
     --chart-5: 280 84% 56%;
     --radius: 0;
-    --sidebar-background: 0 0% 11%;
-    --sidebar-foreground: 0 0% 85%;
+    --sidebar-background: 36 20% 91%;
+    --sidebar-foreground: 0 0% 35%;
     --sidebar-primary: 210 100% 56%;
-    --sidebar-primary-foreground: 0 0% 11%;
-    --sidebar-accent: 0 0% 16%;
-    --sidebar-accent-foreground: 0 0% 95%;
+    --sidebar-primary-foreground: 36 20% 91%;
+    --sidebar-accent: 36 15% 85%;
+    --sidebar-accent-foreground: 0 0% 25%;
     --sidebar-border: 0 0% 60%;
     --sidebar-ring: 210 100% 56%;
   }
@@ -120,7 +120,9 @@
 @layer base {
   body {
     @apply bg-background text-foreground;
-    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+    font-family:
+      "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata",
+      "Roboto Mono", "Consolas", monospace;
     font-weight: 400;
     letter-spacing: 0.025em;
   }
@@ -132,7 +134,9 @@
   h5,
   h6 {
     color: hsl(var(--foreground));
-    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+    font-family:
+      "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata",
+      "Roboto Mono", "Consolas", monospace;
     font-weight: 500;
     letter-spacing: 0.025em;
     text-transform: uppercase;
@@ -140,7 +144,9 @@
 
   button {
     color: hsl(var(--foreground));
-    font-family: "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+    font-family:
+      "Founders Grotesk Mono", "SF Mono", "Monaco", "Inconsolata",
+      "Roboto Mono", "Consolas", monospace;
     letter-spacing: 0.05em;
     line-height: 150%;
     text-transform: uppercase;
@@ -171,7 +177,7 @@ html::-webkit-scrollbar {
 
 /* Custom overlay scrollbar */
 html::after {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   right: 0;
@@ -195,7 +201,7 @@ html::after {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.0);
+  background: rgba(64, 64, 64, 0);
   border-radius: 0;
   border: none;
   transition: background-color 2s ease-out;
@@ -205,13 +211,13 @@ html::after {
 
 /* Slow fade transitions */
 html:not(.scrolling):not(.mouse-active) ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.0) !important;
+  background: rgba(64, 64, 64, 0) !important;
   transition: background-color 3s ease-out;
 }
 
 html.scrolling ::-webkit-scrollbar-thumb,
 html.mouse-active ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.8) !important;
+  background: rgba(64, 64, 64, 0.8) !important;
   transition: background-color 1s ease-in;
 }
 
@@ -221,7 +227,7 @@ html.mouse-active ::-webkit-scrollbar-thumb {
     margin-right: 0 !important;
     padding-right: 0 !important;
   }
-  
+
   ::-webkit-scrollbar {
     position: fixed;
     right: 0;
@@ -236,10 +242,10 @@ html.mouse-active ::-webkit-scrollbar-thumb {
     scrollbar-color: transparent transparent;
     transition: scrollbar-color 3s ease-out;
   }
-  
+
   html.scrolling,
   html.mouse-active {
-    scrollbar-color: rgba(255, 255, 255, 0.8) transparent;
+    scrollbar-color: rgba(64, 64, 64, 0.8) transparent;
     transition: scrollbar-color 1s ease-in;
   }
 }
