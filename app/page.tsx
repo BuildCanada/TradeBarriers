@@ -24,8 +24,6 @@ export default async function MainPage() {
   const stats = getAgreementStats(agreements);
 
   return (
-    <div className="min-h-screen bg-[#f6ebe3]">
-      <ClientMainPage initialAgreements={agreements} initialStats={stats} />
-    </div>
+    <ClientMainPage initialAgreements={agreements} initialStats={stats} />
   );
 }
