@@ -7,7 +7,7 @@ export async function PUT(
   { params }: { params: { id: string } },
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     if (!id) {
       return NextResponse.json(
@@ -54,19 +54,8 @@ export async function PUT(
       );
     }
 
-    // Transform the data to match frontend naming conventions
-    const transformedData = data?.[0]
-      ? {
-          ...data[0],
-          sourceUrl: data[0].source_url,
-          jurisdictionStatuses: data[0].jurisdiction_statuses,
-          createdAt: data[0].created_at,
-          updatedAt: data[0].updated_at,
-        }
-      : null;
-
     return NextResponse.json(
-      { message: "Agreement updated successfully", data: transformedData },
+      { message: "Agreement updated successfully", data },
       { status: 200 },
     );
   } catch (error) {

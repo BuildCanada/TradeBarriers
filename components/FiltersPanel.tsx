@@ -4,14 +4,15 @@ import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Agreement, AgreementStatus } from "@/lib/types";
 import {
+  Agreement,
+  AgreementStatus,
   AGREEMENT_STATUSES,
-  checkIfParticipating,
   DEADLINE_TYPES,
-  getDaysUntilDeadline,
   JURISDICTIONS,
-} from "@/lib/utils";
+  DeadlineType,
+} from "@/lib/types";
+import { checkIfParticipating, getDaysUntilDeadline } from "@/lib/utils";
 
 type FiltersPanelProps = {
   agreements: Agreement[];
@@ -21,7 +22,7 @@ type FiltersPanelProps = {
 
 type Filters = {
   statuses: AgreementStatus[];
-  deadlineTypes: string[];
+  deadlineTypes: DeadlineType[];
   jurisdictions: string[];
 };
 
@@ -104,13 +105,21 @@ export default function FiltersPanel({
     onFiltersChange(filtered);
   }, [filters, agreements, applyFilters, onFiltersChange]);
 
-  const toggleFilter = (filterType: keyof Filters, value: string) => {
-    setFilters((prev) => ({
-      ...prev,
-      [filterType]: prev[filterType].includes(value as any) // eslint-disable-line @typescript-eslint/no-explicit-any
-        ? prev[filterType].filter((v) => v !== value)
-        : [...prev[filterType], value as any], // eslint-disable-line @typescript-eslint/no-explicit-any
-    }));
+  const toggleFilter = <T extends keyof Filters>(
+    filterType: T,
+    value: Filters[T][number],
+  ) => {
+    setFilters((prev) => {
+      const currentArray = prev[filterType] as readonly Filters[T][number][];
+      const isIncluded = currentArray.includes(value);
+
+      return {
+        ...prev,
+        [filterType]: isIncluded
+          ? currentArray.filter((v) => v !== value)
+          : [...currentArray, value],
+      };
+    });
   };
 
   const clearAllFilters = () => {
@@ -158,7 +167,7 @@ export default function FiltersPanel({
             STATUS
           </h3>
           <div>
-            {AGREEMENT_STATUSES.map((status) => (
+            {AGREEMENT_STATUSES.map((status: AgreementStatus) => (
               <label
                 key={status}
                 className="flex items-center space-x-2 cursor-pointer hover:bg-muted py-1"
