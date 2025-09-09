@@ -10,13 +10,12 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
-        founders: ['"Founders Grotesk Mono"', "Arial", "sans-serif"],
-        financier: ['"Financier Text"', "serif"],
-        soehne: ['"Soehne Kraftig"', "sans-serif"],
+        sans: ['"Founders Grotesk Mono"', "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", "monospace"],
+        mono: ['"Founders Grotesk Mono"', "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", "monospace"],
+        founders: ['"Founders Grotesk Mono"', "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", "monospace"],
       },
       colors: {
-        background: "#f6ebe3",
+        background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {
           DEFAULT: "hsl(var(--card))",
@@ -26,12 +25,18 @@ const config: Config = {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
         },
-        primary: "#8b2332",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
         },
-        muted: "#f6ebe3",
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
@@ -40,7 +45,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
         },
-        border: "#d3c7b9",
+        border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
@@ -60,17 +65,20 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        "canada-red": "#FF0000",
-        "canada-cream": "#FFF8DC",
-        "status-inProgress": "#007bff",
-        "status-partial": "#ffc107",
-        "status-complete": "#28a745",
-        "status-notStarted": "#6c757d",
+        // Bloomberg-style color scheme
+        "bloomberg-dark": "#1a1a1a",
+        "bloomberg-blue": "#1e90ff",
+        "bloomberg-red": "#dc143c",
+        "bloomberg-gray": "#404040",
+        "bloomberg-border": "#666666",
+        "bloomberg-text": "#ffffff",
+        "bloomberg-navy": "#1e3a8a",
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "0",
+        md: "0",
+        sm: "0",
+        DEFAULT: "0",
       },
       keyframes: {
         "accordion-down": {

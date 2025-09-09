@@ -60,17 +60,16 @@ export default function ClientMainPage({
   }, [initialAgreements]);
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row min-h-screen bg-background">
       {/* Left Column - Branding, Title, and Filters */}
-      <div className="w-full lg:w-80 flex-shrink-0 p-6">
+      <div className="w-full lg:w-80 flex-shrink-0 p-6 border-r border-border">
         <div className="mb-8">
-          <NavButton />
-          <h1 className="text-4xl lg:text-5xl font-bold mb-3 font-soehne">
-            Trade Barriers Tracker
+          <h1 className="text-3xl lg:text-4xl font-bold mb-3 font-mono uppercase tracking-wider text-foreground">
+            TRADE BARRIERS TRACKER
           </h1>
-          <p className="text-gray-600">
-            A non-partisan platform tracking progress of interprovincial trade
-            reform agreements across Canada.
+          <p className="text-muted-foreground font-mono text-sm uppercase tracking-wide">
+            A NON-PARTISAN PLATFORM TRACKING PROGRESS OF INTERPROVINCIAL TRADE
+            REFORM AGREEMENTS ACROSS CANADA.
           </p>
         </div>
 
@@ -80,20 +79,20 @@ export default function ClientMainPage({
           <div className="lg:hidden">
             <button
               onClick={() => setFiltersOpen(!filtersOpen)}
-              className="flex items-center justify-between w-full p-3 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-colors"
+              className="flex items-center justify-between w-full p-3 bg-card border border-border hover:bg-muted transition-colors"
             >
-              <h3 className="text-lg font-semibold">Filters</h3>
+              <h3 className="text-lg font-mono font-semibold uppercase tracking-wide text-foreground">FILTERS</h3>
               {filtersOpen ? (
-                <ChevronUp className="h-5 w-5 text-gray-600" />
+                <ChevronUp className="h-5 w-5 text-muted-foreground" />
               ) : (
-                <ChevronDown className="h-5 w-5 text-gray-600" />
+                <ChevronDown className="h-5 w-5 text-muted-foreground" />
               )}
             </button>
           </div>
 
           {/* Desktop always-visible header */}
-          <h3 className="hidden lg:block text-xl font-semibold mb-4">
-            Filters
+          <h3 className="hidden lg:block text-xl font-mono font-semibold mb-4 uppercase tracking-wide text-foreground">
+            FILTERS
           </h3>
 
           {/* Filters content - hidden on mobile when collapsed */}
@@ -111,16 +110,24 @@ export default function ClientMainPage({
       <div className="flex-1 p-6">
         {/* Overview Stats */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">
+          <h2 className="text-xl font-mono font-semibold mb-4 uppercase tracking-wide text-foreground">
             Overview{" "}
             <span className="text-sm text-gray-600">
               (Total: {stats.total})
             </span>
           </h2>
           <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-bloomberg-blue">
+                  {stats.total}
+                </div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">TOTAL</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold text-bloomberg-red">
                   {stats.deferred}
                 </div>
                 <div className="text-sm text-gray-600">Deferred</div>
@@ -129,49 +136,48 @@ export default function ClientMainPage({
 
             <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-bloomberg-red">
                   {stats.awaitingSponsorship}
                 </div>
-                <div className="text-sm text-gray-600">
-                  Awaiting Sponsorship
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  AWAITING
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-yellow-400">
                   {stats.underNegotiation}
                 </div>
-                <div className="text-sm text-gray-600">Under Negotiation</div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">NEGOTIATION</div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-orange-400">
                   {stats.agreementReached}
                 </div>
-                <div className="text-sm text-gray-600">Agreement Reached</div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">REACHED</div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-green-400">
                   {stats.partiallyImplemented}
                 </div>
-                <div className="text-sm text-gray-600">
-                  Partially Implemented
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  PARTIAL
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold text-primary">
+                <div className="text-2xl font-bold font-mono text-bloomberg-blue">
                   {stats.implemented}
                 </div>
-                <div className="text-sm text-gray-600">
-                  Implemented
-                  <span className="text-sm text-gray-600">
-                    {" "}
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  COMPLETE
+                  <span className="text-xs text-muted-foreground block">
                     ({((stats.implemented / stats.total) * 100).toFixed(0)}%)
                   </span>
                 </div>
@@ -185,19 +191,19 @@ export default function ClientMainPage({
           <div className="mb-6">
             {/* Desktop layout */}
             <div className="hidden md:flex items-center justify-between mb-2">
-              <h2 className="text-xl font-semibold text-[#272727]">
-                Agreements ({filteredAgreements.length})
+              <h2 className="text-xl font-mono font-semibold uppercase tracking-wide text-foreground">
+                AGREEMENTS ({filteredAgreements.length})
               </h2>
 
               {/* Search Bar */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search agreements..."
+                  placeholder="SEARCH AGREEMENTS..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="pl-10 pr-4 py-2 border border-[#cdc4bd] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-64"
+                  className="pl-10 pr-4 py-2 border border-border bg-card text-sm font-mono uppercase tracking-wide text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-bloomberg-blue focus:border-bloomberg-blue w-64"
                 />
               </div>
             </div>
@@ -205,28 +211,28 @@ export default function ClientMainPage({
             {/* Mobile layout - search bar on its own row */}
             <div className="md:hidden">
               <div className="mb-4">
-                <h2 className="text-xl font-semibold text-[#272727]">
-                  Agreements ({filteredAgreements.length})
+                <h2 className="text-xl font-mono font-semibold uppercase tracking-wide text-foreground">
+                  AGREEMENTS ({filteredAgreements.length})
                 </h2>
               </div>
 
               {/* Search Bar - full width on mobile */}
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                 <input
                   type="text"
-                  placeholder="Search agreements..."
+                  placeholder="SEARCH AGREEMENTS..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="w-full pl-10 pr-4 py-2 border border-[#cdc4bd] rounded-md bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  className="w-full pl-10 pr-4 py-2 border border-border bg-card text-sm font-mono uppercase tracking-wide text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-bloomberg-blue focus:border-bloomberg-blue"
                 />
               </div>
             </div>
 
             {filteredAgreements.length !== initialAgreements.length && (
-              <p className="text-sm text-gray-600">
-                Showing {filteredAgreements.length} of{" "}
-                {initialAgreements.length} agreements
+              <p className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                SHOWING {filteredAgreements.length} OF{" "}
+                {initialAgreements.length} AGREEMENTS
               </p>
             )}
           </div>
@@ -237,13 +243,13 @@ export default function ClientMainPage({
 
           {/* Empty State */}
           {filteredAgreements.length === 0 && (
-            <Card className="bg-white border-[#cdc4bd] text-center py-12">
+            <Card className="bg-card border border-border text-center py-12">
               <CardContent>
-                <div className="text-gray-500 text-lg">
-                  No agreements match your filters
+                <div className="text-muted-foreground text-lg font-mono uppercase tracking-wide">
+                  NO AGREEMENTS MATCH YOUR FILTERS
                 </div>
-                <div className="text-gray-400 text-sm mt-2">
-                  Try adjusting your filter criteria
+                <div className="text-muted-foreground text-sm mt-2 font-mono uppercase tracking-wide">
+                  TRY ADJUSTING YOUR FILTER CRITERIA
                 </div>
               </CardContent>
             </Card>
