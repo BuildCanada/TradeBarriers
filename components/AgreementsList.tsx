@@ -190,8 +190,8 @@ export default function AgreementsList({
                 <div
                   className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}
                 >
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-600" />
+                  <div>
+                    <Calendar className="w-4 h-4 text-gray-600 inline-block mr-1 relative -top-px" />
                     <span className="font-medium">
                       {item.status === "Implemented" ? "Completed" : "Deadline"}
                       :
