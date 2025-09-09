@@ -35,7 +35,7 @@ export default function AgreementModal({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-soehne">
+          <DialogTitle className="text-3xl font-soehne">
             {agreement.title}
           </DialogTitle>
         </DialogHeader>
@@ -67,15 +67,13 @@ export default function AgreementModal({
 
           {/* Summary */}
           <div>
-            <h3 className="text-lg font-semibold text-[#272727] mb-2">
-              Summary
-            </h3>
+            <h3 className="text-lg font-mono tracking-wide mb-2">Summary</h3>
             <p className="text-gray-700">{agreement.summary}</p>
           </div>
 
           {/* Description */}
           <div>
-            <h3 className="text-lg font-semibold text-[#272727] mb-2">
+            <h3 className="text-lg font-mono tracking-wide mb-2">
               Description
             </h3>
             <p className="text-gray-700">{agreement.description}</p>
@@ -83,7 +81,7 @@ export default function AgreementModal({
 
           {/* Jurisdiction Status Table */}
           <div>
-            <h3 className="text-lg font-semibold text-[#272727] mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-mono tracking-wide mb-4 flex items-center gap-2">
               <MapPin className="w-5 h-5 text-gray-600" />
               Jurisdiction Status
             </h3>
@@ -110,12 +108,10 @@ export default function AgreementModal({
                         index % 2 === 0 ? "bg-white" : "bg-gray-50"
                       }`}
                     >
-                      <td className="p-3 font-medium text-gray-900">
-                        {jurisdiction.name}
-                      </td>
+                      <td className="p-3 text-gray-900">{jurisdiction.name}</td>
                       <td className="p-3">
                         <Badge
-                          className={`${getGovernmentStatusColor(jurisdiction.status)} border text-xs`}
+                          className={`${getGovernmentStatusColor(jurisdiction.status)} border text-xs hover:bg-inherit`}
                         >
                           {jurisdiction.status}
                         </Badge>

@@ -53,7 +53,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-background text-foreground font-mono">
+      <body className="bg-background text-foreground">
         <div className="min-h-screen">
           <main className="bg-background">
             <div className="min-h-screen">
