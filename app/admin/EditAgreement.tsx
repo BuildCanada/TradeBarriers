@@ -16,7 +16,7 @@ import {
   Jurisdiction,
   JurisdictionStatus,
 } from "@/lib/types";
-import { AGREEMENT_STATUSES } from "@/lib/utils";
+import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 
 export default function EditAgreement({
@@ -221,7 +221,7 @@ export default function EditAgreement({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {AGREEMENT_STATUSES.map((status) => (
+                {AGREEMENT_STATUSES.map((status: AgreementStatus) => (
                   <SelectItem key={status} value={status}>
                     {status}
                   </SelectItem>

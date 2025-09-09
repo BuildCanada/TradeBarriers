@@ -16,7 +16,7 @@ import {
   Jurisdiction,
   JurisdictionStatus,
 } from "@/lib/types";
-import { AGREEMENT_STATUSES } from "@/lib/utils";
+import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 
 export default function AddAgreement({

@@ -111,16 +111,22 @@ export default function ClientMainPage({
       <div className="flex-1 p-6">
         {/* Overview Stats */}
         <div className="mb-8">
-          <h2 className="text-xl font-semibold mb-4">Overview</h2>
+          <h2 className="text-xl font-semibold mb-4">
+            Overview{" "}
+            <span className="text-sm text-gray-600">
+              (Total: {stats.total})
+            </span>
+          </h2>
           <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
             <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
                 <div className="text-2xl font-bold text-primary">
-                  {stats.total}
+                  {stats.deferred}
                 </div>
-                <div className="text-sm text-gray-600">Total</div>
+                <div className="text-sm text-gray-600">Deferred</div>
               </CardContent>
             </Card>
+
             <Card className="bg-white border-[#cdc4bd] col-span-2 md:col-span-1">
               <CardContent className="p-4">
                 <div className="text-2xl font-bold text-primary">

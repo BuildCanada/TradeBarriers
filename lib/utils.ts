@@ -11,41 +11,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Constants
-export const AGREEMENT_STATUSES: AgreementStatus[] = [
-  "Awaiting Sponsorship",
-  "Under Negotiation",
-  "Agreement Reached",
-  "Partially Implemented",
-  "Implemented",
-];
-export const DEADLINE_TYPES = [
-  "Overdue",
-  "Due Soon (30 days)",
-  "On Track",
-  "No Deadline",
-];
-export const JURISDICTIONS = [
-  "Alberta",
-  "British Columbia",
-  "Manitoba",
-  "New Brunswick",
-  "Newfoundland and Labrador",
-  "Nova Scotia",
-  "Ontario",
-  "Prince Edward Island",
-  "Quebec",
-  "Saskatchewan",
-  "Northwest Territories",
-  "Nunavut",
-  "Yukon",
-];
-
 // Status color mapping. Returns a string of tailwind classes.
 export const getStatusColor = (status: AgreementStatus) => {
   switch (status) {
-    case "Awaiting Sponsorship":
+    case "Deferred":
       return "bg-gray-100 text-gray-800 border-gray-300";
+    case "Awaiting Sponsorship":
+      return "bg-gray-200 text-gray-800 border-gray-300";
     case "Under Negotiation":
       return "bg-blue-100 text-blue-800 border-blue-300";
     case "Agreement Reached":
@@ -120,6 +92,7 @@ export const getAgreementStats = (agreements: Agreement[]) => {
       (c) => c.status === "Partially Implemented",
     ).length,
     implemented: agreements.filter((c) => c.status === "Implemented").length,
+    deferred: agreements.filter((c) => c.status === "Deferred").length,
   };
 };
 
