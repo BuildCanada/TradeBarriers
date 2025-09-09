@@ -57,9 +57,10 @@ export interface Agreement {
   jurisdictions: Jurisdiction[];
   deadline: string | null;
   status: AgreementStatus;
-  sourceUrl: string | null;
-  createdAt: string;
-  updatedAt: string;
+  source_url: string | null;
+  created_at: string;
+  updated_at: string;
+  launch_date: string | null;
 }
 
 export interface AgreementStats {

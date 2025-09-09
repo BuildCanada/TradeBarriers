@@ -14,16 +14,7 @@ async function getAgreements(): Promise<Agreement[]> {
     return [];
   }
 
-  // Transform the data to match frontend naming conventions
-  return (
-    data?.map((item) => ({
-      ...item,
-      sourceUrl: item.source_url,
-      jurisdictionStatuses: item.jurisdiction_statuses,
-      createdAt: item.created_at,
-      updatedAt: item.updated_at,
-    })) || []
-  );
+  return data || [];
 }
 
 export const revalidate = 3600;

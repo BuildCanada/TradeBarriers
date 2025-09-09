@@ -12,16 +12,7 @@ export async function GET() {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  // Transform the data to match frontend naming conventions
-  const transformedData = data?.map((item) => ({
-    ...item,
-    sourceUrl: item.source_url,
-    jurisdictionStatuses: item.jurisdiction_statuses,
-    createdAt: item.created_at,
-    updatedAt: item.updated_at,
-  }));
-
-  return NextResponse.json(transformedData);
+  return NextResponse.json(data);
 }
 
 // POST request to add a new Agreement
