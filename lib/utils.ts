@@ -59,7 +59,7 @@ export const getGovernmentStatusColor = (status: JurisdictionStatus) => {
 
 // Format the date (e.g. "Jan 1, 2025"). Returns a string.
 export const formatDate = (dateString: string | null) => {
-  if (!dateString) return "No deadline set";
+  if (!dateString) return "No date set";
   return new Date(dateString).toLocaleDateString("en-CA", {
     year: "numeric",
     month: "short",

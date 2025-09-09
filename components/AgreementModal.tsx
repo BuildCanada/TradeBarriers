@@ -51,11 +51,16 @@ export default function AgreementModal({
           <div
             className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-gray-600" />
               <span className="font-medium">Deadline:</span>{" "}
               {formatDate(agreement.deadline)}
               {isOverdue && <span className="text-red-600"> (Overdue)</span>}
+            </div>
+            <div className="flex items-center gap-2">
+              <Calendar className="w-4 h-4 text-gray-600" />
+              <span className="font-medium">Launch Date:</span>{" "}
+              {formatDate(agreement.launch_date)}
             </div>
           </div>
 
@@ -130,16 +135,16 @@ export default function AgreementModal({
               <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                 <div>
                   <span className="font-medium">Created:</span>{" "}
-                  {formatDate(agreement.createdAt)}
+                  {formatDate(agreement.created_at)}
                 </div>
                 <div>
                   <span className="font-medium">Updated:</span>{" "}
-                  {formatDate(agreement.updatedAt)}
+                  {formatDate(agreement.updated_at)}
                 </div>
               </div>
-              {agreement.sourceUrl && (
+              {agreement.source_url && (
                 <a
-                  href={agreement.sourceUrl}
+                  href={agreement.source_url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"

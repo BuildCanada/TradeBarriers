@@ -30,7 +30,8 @@ export default function AddAgreement({
     description: "",
     status: "" as AgreementStatus,
     deadline: "",
-    sourceUrl: "",
+    source_url: "",
+    launch_date: "",
     jurisdictions: [
       {
         name: "Alberta",
@@ -148,15 +149,17 @@ export default function AddAgreement({
       }
 
       // Create the agreement object
-      const newAgreement: Omit<Agreement, "id" | "createdAt" | "updatedAt"> = {
-        title: formData.title,
-        summary: formData.summary,
-        description: formData.description,
-        status: formData.status,
-        deadline: formData.deadline || null,
-        sourceUrl: formData.sourceUrl || null,
-        jurisdictions: formData.jurisdictions,
-      };
+      const newAgreement: Omit<Agreement, "id" | "created_at" | "updated_at"> =
+        {
+          title: formData.title,
+          summary: formData.summary,
+          description: formData.description,
+          status: formData.status,
+          deadline: formData.deadline || null,
+          source_url: formData.source_url || null,
+          launch_date: formData.launch_date || null,
+          jurisdictions: formData.jurisdictions,
+        };
 
       // Send the agreement to the API
       const response = await fetch("/trade-barriers/api/agreements", {
@@ -202,7 +205,8 @@ export default function AddAgreement({
         description: "",
         status: "" as AgreementStatus,
         deadline: "",
-        sourceUrl: "",
+        source_url: "",
+        launch_date: "",
         jurisdictions: [
           {
             name: "Alberta",
@@ -387,8 +391,8 @@ export default function AddAgreement({
             </label>
             <Input
               type="url"
-              value={formData.sourceUrl}
-              onChange={(e) => handleInputChange("sourceUrl", e.target.value)}
+              value={formData.source_url}
+              onChange={(e) => handleInputChange("source_url", e.target.value)}
               placeholder="https://..."
               className="border-[#d3c7b9]"
             />

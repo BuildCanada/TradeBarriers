@@ -32,8 +32,9 @@ export default function EditAgreement({
     description: "",
     status: "Awaiting Sponsorship" as AgreementStatus, // Set a default value
     deadline: "",
-    sourceUrl: "",
+    source_url: "",
     jurisdictions: [] as Jurisdiction[],
+    launch_date: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -47,8 +48,9 @@ export default function EditAgreement({
         description: agreement.description,
         status: agreement.status,
         deadline: agreement.deadline || "",
-        sourceUrl: agreement.sourceUrl || "",
+        source_url: agreement.source_url || "",
         jurisdictions: agreement.jurisdictions,
+        launch_date: agreement.launch_date || "",
       };
       setFormData(initialFormData);
     }
@@ -106,15 +108,16 @@ export default function EditAgreement({
       // Create the updated agreement object
       const updatedAgreement: Omit<
         Agreement,
-        "id" | "createdAt" | "updatedAt"
+        "id" | "created_at" | "updated_at"
       > = {
         title: formData.title,
         summary: formData.summary,
         description: formData.description,
         status: formData.status,
         deadline: formData.deadline || null,
-        sourceUrl: formData.sourceUrl || null,
+        source_url: formData.source_url || null,
         jurisdictions: formData.jurisdictions,
+        launch_date: formData.launch_date || null,
       };
 
       // Send the updated agreement to the API
@@ -263,7 +266,7 @@ export default function EditAgreement({
           />
         </div>
 
-        {/* Deadline and Source URL */}
+        {/* Deadline and Source URL and Launch Date */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -279,12 +282,24 @@ export default function EditAgreement({
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
+              Launch Date
+            </label>
+            <Input
+              type="date"
+              value={formData.launch_date}
+              onChange={(e) => handleInputChange("launch_date", e.target.value)}
+              className="border-[#d3c7b9]"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Source URL
             </label>
             <Input
               type="url"
-              value={formData.sourceUrl}
-              onChange={(e) => handleInputChange("sourceUrl", e.target.value)}
+              value={formData.source_url}
+              onChange={(e) => handleInputChange("source_url", e.target.value)}
               placeholder="https://..."
               className="border-[#d3c7b9]"
             />
