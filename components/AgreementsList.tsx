@@ -193,7 +193,12 @@ export default function AgreementsList({
                 >
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gray-600" />
-                    <span className="font-medium">Deadline:</span>{" "}
+                    <span className="font-medium">
+                      {item.status === "Implemented"
+                        ? "Completion Date"
+                        : "Deadline"}
+                      :
+                    </span>{" "}
                     {formatDate(item.deadline)}
                     {isOverdue && (
                       <span className="text-red-600"> (Overdue)</span>

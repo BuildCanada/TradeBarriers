@@ -53,7 +53,12 @@ export default function AgreementModal({
           >
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="w-4 h-4 text-gray-600" />
-              <span className="font-medium">Deadline:</span>{" "}
+              <span className="font-medium">
+                {agreement.status === "Implemented"
+                  ? "Completion Date"
+                  : "Deadline"}
+                :
+              </span>{" "}
               {formatDate(agreement.deadline)}
               {isOverdue && <span className="text-red-600"> (Overdue)</span>}
             </div>
