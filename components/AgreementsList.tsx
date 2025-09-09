@@ -2,9 +2,9 @@ import { Agreement } from "@/lib/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   getStatusColor,
-  getDaysUntilDeadline,
   formatDate,
   getParticipatingJurisdictions,
+  checkIfOverdue,
 } from "@/lib/utils";
 import { useState } from "react";
 import { Calendar, Trash2, Edit } from "lucide-react";
@@ -105,8 +105,7 @@ export default function AgreementsList({
   return (
     <>
       {agreements.map((item) => {
-        const daysUntilDeadline = getDaysUntilDeadline(item.deadline);
-        const isOverdue = daysUntilDeadline !== null && daysUntilDeadline < 0;
+        const isOverdue = checkIfOverdue(item.deadline, item.status);
 
         return (
           <Card
@@ -194,9 +193,7 @@ export default function AgreementsList({
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4 text-gray-600" />
                     <span className="font-medium">
-                      {item.status === "Implemented"
-                        ? "Completion Date"
-                        : "Deadline"}
+                      {item.status === "Implemented" ? "Completed" : "Deadline"}
                       :
                     </span>{" "}
                     {formatDate(item.deadline)}

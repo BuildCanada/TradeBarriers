@@ -96,6 +96,7 @@ export const getAgreementStats = (agreements: Agreement[]) => {
   };
 };
 
+// Determines if the jurisdiction is labeled as participating (for the badges). Returns a boolean.
 export const checkIfParticipating = (jurisdictions: Jurisdiction[]) => {
   return jurisdictions.some(
     (jurisdiction) =>
@@ -105,6 +106,7 @@ export const checkIfParticipating = (jurisdictions: Jurisdiction[]) => {
   );
 };
 
+// Gets the participating jurisdictions (for the badges). Returns an array of jurisdictions.
 export const getParticipatingJurisdictions = (
   jurisdictions: Jurisdiction[],
 ) => {
@@ -113,5 +115,18 @@ export const getParticipatingJurisdictions = (
       jurisdiction.status !== "Declined" &&
       jurisdiction.status !== "Not Applicable" &&
       jurisdiction.status !== "Unknown",
+  );
+};
+
+// Check if the deadline is overdue, unless the status is "Implemented" in which case it is "Completed". Returns a boolean.
+export const checkIfOverdue = (
+  deadline: string | null,
+  status: AgreementStatus,
+) => {
+  const daysUntilDeadline = getDaysUntilDeadline(deadline);
+  return (
+    daysUntilDeadline !== null &&
+    daysUntilDeadline < 0 &&
+    status !== "Implemented"
   );
 };
