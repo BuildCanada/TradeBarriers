@@ -4,6 +4,7 @@ import {
   Agreement,
   AgreementStatus,
   Jurisdiction,
+  JURISDICTIONS,
   JurisdictionStatus,
 } from "./types";
 
@@ -129,4 +130,13 @@ export const checkIfOverdue = (
     daysUntilDeadline < 0 &&
     status !== "Implemented"
   );
+};
+
+// Generates the jurisdictions with the default status of "Unknown". Returns an array of jurisdictions.
+export const generateJurisdictions = () => {
+  return JURISDICTIONS.map((jurisdiction) => ({
+    name: jurisdiction,
+    status: "Unknown" as JurisdictionStatus,
+    notes: "",
+  }));
 };

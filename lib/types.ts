@@ -17,6 +17,7 @@ export const DEADLINE_TYPES = [
 export type DeadlineType = (typeof DEADLINE_TYPES)[number];
 
 export const JURISDICTIONS = [
+  "Canada",
   "Alberta",
   "British Columbia",
   "Manitoba",

@@ -18,6 +18,7 @@ import {
 } from "@/lib/types";
 import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
+import { generateJurisdictions } from "@/lib/utils";
 
 export default function AddAgreement({
   onAgreementAdded,
@@ -32,69 +33,7 @@ export default function AddAgreement({
     deadline: "",
     source_url: "",
     launch_date: "",
-    jurisdictions: [
-      {
-        name: "Alberta",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "New Brunswick",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Ontario",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Saskatchewan",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      { name: "Yukon", notes: "", status: "Unknown" as JurisdictionStatus },
-      {
-        name: "Prince Edward Island",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Newfoundland and Labrador",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "British Columbia",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Northwest Territories",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Manitoba",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Nova Scotia",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Quebec",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-      {
-        name: "Nunavut",
-        notes: "",
-        status: "Unknown" as JurisdictionStatus,
-      },
-    ] as Jurisdiction[],
+    jurisdictions: generateJurisdictions() as Jurisdiction[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -207,73 +146,7 @@ export default function AddAgreement({
         deadline: "",
         source_url: "",
         launch_date: "",
-        jurisdictions: [
-          {
-            name: "Alberta",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "New Brunswick",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Ontario",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Saskatchewan",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Yukon",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Prince Edward Island",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Newfoundland and Labrador",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "British Columbia",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Northwest Territories",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Manitoba",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Nova Scotia",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Quebec",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-          {
-            name: "Nunavut",
-            notes: "",
-            status: "Unknown" as JurisdictionStatus,
-          },
-        ],
+        jurisdictions: generateJurisdictions() as Jurisdiction[],
       });
     } catch (error) {
       console.error("Error submitting agreement:", error);
