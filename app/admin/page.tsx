@@ -206,7 +206,7 @@ export default function AdminPage() {
               </div>
 
               {/* Right Content - Agreements List */}
-              <div className="flex-1">
+              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <AgreementsList
                   agreements={filteredData}
                   onAgreementDeleted={handleAgreementDeleted}

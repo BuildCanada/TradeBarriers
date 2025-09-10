@@ -104,116 +104,112 @@ export default function AgreementsList({
 
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {agreements.map((item) => {
-          const isOverdue = checkIfOverdue(item.deadline, item.status);
+      {agreements.map((item) => {
+        const isOverdue = checkIfOverdue(item.deadline, item.status);
 
-          return (
-            <Card
-              key={item.id}
-              className="bg-white border-[#cdc4bssd] hover:shadow-lg transition-shadow cursor-pointer flex flex-col relative group"
-              onClick={() => handleCardClick(item)}
-            >
-              {/* Delete Button - Only visible on hover and when admin */}
-              {isAdmin && (
-                <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => handleEditClick(e, item)}
-                    className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 text-white border-blue-500"
-                  >
-                    <Edit className="h-4 w-4 p-2" />
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={(e) => handleDeleteClick(e, item)}
-                    className="h-8 w-8 bg-primary hover:bg-primary/90"
-                  >
-                    <Trash2 className="h-4 w-4 p-2" />
-                  </Button>
+        return (
+          <Card
+            key={item.id}
+            className="bg-white border-[#cdc4bssd] hover:shadow-lg transition-shadow cursor-pointer flex flex-col relative group"
+            onClick={() => handleCardClick(item)}
+          >
+            {/* Delete Button - Only visible on hover and when admin */}
+            {isAdmin && (
+              <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity z-10 flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={(e) => handleEditClick(e, item)}
+                  className="h-8 w-8 p-0 bg-blue-500 hover:bg-blue-600 text-white border-blue-500"
+                >
+                  <Edit className="h-4 w-4 p-2" />
+                </Button>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={(e) => handleDeleteClick(e, item)}
+                  className="h-8 w-8 bg-primary hover:bg-primary/90"
+                >
+                  <Trash2 className="h-4 w-4 p-2" />
+                </Button>
+              </div>
+            )}
+
+            <CardHeader className="pb-4">
+              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+                <div className="flex-1">
+                  <CardTitle className="text-xl text-[#272727] mb-2">
+                    {item.title}
+                  </CardTitle>
                 </div>
-              )}
+              </div>
+              <div className="w-fit">
+                <div
+                  className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}
+                >
+                  {item.status}
+                </div>
+                {item.theme && (
+                  <div className="mt-2 text-sm font-semibold text-gray-800 uppercase tracking-wide flex items-center gap-1">
+                    <Tag className="w-3 h-3" />
+                    {item.theme}
+                  </div>
+                )}
+              </div>
+            </CardHeader>
 
-              <CardHeader className="pb-4">
-                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-                  <div className="flex-1">
-                    <CardTitle className="text-xl text-[#272727] mb-2">
-                      {item.title}
-                    </CardTitle>
+            <CardContent className="pt-0 flex-1 flex flex-col">
+              {/* Quick Jurisdiction Overview */}
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-1">
+                  {/* Individual badges */}
+                  {getParticipatingJurisdictions(item.jurisdictions)
+                    ?.slice(0, 3)
+                    .map((jurisdictionStatus) => (
+                      <span
+                        key={jurisdictionStatus.name}
+                        className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
+                      >
+                        {jurisdictionStatus.name}
+                      </span>
+                    ))}
+
+                  {/* "More" badge */}
+                  {item.jurisdictions &&
+                    getParticipatingJurisdictions(item.jurisdictions).length >
+                      3 && (
+                      <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                        +
+                        {getParticipatingJurisdictions(item.jurisdictions)
+                          .length - 3}{" "}
+                        more
+                      </span>
+                    )}
+                </div>
+              </div>
+
+              {/* Footer Info */}
+              <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#cdc4bd]">
+                <div
+                  className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}
+                >
+                  <div>
+                    <Calendar className="w-4 h-4 text-gray-600 inline-block mr-1 relative -top-px" />
+                    <span className="font-medium">
+                      {item.status === "Implemented" ? "Completed" : "Deadline"}
+                      :
+                    </span>{" "}
+                    {formatDate(item.deadline)}
+                    {isOverdue && (
+                      <span className="text-red-600"> (Overdue)</span>
+                    )}
                   </div>
                 </div>
-                <div className="w-fit">
-                  <div
-                    className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}
-                  >
-                    {item.status}
-                  </div>
-                  {item.theme && (
-                    <div className="mt-2 text-sm font-semibold text-gray-800 uppercase tracking-wide flex items-center gap-1">
-                      <Tag className="w-3 h-3" />
-                      {item.theme}
-                    </div>
-                  )}
-                </div>
-              </CardHeader>
-
-              <CardContent className="pt-0 flex-1 flex flex-col">
-                {/* Quick Jurisdiction Overview */}
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-1">
-                    {/* Individual badges */}
-                    {getParticipatingJurisdictions(item.jurisdictions)
-                      ?.slice(0, 3)
-                      .map((jurisdictionStatus) => (
-                        <span
-                          key={jurisdictionStatus.name}
-                          className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
-                        >
-                          {jurisdictionStatus.name}
-                        </span>
-                      ))}
-
-                    {/* "More" badge */}
-                    {item.jurisdictions &&
-                      getParticipatingJurisdictions(item.jurisdictions).length >
-                        3 && (
-                        <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                          +
-                          {getParticipatingJurisdictions(item.jurisdictions)
-                            .length - 3}{" "}
-                          more
-                        </span>
-                      )}
-                  </div>
-                </div>
-
-                {/* Footer Info */}
-                <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#cdc4bd]">
-                  <div
-                    className={`text-sm ${isOverdue ? "text-red-600 font-medium" : "text-gray-600"}`}
-                  >
-                    <div>
-                      <Calendar className="w-4 h-4 text-gray-600 inline-block mr-1 relative -top-px" />
-                      <span className="font-medium">
-                        {item.status === "Implemented"
-                          ? "Completed"
-                          : "Deadline"}
-                        :
-                      </span>{" "}
-                      {formatDate(item.deadline)}
-                      {isOverdue && (
-                        <span className="text-red-600"> (Overdue)</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+              </div>
+            </CardContent>
+          </Card>
+        );
+      })}
 
       {/* Agreement Modal */}
       <AgreementModal
