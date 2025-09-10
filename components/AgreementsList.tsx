@@ -155,9 +155,6 @@ export default function AgreementsList({
             <CardContent className="pt-0 flex-1 flex flex-col">
               {/* Quick Jurisdiction Overview */}
               <div className="mb-4">
-                <h4 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide font-founders">
-                  Participating Jurisdictions
-                </h4>
                 <div className="flex flex-wrap gap-1">
                   {/* Individual badges */}
                   {getParticipatingJurisdictions(item.jurisdictions)

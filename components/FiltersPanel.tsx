@@ -178,7 +178,7 @@ export default function FiltersPanel({
                   onChange={() => toggleFilter("statuses", status)}
                   className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{status}</span>
+                <span className="text-sm text-foreground">{status}</span>
               </label>
             ))}
           </div>
@@ -201,7 +201,7 @@ export default function FiltersPanel({
                   onChange={() => toggleFilter("deadlineTypes", type)}
                   className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{type}</span>
+                <span className="text-sm text-foreground">{type}</span>
               </label>
             ))}
           </div>
@@ -225,7 +225,7 @@ export default function FiltersPanel({
                   onChange={() => toggleFilter("jurisdictions", jurisdiction)}
                   className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
                 />
-                <span className="text-sm text-foreground font-mono uppercase tracking-wide">{jurisdiction}</span>
+                <span className="text-sm text-foreground">{jurisdiction}</span>
               </label>
             ))}
           </div>
