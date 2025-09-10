@@ -140,3 +140,15 @@ export const generateJurisdictions = () => {
     notes: "",
   }));
 };
+
+// Extract unique themes from agreements
+export const getUniqueThemes = (agreements: Agreement[]): string[] => {
+  const themes = agreements
+    .map((agreement) => agreement.theme)
+    .filter(
+      (theme): theme is string =>
+        theme !== null && theme !== undefined && theme.trim() !== "",
+    );
+
+  return Array.from(new Set(themes)).sort();
+};

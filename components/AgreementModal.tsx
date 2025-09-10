@@ -14,7 +14,7 @@ import {
   formatDate,
   checkIfOverdue,
 } from "@/lib/utils";
-import { Calendar, MapPin, ExternalLink } from "lucide-react";
+import { Calendar, MapPin, ExternalLink, Tag } from "lucide-react";
 
 interface AgreementModalProps {
   agreement: Agreement | null;
@@ -41,10 +41,18 @@ export default function AgreementModal({
         </DialogHeader>
 
         <div className="space-y-6">
-          <div
-            className={`w-fit text-xs p-1 rounded-md border ${getStatusColor(agreement.status)}`}
-          >
-            {agreement.status}
+          <div className="w-fit">
+            <div
+              className={`text-xs p-1 rounded-md border ${getStatusColor(agreement.status)}`}
+            >
+              {agreement.status}
+            </div>
+            {agreement.theme && (
+              <div className="mt-2 text-sm font-semibold text-gray-800 uppercase tracking-wide flex items-center gap-1">
+                <Tag className="w-3 h-3" />
+                {agreement.theme}
+              </div>
+            )}
           </div>
 
           <div

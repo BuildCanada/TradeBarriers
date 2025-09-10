@@ -11,8 +11,13 @@ import {
   DEADLINE_TYPES,
   JURISDICTIONS,
   DeadlineType,
+  Theme,
 } from "@/lib/types";
-import { checkIfParticipating, getDaysUntilDeadline } from "@/lib/utils";
+import {
+  checkIfParticipating,
+  getDaysUntilDeadline,
+  getUniqueThemes,
+} from "@/lib/utils";
 
 type FiltersPanelProps = {
   agreements: Agreement[];
@@ -24,6 +29,7 @@ type Filters = {
   statuses: AgreementStatus[];
   deadlineTypes: DeadlineType[];
   jurisdictions: string[];
+  themes: Theme[];
 };
 
 export default function FiltersPanel({
@@ -35,6 +41,7 @@ export default function FiltersPanel({
     statuses: [],
     deadlineTypes: [],
     jurisdictions: [],
+    themes: [],
   });
 
   // Memoize the filtering function to prevent unnecessary re-renders
@@ -94,6 +101,13 @@ export default function FiltersPanel({
         );
       }
 
+      // Filter by theme
+      if (currentFilters.themes.length > 0) {
+        filtered = filtered.filter((agreement) =>
+          currentFilters.themes.includes(agreement.theme),
+        );
+      }
+
       return filtered;
     },
     [],
@@ -127,6 +141,7 @@ export default function FiltersPanel({
       statuses: [],
       deadlineTypes: [],
       jurisdictions: [],
+      themes: [],
     });
 
     // Call parent's clearAll function if provided
@@ -139,7 +154,8 @@ export default function FiltersPanel({
     return (
       filters.statuses.length +
       filters.deadlineTypes.length +
-      filters.jurisdictions.length
+      filters.jurisdictions.length +
+      filters.themes.length
     );
   };
 
@@ -231,6 +247,31 @@ export default function FiltersPanel({
           </div>
         </div>
 
+        {/* Theme Filters */}
+        {getUniqueThemes(agreements).length > 0 && (
+          <div>
+            <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide font-mono">
+              THEMES
+            </h3>
+            <div>
+              {getUniqueThemes(agreements).map((theme: Theme) => (
+                <label
+                  key={theme}
+                  className="flex items-center space-x-2 cursor-pointer hover:bg-muted py-1"
+                >
+                  <input
+                    type="checkbox"
+                    checked={filters.themes.includes(theme)}
+                    onChange={() => toggleFilter("themes", theme)}
+                    className="border-border text-bloomberg-blue focus:ring-bloomberg-blue"
+                  />
+                  <span className="text-sm text-foreground">{theme}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Active Filters Summary */}
         {getActiveFiltersCount() > 0 && (
           <div className="pt-4 border-t border-border">
@@ -263,6 +304,15 @@ export default function FiltersPanel({
                   className="text-xs border-border text-foreground font-mono uppercase tracking-wide"
                 >
                   {jurisdiction}
+                </Badge>
+              ))}
+              {filters.themes.map((theme) => (
+                <Badge
+                  key={theme}
+                  variant="outline"
+                  className="text-xs border-border text-foreground font-mono uppercase tracking-wide"
+                >
+                  {theme}
                 </Badge>
               ))}
             </div>

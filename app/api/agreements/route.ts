@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       deadline,
       status,
       sourceUrl,
+      theme,
     } = body;
 
     const supabase = await createClient();
@@ -40,6 +41,7 @@ export async function POST(request: Request) {
         deadline,
         status,
         source_url: sourceUrl,
+        theme,
       })
       .select();
 

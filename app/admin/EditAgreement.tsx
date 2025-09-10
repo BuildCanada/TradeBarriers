@@ -15,6 +15,7 @@ import {
   AgreementStatus,
   Jurisdiction,
   JurisdictionStatus,
+  Theme,
 } from "@/lib/types";
 import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
@@ -35,9 +36,31 @@ export default function EditAgreement({
     source_url: "",
     jurisdictions: [] as Jurisdiction[],
     launch_date: "",
+    theme: "Other" as Theme,
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableThemes, setAvailableThemes] = useState<string[]>([]);
+  const [isLoadingThemes, setIsLoadingThemes] = useState(true);
+
+  // Fetch available themes on component mount
+  useEffect(() => {
+    const fetchThemes = async () => {
+      try {
+        const response = await fetch("/trade-barriers/api/themes");
+        if (response.ok) {
+          const themes = await response.json();
+          setAvailableThemes(themes);
+        }
+      } catch (error) {
+        console.error("Error fetching themes:", error);
+      } finally {
+        setIsLoadingThemes(false);
+      }
+    };
+
+    fetchThemes();
+  }, []);
 
   // Initialize form data when agreement prop changes
   useEffect(() => {
@@ -51,6 +74,7 @@ export default function EditAgreement({
         source_url: agreement.source_url || "",
         jurisdictions: agreement.jurisdictions,
         launch_date: agreement.launch_date || "",
+        theme: agreement.theme,
       };
       setFormData(initialFormData);
     }
@@ -118,6 +142,7 @@ export default function EditAgreement({
         source_url: formData.source_url || null,
         jurisdictions: formData.jurisdictions,
         launch_date: formData.launch_date || null,
+        theme: formData.theme,
       };
 
       // Send the updated agreement to the API
@@ -231,6 +256,39 @@ export default function EditAgreement({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Theme *
+            </label>
+            <Select
+              key={formData.theme}
+              value={formData.theme}
+              onValueChange={(value) => handleInputChange("theme", value)}
+              required
+              disabled={isLoadingThemes}
+            >
+              <SelectTrigger className="border-[#d3c7b9]">
+                <SelectValue
+                  placeholder={
+                    isLoadingThemes ? "Loading themes..." : "Select theme"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {availableThemes.map((theme) => (
+                  <SelectItem key={theme} value={theme}>
+                    {theme}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {isLoadingThemes && (
+              <p className="text-xs text-gray-500 mt-1">
+                Loading existing themes...
+              </p>
+            )}
           </div>
         </div>
 

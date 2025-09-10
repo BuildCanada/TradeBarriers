@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -15,6 +15,7 @@ import {
   AgreementStatus,
   Jurisdiction,
   JurisdictionStatus,
+  Theme,
 } from "@/lib/types";
 import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
@@ -33,10 +34,32 @@ export default function AddAgreement({
     deadline: "",
     source_url: "",
     launch_date: "",
+    theme: "" as Theme,
     jurisdictions: generateJurisdictions() as Jurisdiction[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [availableThemes, setAvailableThemes] = useState<string[]>([]);
+  const [isLoadingThemes, setIsLoadingThemes] = useState(true);
+
+  // Fetch available themes on component mount
+  useEffect(() => {
+    const fetchThemes = async () => {
+      try {
+        const response = await fetch("/trade-barriers/api/themes");
+        if (response.ok) {
+          const themes = await response.json();
+          setAvailableThemes(themes);
+        }
+      } catch (error) {
+        console.error("Error fetching themes:", error);
+      } finally {
+        setIsLoadingThemes(false);
+      }
+    };
+
+    fetchThemes();
+  }, []);
 
   const handleInputChange = (field: string, value: string | string[]) => {
     setFormData((prev) => ({
@@ -97,6 +120,7 @@ export default function AddAgreement({
           deadline: formData.deadline || null,
           source_url: formData.source_url || null,
           launch_date: formData.launch_date || null,
+          theme: formData.theme,
           jurisdictions: formData.jurisdictions,
         };
 
@@ -147,6 +171,7 @@ export default function AddAgreement({
         source_url: "",
         launch_date: "",
         jurisdictions: generateJurisdictions() as Jurisdiction[],
+        theme: "" as Theme,
       });
     } catch (error) {
       console.error("Error submitting agreement:", error);
@@ -212,6 +237,38 @@ export default function AddAgreement({
                 ))}
               </SelectContent>
             </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Theme *
+            </label>
+            <Select
+              value={formData.theme}
+              onValueChange={(value) => handleInputChange("theme", value)}
+              required
+              disabled={isLoadingThemes}
+            >
+              <SelectTrigger className="border-[#d3c7b9]">
+                <SelectValue
+                  placeholder={
+                    isLoadingThemes ? "Loading themes..." : "Select theme"
+                  }
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {availableThemes.map((theme) => (
+                  <SelectItem key={theme} value={theme}>
+                    {theme}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {isLoadingThemes && (
+              <p className="text-xs text-gray-500 mt-1">
+                Loading existing themes...
+              </p>
+            )}
           </div>
         </div>
 

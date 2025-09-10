@@ -7,7 +7,7 @@ import {
   checkIfOverdue,
 } from "@/lib/utils";
 import { useState } from "react";
-import { Calendar, Trash2, Edit } from "lucide-react";
+import { Calendar, Trash2, Edit, Tag } from "lucide-react";
 import AgreementModal from "./AgreementModal";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -149,6 +149,12 @@ export default function AgreementsList({
                 >
                   {item.status}
                 </div>
+                {item.theme && (
+                  <div className="mt-2 text-sm font-semibold text-gray-800 uppercase tracking-wide flex items-center gap-1">
+                    <Tag className="w-3 h-3" />
+                    {item.theme}
+                  </div>
+                )}
               </div>
             </CardHeader>
 

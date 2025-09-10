@@ -26,6 +26,7 @@ export async function PUT(
       deadline,
       status,
       sourceUrl,
+      theme,
     } = body;
 
     const supabase = await createClient();
@@ -42,6 +43,7 @@ export async function PUT(
         deadline,
         status,
         source_url: sourceUrl,
+        theme,
       })
       .eq("id", id)
       .select();

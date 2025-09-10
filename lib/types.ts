@@ -33,6 +33,8 @@ export const JURISDICTIONS = [
   "Yukon",
 ];
 
+export type Theme = string;
+
 export type JurisdictionStatus =
   | "Unknown"
   | "Aware"
@@ -62,6 +64,7 @@ export interface Agreement {
   created_at: string;
   updated_at: string;
   launch_date: string | null;
+  theme: Theme;
 }
 
 export interface AgreementStats {
