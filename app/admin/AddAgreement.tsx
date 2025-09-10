@@ -48,8 +48,8 @@ export default function AddAgreement({
       try {
         const response = await fetch("/trade-barriers/api/themes");
         if (response.ok) {
-          const themes = await response.json();
-          setAvailableThemes(themes);
+          const themesData = await response.json();
+          setAvailableThemes(themesData.map((theme: any) => theme.name)); // eslint-disable-line @typescript-eslint/no-explicit-any
         }
       } catch (error) {
         console.error("Error fetching themes:", error);

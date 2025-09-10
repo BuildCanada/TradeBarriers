@@ -10,6 +10,7 @@ import AddAgreement from "./AddAgreement";
 import { Agreement } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import AgreementsList from "@/components/AgreementsList";
+import ThemeManagement from "@/components/ThemeManagement";
 import { Input } from "@/components/ui/input";
 import {
   Dialog,
@@ -198,13 +199,21 @@ export default function AdminPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <AgreementsList
-                agreements={filteredData}
-                onAgreementDeleted={handleAgreementDeleted}
-                onAgreementUpdated={handleAgreementUpdated}
-                isAdmin={true}
-              />
+            <div className="flex flex-col lg:flex-row gap-6">
+              {/* Left Sidebar - Theme Management */}
+              <div className="w-full lg:w-80 flex-shrink-0">
+                <ThemeManagement />
+              </div>
+
+              {/* Right Content - Agreements List */}
+              <div className="flex-1">
+                <AgreementsList
+                  agreements={filteredData}
+                  onAgreementDeleted={handleAgreementDeleted}
+                  onAgreementUpdated={handleAgreementUpdated}
+                  isAdmin={true}
+                />
+              </div>
             </div>
           </div>
 
