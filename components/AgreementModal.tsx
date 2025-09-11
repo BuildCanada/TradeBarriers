@@ -15,6 +15,7 @@ import {
   checkIfOverdue,
 } from "@/lib/utils";
 import { Calendar, MapPin, ExternalLink, Tag } from "lucide-react";
+import Timeline from "./Timeline";
 
 interface AgreementModalProps {
   agreement: Agreement | null;
@@ -39,6 +40,8 @@ export default function AgreementModal({
             {agreement.title}
           </DialogTitle>
         </DialogHeader>
+
+        <Timeline history={agreement.agreement_history} />
 
         <div className="space-y-6">
           <div className="w-fit">
