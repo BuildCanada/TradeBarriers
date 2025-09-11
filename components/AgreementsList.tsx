@@ -188,6 +188,37 @@ export default function AgreementsList({
                 </div>
               </div>
 
+              {/* Agreement History - Simple display */}
+              {item.agreement_history && item.agreement_history.length > 0 && (
+                <div className="mb-4">
+                  <div className="text-xs text-gray-500 mb-2">
+                    Recent History:
+                  </div>
+                  <div className="space-y-1">
+                    {item.agreement_history
+                      .slice(-2) // Show only last 2 entries
+                      .map((history, index) => (
+                        <div
+                          key={index}
+                          className="text-xs text-gray-600 flex items-center gap-2"
+                        >
+                          <span
+                            className={`w-2 h-2 rounded-full ${getStatusColor(history.status).replace("text-", "bg-").replace("border-", "bg-")}`}
+                          ></span>
+                          <span className="font-medium">{history.status}</span>
+                          <span className="text-gray-400">•</span>
+                          <span>{formatDate(history.date_entered)}</span>
+                        </div>
+                      ))}
+                    {item.agreement_history.length > 2 && (
+                      <div className="text-xs text-gray-400 ml-4">
+                        +{item.agreement_history.length - 2} more entries
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Footer Info */}
               <div className="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 border-t border-[#cdc4bd]">
                 <div

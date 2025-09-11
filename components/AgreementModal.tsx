@@ -134,6 +134,36 @@ export default function AgreementModal({
             </div>
           </div>
 
+          {/* Agreement History */}
+          {agreement.agreement_history &&
+            agreement.agreement_history.length > 0 && (
+              <div>
+                <h3 className="text-lg font-mono tracking-wide mb-4">
+                  Agreement History
+                </h3>
+                <div className="space-y-3">
+                  {agreement.agreement_history.map((history, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg"
+                    >
+                      <div
+                        className={`w-2 h-2 rounded-full ${getStatusColor(history.status).replace("text-", "bg-").replace("border-", "bg-")}`}
+                      ></div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {history.status}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {formatDate(history.date_entered)}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
           {/* Footer Info */}
           <div className="pt-4 border-t border-gray-200">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
