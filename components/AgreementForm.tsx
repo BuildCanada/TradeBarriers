@@ -395,7 +395,7 @@ export default function AgreementForm({
                       <Button
                         type="button"
                         onClick={() => addJurisdictionHistoryEntry(js.name)}
-                        className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-2 py-1 h-6"
+                        className="bg-green-500 hover:bg-green-600 text-white text-xs px-2 py-1 h-6 rounded-full"
                       >
                         +
                       </Button>
@@ -408,9 +408,9 @@ export default function AgreementForm({
                           .map((history, index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-2 text-xs"
+                              className="grid grid-cols-1 md:grid-cols-5 gap-2 text-xs"
                             >
-                              <div className="flex items-center gap-2">
+                              <div className="col-span-1 md:col-span-2">
                                 <Select
                                   value={history.status}
                                   onValueChange={(value) =>
@@ -454,28 +454,35 @@ export default function AgreementForm({
                                   </SelectContent>
                                 </Select>
                               </div>
-                              <Input
-                                type="date"
-                                value={history.date_entered}
-                                onChange={(e) =>
-                                  handleJurisdictionHistoryChange(
-                                    js.name,
-                                    index,
-                                    "date_entered",
-                                    e.target.value,
-                                  )
-                                }
-                                className="h-6 text-xs border-gray-300"
-                              />
-                              <Button
-                                type="button"
-                                onClick={() =>
-                                  removeJurisdictionHistoryEntry(js.name, index)
-                                }
-                                className="bg-red-500 hover:bg-red-600 text-white text-xs px-1 py-0.5 h-6"
-                              >
-                                ×
-                              </Button>
+                              <div className="col-span-1 md:col-span-2">
+                                <Input
+                                  type="date"
+                                  value={history.date_entered}
+                                  onChange={(e) =>
+                                    handleJurisdictionHistoryChange(
+                                      js.name,
+                                      index,
+                                      "date_entered",
+                                      e.target.value,
+                                    )
+                                  }
+                                  className="h-6 text-xs border-gray-300"
+                                />
+                              </div>
+                              <div className="col-span-1 md:col-span-1 flex items-end">
+                                <Button
+                                  type="button"
+                                  onClick={() =>
+                                    removeJurisdictionHistoryEntry(
+                                      js.name,
+                                      index,
+                                    )
+                                  }
+                                  className="bg-red-500 hover:bg-red-600 text-white text-xs px-1 py-0.5 h-6 w-full"
+                                >
+                                  Remove
+                                </Button>
+                              </div>
                             </div>
                           ))}
                         {js.jurisdiction_history.length > 2 && (
