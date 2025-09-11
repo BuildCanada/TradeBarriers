@@ -50,6 +50,12 @@ export interface Jurisdiction {
   name: string;
   status: JurisdictionStatus;
   notes: string;
+  jurisdiction_history: JurisdictionHistory[];
+}
+
+export interface JurisdictionHistory {
+  status: JurisdictionStatus;
+  date_entered: string;
 }
 
 export interface Agreement {

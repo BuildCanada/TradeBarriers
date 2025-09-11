@@ -125,7 +125,28 @@ export default function AgreementModal({
                         </Badge>
                       </td>
                       <td className="p-3 text-gray-600 text-sm">
-                        {jurisdiction.notes}
+                        <div>{jurisdiction.notes}</div>
+                        {jurisdiction.jurisdiction_history &&
+                          jurisdiction.jurisdiction_history.length > 0 && (
+                            <div className="mt-2 text-xs text-gray-500">
+                              <div className="font-medium mb-1">Recent:</div>
+                              {jurisdiction.jurisdiction_history
+                                .slice(-1)
+                                .map((history, idx) => (
+                                  <div
+                                    key={idx}
+                                    className="flex items-center gap-1"
+                                  >
+                                    <span className="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>
+                                    <span>{history.status}</span>
+                                    <span>•</span>
+                                    <span>
+                                      {formatDate(history.date_entered)}
+                                    </span>
+                                  </div>
+                                ))}
+                            </div>
+                          )}
                       </td>
                     </tr>
                   ))}

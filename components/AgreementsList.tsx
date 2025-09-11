@@ -171,6 +171,9 @@ export default function AgreementsList({
                         className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded"
                       >
                         {jurisdictionStatus.name}
+                        {jurisdictionStatus.jurisdiction_history &&
+                          jurisdictionStatus.jurisdiction_history.length >
+                            0 && <span className="ml-1 text-gray-400">•</span>}
                       </span>
                     ))}
 

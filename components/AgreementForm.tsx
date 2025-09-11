@@ -106,6 +106,69 @@ export default function AgreementForm({
     });
   };
 
+  const addJurisdictionHistoryEntry = (jurisdictionName: string) => {
+    const newHistoryEntry = {
+      status: "Unknown" as JurisdictionStatus,
+      date_entered: new Date().toISOString().split("T")[0],
+    };
+
+    onFormDataChange({
+      ...formData,
+      jurisdictions: formData.jurisdictions.map((js) =>
+        js.name === jurisdictionName
+          ? {
+              ...js,
+              jurisdiction_history: [
+                ...(js.jurisdiction_history || []),
+                newHistoryEntry,
+              ],
+            }
+          : js,
+      ),
+    });
+  };
+
+  const removeJurisdictionHistoryEntry = (
+    jurisdictionName: string,
+    index: number,
+  ) => {
+    onFormDataChange({
+      ...formData,
+      jurisdictions: formData.jurisdictions.map((js) =>
+        js.name === jurisdictionName
+          ? {
+              ...js,
+              jurisdiction_history: (js.jurisdiction_history || []).filter(
+                (_, i) => i !== index,
+              ),
+            }
+          : js,
+      ),
+    });
+  };
+
+  const handleJurisdictionHistoryChange = (
+    jurisdictionName: string,
+    index: number,
+    field: string,
+    value: string,
+  ) => {
+    onFormDataChange({
+      ...formData,
+      jurisdictions: formData.jurisdictions.map((js) =>
+        js.name === jurisdictionName
+          ? {
+              ...js,
+              jurisdiction_history: (js.jurisdiction_history || []).map(
+                (history, i) =>
+                  i === index ? { ...history, [field]: value } : history,
+              ),
+            }
+          : js,
+      ),
+    });
+  };
+
   return (
     <div>
       <form onSubmit={onSubmit} className="space-y-6">
@@ -323,6 +386,107 @@ export default function AgreementForm({
                         className="border-[#d3c7b9] text-sm"
                       />
                     </div>
+                  </div>
+
+                  {/* Minimal Jurisdiction History */}
+                  <div className="mt-3 pt-3 border-t border-gray-200">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs text-gray-500">History</span>
+                      <Button
+                        type="button"
+                        onClick={() => addJurisdictionHistoryEntry(js.name)}
+                        className="bg-gray-500 hover:bg-gray-600 text-white text-xs px-2 py-1 h-6"
+                      >
+                        +
+                      </Button>
+                    </div>
+                    {js.jurisdiction_history &&
+                    js.jurisdiction_history.length > 0 ? (
+                      <div className="space-y-2">
+                        {js.jurisdiction_history
+                          .slice(-2)
+                          .map((history, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2 text-xs"
+                            >
+                              <div className="flex items-center gap-2">
+                                <Select
+                                  value={history.status}
+                                  onValueChange={(value) =>
+                                    handleJurisdictionHistoryChange(
+                                      js.name,
+                                      index,
+                                      "status",
+                                      value as JurisdictionStatus,
+                                    )
+                                  }
+                                >
+                                  <SelectTrigger className="h-6 text-xs border-gray-300">
+                                    <SelectValue />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectItem value="Unknown">
+                                      Unknown
+                                    </SelectItem>
+                                    <SelectItem value="Aware">Aware</SelectItem>
+                                    <SelectItem value="Considering">
+                                      Considering
+                                    </SelectItem>
+                                    <SelectItem value="Engaged">
+                                      Engaged
+                                    </SelectItem>
+                                    <SelectItem value="Committed">
+                                      Committed
+                                    </SelectItem>
+                                    <SelectItem value="Implementing">
+                                      Implementing
+                                    </SelectItem>
+                                    <SelectItem value="Complete">
+                                      Complete
+                                    </SelectItem>
+                                    <SelectItem value="Declined">
+                                      Declined
+                                    </SelectItem>
+                                    <SelectItem value="Not Applicable">
+                                      Not Applicable
+                                    </SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </div>
+                              <Input
+                                type="date"
+                                value={history.date_entered}
+                                onChange={(e) =>
+                                  handleJurisdictionHistoryChange(
+                                    js.name,
+                                    index,
+                                    "date_entered",
+                                    e.target.value,
+                                  )
+                                }
+                                className="h-6 text-xs border-gray-300"
+                              />
+                              <Button
+                                type="button"
+                                onClick={() =>
+                                  removeJurisdictionHistoryEntry(js.name, index)
+                                }
+                                className="bg-red-500 hover:bg-red-600 text-white text-xs px-1 py-0.5 h-6"
+                              >
+                                ×
+                              </Button>
+                            </div>
+                          ))}
+                        {js.jurisdiction_history.length > 2 && (
+                          <div className="text-xs text-gray-400 ml-2">
+                            +{js.jurisdiction_history.length - 2} more
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-400">No history</div>
+                    )}
                   </div>
                 </div>
               ))}
