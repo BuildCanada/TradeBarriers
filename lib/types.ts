@@ -65,6 +65,7 @@ export interface Agreement {
   updated_at: string;
   launch_date: string | null;
   theme: Theme;
+  agreement_history: AgreementHistory[];
 }
 
 export interface AgreementStats {
@@ -74,4 +75,23 @@ export interface AgreementStats {
   committed: number;
   implemented: number;
   deferred: number;
+}
+
+export type AgreementHistory = {
+  status: AgreementStatus;
+  date_entered: string;
+};
+
+// This is the data that is passed to the AgreementForm component used for AddAgreement and EditAgreement.
+export interface AgreementFormData {
+  title: string;
+  summary: string;
+  description: string;
+  status: AgreementStatus;
+  deadline: string;
+  source_url: string;
+  jurisdictions: Jurisdiction[];
+  launch_date: string;
+  theme: Theme;
+  agreement_history: AgreementHistory[];
 }

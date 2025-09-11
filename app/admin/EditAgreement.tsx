@@ -1,24 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Agreement,
-  AgreementStatus,
+  AgreementFormData,
+  AgreementHistory,
   Jurisdiction,
-  JurisdictionStatus,
   Theme,
+  AgreementStatus,
 } from "@/lib/types";
-import { AGREEMENT_STATUSES } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
+import AgreementForm from "@/components/AgreementForm";
 
 export default function EditAgreement({
   agreement,
@@ -27,45 +19,25 @@ export default function EditAgreement({
   agreement: Agreement;
   onAgreementUpdated?: (updatedAgreement: Agreement) => void;
 }) {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<AgreementFormData>({
     title: "",
     summary: "",
     description: "",
-    status: "Awaiting Sponsorship" as AgreementStatus, // Set a default value
+    status: "Awaiting Sponsorship" as AgreementStatus,
     deadline: "",
     source_url: "",
     jurisdictions: [] as Jurisdiction[],
     launch_date: "",
-    theme: "Other" as Theme,
+    theme: "" as Theme,
+    agreement_history: [] as AgreementHistory[],
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [availableThemes, setAvailableThemes] = useState<string[]>([]);
-  const [isLoadingThemes, setIsLoadingThemes] = useState(true);
-
-  // Fetch available themes on component mount
-  useEffect(() => {
-    const fetchThemes = async () => {
-      try {
-        const response = await fetch("/trade-barriers/api/themes");
-        if (response.ok) {
-          const themesData = await response.json();
-          setAvailableThemes(themesData.map((theme: any) => theme.name)); // eslint-disable-line @typescript-eslint/no-explicit-any
-        }
-      } catch (error) {
-        console.error("Error fetching themes:", error);
-      } finally {
-        setIsLoadingThemes(false);
-      }
-    };
-
-    fetchThemes();
-  }, []);
 
   // Initialize form data when agreement prop changes
   useEffect(() => {
     if (agreement) {
-      const initialFormData = {
+      const initialFormData: AgreementFormData = {
         title: agreement.title,
         summary: agreement.summary,
         description: agreement.description,
@@ -75,29 +47,14 @@ export default function EditAgreement({
         jurisdictions: agreement.jurisdictions,
         launch_date: agreement.launch_date || "",
         theme: agreement.theme,
+        agreement_history: agreement.agreement_history,
       };
       setFormData(initialFormData);
     }
   }, [agreement]);
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-
-  const handleJurisdictionStatusChange = (
-    jurisdictionName: string,
-    field: string,
-    value: string,
-  ) => {
-    setFormData((prev) => ({
-      ...prev,
-      jurisdictions: prev.jurisdictions.map((js) =>
-        js.name === jurisdictionName ? { ...js, [field]: value } : js,
-      ),
-    }));
+  const handleFormDataChange = (data: AgreementFormData) => {
+    setFormData(data);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -129,6 +86,19 @@ export default function EditAgreement({
         return;
       }
 
+      // Validate history entries
+      for (let i = 0; i < formData.agreement_history.length; i++) {
+        const history = formData.agreement_history[i];
+        if (!history.status || !history.date_entered) {
+          toast({
+            title: "Invalid History Entry",
+            description: `History entry #${i + 1} is missing required fields (status and date).`,
+            variant: "destructive",
+          });
+          return;
+        }
+      }
+
       // Create the updated agreement object
       const updatedAgreement: Omit<
         Agreement,
@@ -143,6 +113,7 @@ export default function EditAgreement({
         jurisdictions: formData.jurisdictions,
         launch_date: formData.launch_date || null,
         theme: formData.theme,
+        agreement_history: formData.agreement_history,
       };
 
       // Send the updated agreement to the API
@@ -216,241 +187,12 @@ export default function EditAgreement({
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Basic Information */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title *
-            </label>
-            <Input
-              value={formData.title}
-              onChange={(e) => handleInputChange("title", e.target.value)}
-              placeholder="Brief title for the agreement"
-              className="border-[#d3c7b9]"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Status *
-            </label>
-            <Select
-              key={formData.status}
-              value={formData.status}
-              onValueChange={(value) =>
-                handleInputChange("status", value as AgreementStatus)
-              }
-              required
-            >
-              <SelectTrigger className="border-[#d3c7b9]">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {AGREEMENT_STATUSES.map((status: AgreementStatus) => (
-                  <SelectItem key={status} value={status}>
-                    {status}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Theme *
-            </label>
-            <Select
-              key={formData.theme}
-              value={formData.theme}
-              onValueChange={(value) => handleInputChange("theme", value)}
-              required
-              disabled={isLoadingThemes}
-            >
-              <SelectTrigger className="border-[#d3c7b9]">
-                <SelectValue
-                  placeholder={
-                    isLoadingThemes ? "Loading themes..." : "Select theme"
-                  }
-                />
-              </SelectTrigger>
-              <SelectContent>
-                {availableThemes.map((theme) => (
-                  <SelectItem key={theme} value={theme}>
-                    {theme}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {isLoadingThemes && (
-              <p className="text-xs text-gray-500 mt-1">
-                Loading existing themes...
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Summary */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Summary *
-          </label>
-          <Input
-            value={formData.summary}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInputChange("summary", e.target.value)
-            }
-            placeholder="One sentence summary of the agreement"
-            className="border-[#d3c7b9]"
-            required
-          />
-        </div>
-
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Description *
-          </label>
-          <Input
-            value={formData.description}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              handleInputChange("description", e.target.value)
-            }
-            placeholder="Detailed description (3-5 sentences)"
-            className="border-[#d3c7b9]"
-            required
-          />
-        </div>
-
-        {/* Deadline and Source URL and Launch Date */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {formData.status === "Implemented" ? "Completed" : "Deadline"}
-            </label>
-            <Input
-              type="date"
-              value={formData.deadline}
-              onChange={(e) => handleInputChange("deadline", e.target.value)}
-              className="border-[#d3c7b9]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Launch Date
-            </label>
-            <Input
-              type="date"
-              value={formData.launch_date}
-              onChange={(e) => handleInputChange("launch_date", e.target.value)}
-              className="border-[#d3c7b9]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Source URL
-            </label>
-            <Input
-              type="url"
-              value={formData.source_url}
-              onChange={(e) => handleInputChange("source_url", e.target.value)}
-              placeholder="https://..."
-              className="border-[#d3c7b9]"
-            />
-          </div>
-        </div>
-
-        {/* Jurisdiction Statuses */}
-        {formData.jurisdictions.length > 0 && (
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
-              Jurisdiction Status Details
-            </label>
-            <div className="space-y-3">
-              {formData.jurisdictions.map((js) => (
-                <div
-                  key={js.name}
-                  className="p-3 border border-[#d3c7b9] rounded-md"
-                >
-                  <div className="font-medium text-gray-900 mb-2">
-                    {js.name}
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">
-                        Status
-                      </label>
-                      <Select
-                        value={js.status}
-                        onValueChange={(value) =>
-                          handleJurisdictionStatusChange(
-                            js.name,
-                            "status",
-                            value as JurisdictionStatus,
-                          )
-                        }
-                      >
-                        <SelectTrigger className="border-[#d3c7b9] text-sm">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Unknown">Unknown</SelectItem>
-                          <SelectItem value="Aware">Aware</SelectItem>
-                          <SelectItem value="Considering">
-                            Considering
-                          </SelectItem>
-                          <SelectItem value="Engaged">Engaged</SelectItem>
-                          <SelectItem value="Committed">Committed</SelectItem>
-                          <SelectItem value="Implementing">
-                            Implementing
-                          </SelectItem>
-                          <SelectItem value="Complete">Complete</SelectItem>
-                          <SelectItem value="Declined">Declined</SelectItem>
-                          <SelectItem value="Not Applicable">
-                            Not Applicable
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div>
-                      <label className="block text-xs text-gray-600 mb-1">
-                        Notes
-                      </label>
-                      <Input
-                        value={js.notes}
-                        onChange={(e) =>
-                          handleJurisdictionStatusChange(
-                            js.name,
-                            "notes",
-                            e.target.value,
-                          )
-                        }
-                        placeholder="Additional context"
-                        className="border-[#d3c7b9] text-sm"
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Submit Button */}
-        <div className="pt-4 border-t border-[#d3c7b9]">
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className="bg-primary hover:bg-primary/90 text-white font-medium px-6 py-2"
-          >
-            {isSubmitting ? "Updating..." : "Update Agreement"}
-          </Button>
-        </div>
-      </form>
-    </div>
+    <AgreementForm
+      formData={formData}
+      onFormDataChange={handleFormDataChange}
+      onSubmit={handleSubmit}
+      isSubmitting={isSubmitting}
+      submitButtonText="Update Agreement"
+    />
   );
 }
