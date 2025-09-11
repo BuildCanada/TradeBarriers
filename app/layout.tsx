@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SimpleAnalytics } from "@/components/SimpleAnalytics";
 import AutoHideScrollbar from "@/components/AutoHideScrollbar";
+import Link from "next/link";
 
 // SVG for the emoji favicon: 🏗️🇨🇦 using separate text elements, further reduced font
 // and Unicode escape for the Canadian flag emoji.
@@ -65,9 +66,9 @@ export default function RootLayout({
             <div className="text-center">
               <p className="text-foreground text-sm font-mono uppercase tracking-wider">
                 🏗️🇨🇦 A{" "}
-                <a href="/" className="text-bloomberg-blue hover:underline">
+                <Link href="/" className="text-bloomberg-blue hover:underline">
                   BUILD CANADA
-                </a>{" "}
+                </Link>{" "}
                 PROJECT
               </p>
             </div>
