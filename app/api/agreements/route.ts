@@ -19,29 +19,20 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const {
-      title,
-      summary,
-      description,
-      jurisdictions,
-      deadline,
-      status,
-      sourceUrl,
-      theme,
-    } = body;
 
     const supabase = await createClient();
     const { data, error } = await supabase
       .from(process.env.DATABASE_TABLE_NAME!)
       .insert({
-        title,
-        summary,
-        description,
-        jurisdictions,
-        deadline,
-        status,
-        source_url: sourceUrl,
-        theme,
+        title: body.title,
+        summary: body.summary,
+        description: body.description,
+        jurisdictions: body.jurisdictions,
+        deadline: body.deadline,
+        status: body.status,
+        source_url: body.sourceUrl,
+        theme: body.theme,
+        agreement_history: body.agreement_history,
       })
       .select();
 

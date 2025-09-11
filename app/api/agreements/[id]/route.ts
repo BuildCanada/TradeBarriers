@@ -17,17 +17,6 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const {
-      title,
-      summary,
-      description,
-      jurisdictions,
-      jurisdictionStatuses,
-      deadline,
-      status,
-      sourceUrl,
-      theme,
-    } = body;
 
     const supabase = await createClient();
 
@@ -35,15 +24,15 @@ export async function PUT(
     const { data, error: updateError } = await supabase
       .from(process.env.DATABASE_TABLE_NAME!)
       .update({
-        title,
-        summary,
-        description,
-        jurisdictions,
-        jurisdiction_statuses: jurisdictionStatuses,
-        deadline,
-        status,
-        source_url: sourceUrl,
-        theme,
+        title: body.title,
+        summary: body.summary,
+        description: body.description,
+        jurisdictions: body.jurisdictions,
+        deadline: body.deadline,
+        status: body.status,
+        source_url: body.sourceUrl,
+        theme: body.theme,
+        agreement_history: body.agreement_history,
       })
       .eq("id", id)
       .select();
