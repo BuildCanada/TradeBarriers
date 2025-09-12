@@ -1,10 +1,10 @@
 export const AGREEMENT_STATUSES = [
-  "Deferred",
   "Awaiting Sponsorship",
   "Under Negotiation",
   "Agreement Reached",
   "Partially Implemented",
   "Implemented",
+  "Deferred",
 ] as const;
 export type AgreementStatus = (typeof AGREEMENT_STATUSES)[number];
 
