@@ -110,58 +110,22 @@ export default function ClientMainPage({
       <div className="flex-1 p-6">
         {/* Overview Stats */}
         <div className="mb-8">
-          <h2 className="text-xl font-mono font-semibold mb-4 uppercase tracking-wide text-foreground">
-            Overview
-          </h2>
-          <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-mono font-semibold uppercase tracking-wide text-foreground">
+              Overview
+            </h2>
+            <span className="text-sm font-mono text-muted-foreground uppercase tracking-wide">
+              {stats.total} total trade agreements
+            </span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-bloomberg-blue">
-                  {stats.total}
+                <div className="text-2xl font-bold font-mono text-green-600">
+                  {stats.implemented}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Total
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card border border-border col-span-2 md:col-span-1">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-bloomberg-red">
-                  {stats.deferred}
-                </div>
-                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Deferred
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-card border col-span-2 md:col-span-1">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-bloomberg-red">
-                  {stats.awaitingSponsorship}
-                </div>
-                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Awaiting
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card border border-border col-span-2 md:col-span-1">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-yellow-400">
-                  {stats.underNegotiation}
-                </div>
-                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Negotiation
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="bg-card border border-border col-span-2 md:col-span-1">
-              <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-orange-400">
-                  {stats.agreementReached}
-                </div>
-                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Reached
+                  Complete
                 </div>
               </CardContent>
             </Card>
@@ -177,17 +141,105 @@ export default function ClientMainPage({
             </Card>
             <Card className="bg-card border border-border col-span-2 md:col-span-1">
               <CardContent className="p-4">
-                <div className="text-2xl font-bold font-mono text-bloomberg-blue">
-                  {stats.implemented}
+                <div className="text-2xl font-bold font-mono text-orange-400">
+                  {stats.agreementReached}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Complete
-                  <span className="text-xs text-muted-foreground block">
-                    ({((stats.implemented / stats.total) * 100).toFixed(0)}%)
-                  </span>
+                  Reached
                 </div>
               </CardContent>
             </Card>
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold font-mono text-yellow-400">
+                  {stats.underNegotiation}
+                </div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  Negotiation
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold font-mono text-bloomberg-red">
+                  {stats.awaitingSponsorship}
+                </div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  Awaiting
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="bg-card border border-border col-span-2 md:col-span-1">
+              <CardContent className="p-4">
+                <div className="text-2xl font-bold font-mono text-bloomberg-red">
+                  {stats.deferred}
+                </div>
+                <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
+                  Deferred
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Progress Bar Visualization */}
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-sm font-mono font-semibold text-foreground">
+                {((stats.implemented / stats.total) * 100).toFixed(0)}% COMPLETE
+              </span>
+            </div>
+            <div className="relative h-3 bg-gray-200 rounded-lg overflow-hidden">
+              {/* Implemented (Complete) - Start from left */}
+              <div
+                className="absolute top-0 left-0 h-full bg-green-600"
+                style={{ width: `${(stats.implemented / stats.total) * 100}%` }}
+              ></div>
+
+              {/* Partially Implemented */}
+              <div
+                className="absolute top-0 h-full bg-green-400"
+                style={{
+                  left: `${(stats.implemented / stats.total) * 100}%`,
+                  width: `${(stats.partiallyImplemented / stats.total) * 100}%`,
+                }}
+              ></div>
+
+              {/* Agreement Reached */}
+              <div
+                className="absolute top-0 h-full bg-orange-400"
+                style={{
+                  left: `${((stats.implemented + stats.partiallyImplemented) / stats.total) * 100}%`,
+                  width: `${(stats.agreementReached / stats.total) * 100}%`,
+                }}
+              ></div>
+
+              {/* Under Negotiation */}
+              <div
+                className="absolute top-0 h-full bg-yellow-400"
+                style={{
+                  left: `${((stats.implemented + stats.partiallyImplemented + stats.agreementReached) / stats.total) * 100}%`,
+                  width: `${(stats.underNegotiation / stats.total) * 100}%`,
+                }}
+              ></div>
+
+              {/* Awaiting Sponsorship */}
+              <div
+                className="absolute top-0 h-full bg-red-500"
+                style={{
+                  left: `${((stats.implemented + stats.partiallyImplemented + stats.agreementReached + stats.underNegotiation) / stats.total) * 100}%`,
+                  width: `${(stats.awaitingSponsorship / stats.total) * 100}%`,
+                }}
+              ></div>
+
+              {/* Deferred */}
+              <div
+                className="absolute top-0 h-full bg-red-400"
+                style={{
+                  left: `${((stats.implemented + stats.partiallyImplemented + stats.agreementReached + stats.underNegotiation + stats.awaitingSponsorship) / stats.total) * 100}%`,
+                  width: `${(stats.deferred / stats.total) * 100}%`,
+                }}
+              ></div>
+            </div>
           </div>
         </div>
 
