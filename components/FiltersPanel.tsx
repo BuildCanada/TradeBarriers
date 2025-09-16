@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -162,25 +162,10 @@ export default function FiltersPanel({
 
   return (
     <Card className="bg-background border-border h-fit">
-      <CardHeader className="pb-4">
-        <div className="flex items-center justify-between">
-          {getActiveFiltersCount() > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={clearAllFilters}
-              className="text-xs mx-auto font-mono uppercase tracking-wide border-border text-foreground hover:bg-muted"
-            >
-              Clear All
-            </Button>
-          )}
-        </div>
-      </CardHeader>
-
       <CardContent className="space-y-6">
         {/* Status Filters */}
         <div>
-          <h3 className="text-sm font-semibold text-foreground mb-3 uppercase tracking-wide font-mono">
+          <h3 className="text-sm font-semibold text-foreground my-3 uppercase tracking-wide font-mono">
             STATUS
           </h3>
           <div>
@@ -320,6 +305,20 @@ export default function FiltersPanel({
           </div>
         )}
       </CardContent>
+      <CardFooter className="pb-4">
+        <div className="mx-auto">
+          {getActiveFiltersCount() > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={clearAllFilters}
+              className="text-xs mx-auto font-mono uppercase tracking-wide border-border text-foreground hover:bg-muted"
+            >
+              Clear All
+            </Button>
+          )}
+        </div>
+      </CardFooter>
     </Card>
   );
 }
