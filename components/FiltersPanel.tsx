@@ -64,7 +64,8 @@ export default function FiltersPanel({
           if (
             currentFilters.deadlineTypes.includes("Overdue") &&
             daysUntilDeadline !== null &&
-            daysUntilDeadline < 0
+            daysUntilDeadline < 0 &&
+            agreement.status !== "Implemented"
           )
             return true;
           if (
