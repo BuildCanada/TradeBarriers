@@ -4,7 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Agreement } from "@/lib/types";
 import { getAgreementStats } from "@/lib/utils";
-import { Search, ChevronDown, ChevronUp } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Mail } from "lucide-react";
 import AgreementsList from "@/components/AgreementsList";
 import FiltersPanel from "@/components/FiltersPanel";
 
@@ -69,6 +69,17 @@ export default function ClientMainPage({
           <p className="text-muted-foreground text-sm tracking-wide">
             Tracking progress of interprovincial trade agreements across Canada.
           </p>
+        </div>
+
+        {/* Feedback Button */}
+        <div className="mb-6">
+          <a
+            href="mailto:hi@buildcanada.com?subject=Trade Barriers Feedback"
+            className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-mono uppercase tracking-wide border border-border bg-card text-foreground hover:bg-muted transition-colors rounded-md"
+          >
+            <Mail className="w-4 h-4 mr-2" />
+            Feedback
+          </a>
         </div>
 
         {/* Filters Panel */}
