@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/client";
+import { verifyAuthToken, createAuthErrorResponse } from "@/lib/auth-utils";
 
 // GET request to get all agreements
 export async function GET() {
@@ -16,8 +17,14 @@ export async function GET() {
 }
 
 // POST request to add a new Agreement
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Verify authentication
+    const { user, error: authError } = await verifyAuthToken(request);
+    if (authError || !user) {
+      return createAuthErrorResponse(authError || "Authentication required");
+    }
+
     const body = await request.json();
 
     const supabase = await createClient();

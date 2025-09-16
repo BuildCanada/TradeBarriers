@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
 import { Trash2, Plus, Tag, Edit2, Check, X } from "lucide-react";
+import { authenticatedFetch } from "@/lib/api-utils";
 import {
   Dialog,
   DialogContent,
@@ -68,11 +69,8 @@ export default function ThemeManagement() {
 
     setIsAdding(true);
     try {
-      const response = await fetch("/trade-barriers/api/themes", {
+      const response = await authenticatedFetch("/trade-barriers/api/themes", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ name: newThemeName.trim() }),
       });
 
@@ -111,7 +109,7 @@ export default function ThemeManagement() {
 
     setIsDeleting(true);
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `/trade-barriers/api/themes/${themeToDelete.id}?name=${themeToDelete.name}`,
         {
           method: "DELETE",
@@ -162,13 +160,10 @@ export default function ThemeManagement() {
 
     setIsUpdating(true);
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `/trade-barriers/api/themes/${editingTheme.id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({ name: editingName.trim() }),
         },
       );

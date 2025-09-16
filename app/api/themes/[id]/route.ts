@@ -1,12 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/client";
+import { verifyAuthToken, createAuthErrorResponse } from "@/lib/auth-utils";
 
 // PUT request to update a theme by ID
 export async function PUT(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
+    // Verify authentication
+    const { user, error: authError } = await verifyAuthToken(request);
+    if (authError || !user) {
+      return createAuthErrorResponse(authError || "Authentication required");
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { name } = body;
@@ -78,10 +85,16 @@ export async function PUT(
 
 // DELETE request to delete a theme by ID
 export async function DELETE(
-  request: Request,
+  request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
+    // Verify authentication
+    const { user, error: authError } = await verifyAuthToken(request);
+    if (authError || !user) {
+      return createAuthErrorResponse(authError || "Authentication required");
+    }
+
     const { id } = await params;
     const { searchParams } = new URL(request.url);
     const name = searchParams.get("name");

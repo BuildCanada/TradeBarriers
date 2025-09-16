@@ -11,6 +11,7 @@ import {
 } from "@/lib/types";
 import { toast } from "@/components/ui/use-toast";
 import AgreementForm from "@/components/AgreementForm";
+import { authenticatedFetch } from "@/lib/api-utils";
 
 export default function EditAgreement({
   agreement,
@@ -117,13 +118,10 @@ export default function EditAgreement({
       };
 
       // Send the updated agreement to the API
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `/trade-barriers/api/agreements/${agreement.id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify(updatedAgreement),
         },
       );

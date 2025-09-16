@@ -11,6 +11,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { generateJurisdictions } from "@/lib/utils";
 import AgreementForm from "@/components/AgreementForm";
+import { authenticatedFetch } from "@/lib/api-utils";
 
 export default function AddAgreement({
   onAgreementAdded,
@@ -81,13 +82,13 @@ export default function AddAgreement({
         };
 
       // Send the agreement to the API
-      const response = await fetch("/trade-barriers/api/agreements", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await authenticatedFetch(
+        "/trade-barriers/api/agreements",
+        {
+          method: "POST",
+          body: JSON.stringify(newAgreement),
         },
-        body: JSON.stringify(newAgreement),
-      });
+      );
 
       if (!response.ok) {
         // Try to get error message from response body

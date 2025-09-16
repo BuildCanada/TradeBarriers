@@ -6,6 +6,7 @@ import {
   getParticipatingJurisdictions,
   checkIfOverdue,
 } from "@/lib/utils";
+import { authenticatedFetch } from "@/lib/api-utils";
 import { useState } from "react";
 import { Calendar, Trash2, Edit, Tag } from "lucide-react";
 import AgreementModal from "./AgreementModal";
@@ -69,7 +70,7 @@ export default function AgreementsList({
 
     setIsDeleting(true);
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `/trade-barriers/api/agreements/${agreementToDelete.id}`,
         {
           method: "DELETE",
