@@ -104,8 +104,16 @@ export default function AgreementsList({
 
   return (
     <>
-      {agreements.map((item) => {
+      {agreements.map((item, index) => {
         const isOverdue = checkIfOverdue(item.deadline, item.status);
+
+        const recentHistoryItem = item.agreement_history
+          .sort(
+            (a, b) =>
+              new Date(a.date_entered).getTime() -
+              new Date(b.date_entered).getTime(),
+          )
+          .slice(-1)[0];
 
         return (
           <Card
@@ -198,24 +206,22 @@ export default function AgreementsList({
                     Recent History:
                   </div>
                   <div className="space-y-1">
-                    {item.agreement_history
-                      .slice(-2) // Show only last 2 entries
-                      .map((history, index) => (
-                        <div
-                          key={index}
-                          className="text-xs text-gray-600 flex items-center gap-2"
-                        >
-                          <span
-                            className={`w-2 h-2 rounded-full ${getStatusColor(history.status).replace("text-", "bg-").replace("border-", "bg-")}`}
-                          ></span>
-                          <span className="font-medium">{history.status}</span>
-                          <span className="text-gray-400">•</span>
-                          <span>{formatDate(history.date_entered)}</span>
-                        </div>
-                      ))}
-                    {item.agreement_history.length > 2 && (
+                    <div
+                      key={index}
+                      className="text-xs text-gray-600 flex items-center gap-2"
+                    >
+                      <span
+                        className={`w-2 h-2 rounded-full ${getStatusColor(recentHistoryItem.status).replace("text-", "bg-").replace("border-", "bg-")}`}
+                      ></span>
+                      <span className="font-medium">
+                        {recentHistoryItem.status}
+                      </span>
+                      <span className="text-gray-400">•</span>
+                      <span>{formatDate(recentHistoryItem.date_entered)}</span>
+                    </div>
+                    {item.agreement_history.length > 1 && (
                       <div className="text-xs text-gray-400 ml-4">
-                        +{item.agreement_history.length - 2} more entries
+                        +{item.agreement_history.length - 1} more entries
                       </div>
                     )}
                   </div>
