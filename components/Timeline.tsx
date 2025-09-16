@@ -13,7 +13,7 @@ export default function Timeline({ history }: TimelineProps) {
       new Date(a.date_entered).getTime() - new Date(b.date_entered).getTime(),
   );
 
-  const startDate = new Date("2015-01-01");
+  const startDate = new Date("2018-01-01");
   const endDate = new Date();
   const totalDays = Math.ceil(
     (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
