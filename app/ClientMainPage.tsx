@@ -7,6 +7,7 @@ import { getAgreementStats } from "@/lib/utils";
 import { Search, ChevronDown, ChevronUp, Mail } from "lucide-react";
 import AgreementsList from "@/components/AgreementsList";
 import FiltersPanel from "@/components/FiltersPanel";
+import ActivityChart from "@/components/ActivityChart";
 
 interface ClientMainPageProps {
   initialAgreements: Agreement[];
@@ -254,6 +255,11 @@ export default function ClientMainPage({
               ></div>
             </div>
           </div>
+        </div>
+
+        {/* Activity Chart */}
+        <div className="mb-8">
+          <ActivityChart agreements={filteredAgreements} />
         </div>
 
         {/* Agreements Section */}
