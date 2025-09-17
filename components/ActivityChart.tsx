@@ -165,7 +165,6 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
           backgroundColor: "#3b82f6",
           borderColor: "#2563eb",
           borderWidth: 1,
-          borderRadius: 4,
           borderSkipped: false,
         },
       ],
@@ -188,7 +187,7 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
         bodyColor: "#fff",
         borderColor: "#e5e7eb",
         borderWidth: 1,
-        cornerRadius: 6,
+        cornerRadius: 0,
         displayColors: false,
         callbacks: {
           title: function (context: { dataIndex: number }[]) {
@@ -204,17 +203,6 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
     },
     scales: {
       x: {
-        title: {
-          display: true,
-          text: "Months",
-          color: "#6b7280",
-          font: {
-            family:
-              'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-            size: 12,
-            weight: "bold" as const,
-          },
-        },
         grid: {
           display: false,
         },
@@ -233,7 +221,6 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
             return {
               family:
                 'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
-              size: isJanuary ? 13 : 12, // Slightly larger for January
               weight: isJanuary ? ("bold" as const) : ("normal" as const),
             };
           },
@@ -280,9 +267,16 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
     <Card className="bg-card border border-border">
       <CardHeader>
         <div className="flex items-center justify-between">
-          <CardTitle className="text-lg font-mono font-semibold uppercase tracking-wide text-foreground">
-            Activity Timeline
-          </CardTitle>
+          <div>
+            <CardTitle className="text-lg font-mono font-semibold uppercase tracking-wide text-foreground">
+              Activity Timeline
+            </CardTitle>
+            <div className="text-xs text-muted-foreground font-mono uppercase tracking-wide">
+              {timeRange === "12months"
+                ? "Number of status changes over the last 12 months"
+                : "Number of status changes since earliest recorded agreement"}
+            </div>
+          </div>
           <div className="flex gap-2">
             <Button
               variant={timeRange === "12months" ? "default" : "outline"}
@@ -306,12 +300,6 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
       <CardContent>
         <div className="h-64 w-full">
           <Bar data={chartData} options={options} />
-        </div>
-
-        <div className="mt-4 text-sm text-muted-foreground font-mono uppercase tracking-wide">
-          {timeRange === "12months"
-            ? "Status changes over the last 12 months"
-            : "Status changes since earliest recorded agreement"}
         </div>
       </CardContent>
     </Card>
