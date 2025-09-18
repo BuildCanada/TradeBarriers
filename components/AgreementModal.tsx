@@ -41,8 +41,6 @@ export default function AgreementModal({
           </DialogTitle>
         </DialogHeader>
 
-        <Timeline history={agreement.agreement_history} />
-
         <div className="space-y-6">
           <div className="w-fit">
             <div
@@ -74,6 +72,11 @@ export default function AgreementModal({
               <span className="font-medium">Launch Date:</span>{" "}
               {formatDate(agreement.launch_date)}
             </div>
+          </div>
+
+          <div className="hidden md:block">
+            <h3 className="text-lg font-mono tracking-wide mb-2">Timeline</h3>
+            <Timeline history={agreement.agreement_history} />
           </div>
 
           {/* Summary */}

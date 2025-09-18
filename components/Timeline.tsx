@@ -1,5 +1,5 @@
 import { AgreementHistory } from "@/lib/types";
-import { getStatusColor, formatDate } from "@/lib/utils";
+import { formatDate } from "@/lib/utils";
 
 interface TimelineProps {
   history: AgreementHistory[];
@@ -19,63 +19,138 @@ export default function Timeline({ history }: TimelineProps) {
     (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
   );
 
+  // Get status color for progress bar segments
+  const getStatusBarColor = (status: string) => {
+    switch (status) {
+      case "Under Negotiation":
+        return "bg-yellow-400";
+      case "Agreement Reached":
+        return "bg-orange-400";
+      case "Partially Implemented":
+        return "bg-green-400";
+      case "Implemented":
+        return "bg-green-600";
+      case "Deferred":
+        return "bg-red-400";
+      case "Awaiting Sponsorship":
+        return "bg-gray-400";
+      default:
+        return "bg-gray-400";
+    }
+  };
+
+  // Calculate segment positions and widths
+  const segments = [];
+
+  // Add light grey segment from start to first status
+  if (sortedHistory.length > 0) {
+    const firstEntryDate = new Date(sortedHistory[0].date_entered);
+    const daysToFirstStatus = Math.ceil(
+      (firstEntryDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
+    const firstSegmentWidth = (daysToFirstStatus / totalDays) * 100;
+
+    segments.push({
+      width: firstSegmentWidth,
+      color: "bg-gray-300",
+      status: "Initial Period",
+      startDate: startDate,
+      endDate: firstEntryDate,
+    });
+  }
+
+  // Add segments for each status change
+  for (let i = 0; i < sortedHistory.length; i++) {
+    const currentEntry = sortedHistory[i];
+    const nextEntry = sortedHistory[i + 1];
+
+    const currentEntryDate = new Date(currentEntry.date_entered);
+    const nextEntryDate = nextEntry
+      ? new Date(nextEntry.date_entered)
+      : endDate;
+
+    const segmentStartDays = Math.ceil(
+      (currentEntryDate.getTime() - startDate.getTime()) /
+        (1000 * 60 * 60 * 24),
+    );
+    const segmentEndDays = Math.ceil(
+      (nextEntryDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
+    );
+
+    const segmentWidth =
+      ((segmentEndDays - segmentStartDays) / totalDays) * 100;
+
+    segments.push({
+      width: segmentWidth,
+      color: getStatusBarColor(currentEntry.status),
+      status: currentEntry.status,
+      startDate: currentEntryDate,
+      endDate: nextEntryDate,
+    });
+  }
+
   return (
-    <div className="mb-6">
-      <h3 className="text-sm font-medium text-gray-700 mb-4">Timeline</h3>
-      <div className="relative w-full h-40 bg-gray-50 rounded-lg p-4">
-        {/* Timeline line */}
-        <div className="absolute top-8 left-4 right-4 h-0.5 bg-gray-300"></div>
-
-        {/* Start marker */}
-        <div className="absolute top-6 left-4 w-2 h-2 bg-gray-400 rounded-full"></div>
-        <div className="absolute top-10 left-2 text-xs text-gray-500 font-medium">
-          2015
-        </div>
-
-        {/* End marker */}
-        <div className="absolute top-6 right-4 w-2 h-2 bg-gray-400 rounded-full"></div>
-        <div className="absolute top-10 right-2 text-xs text-gray-500 font-medium">
-          {new Date().getFullYear()}
-        </div>
-
-        {/* History entries */}
-        {sortedHistory.map((entry, index) => {
-          const entryDate = new Date(entry.date_entered);
-          const daysFromStart = Math.ceil(
-            (entryDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
-          );
-          // Calculate position with padding to ensure it fits in single view
-          const padding = 5; // 5% padding on each side
-          const availableWidth = 100 - padding * 2; // 90% available width
-          const position =
-            padding + (daysFromStart / totalDays) * availableWidth;
-
-          return (
+    <div>
+      {/* Progress Bar with Demarcations */}
+      <div className="relative w-full">
+        {/* Progress Bar */}
+        <div className="w-full h-4 bg-gray-100 rounded-lg overflow-hidden flex">
+          {segments.map((segment, index) => (
             <div
               key={index}
-              className="absolute top-6 flex flex-col items-center"
-              style={{ left: `calc(${position}% - 1rem)` }}
-            >
-              {/* Status dot */}
-              <div
-                className={`w-4 h-4 rounded-full ${getStatusColor(entry.status).replace("text-", "bg-").replace("border-", "bg-")} border-2 border-white shadow-sm`}
-                title={`${entry.status} - ${formatDate(entry.date_entered)}`}
-              ></div>
+              className={`h-full ${segment.color} transition-all duration-300`}
+              style={{ width: `${segment.width}%` }}
+              title={`${segment.status} - ${formatDate(segment.startDate.toISOString())} to ${formatDate(segment.endDate.toISOString())}`}
+            />
+          ))}
+        </div>
 
-              {/* Vertical text below dot */}
-              <div className="mt-2 flex flex-col items-center relative">
-                <div
-                  className={`text-xs font-medium ${getStatusColor(entry.status)} transform rotate-90 whitespace-nowrap top-14 absolute`}
-                >
-                  {entry.status}
-                </div>
-                <div className="text-xs text-gray-500 transform rotate-90 whitespace-nowrap mt-1 absolute -right-5 top-14">
-                  {formatDate(entry.date_entered)}
+        {/* Demarcations with Date + Status */}
+        <div className="relative w-full h-[8rem] mb-8">
+          {/* Start demarcation */}
+          <div className="absolute left-0 flex flex-col">
+            <div className="w-[1px] h-4 bg-gray-400 mb-2 self-start"></div>
+            <div className="text-xs text-gray-500 font-medium whitespace-nowrap transform rotate-90 origin-left">
+              {startDate.getFullYear()}
+            </div>
+          </div>
+
+          {/* Status change demarcations */}
+          {sortedHistory.map((entry, index) => {
+            const entryDate = new Date(entry.date_entered);
+            const daysFromStart = Math.ceil(
+              (entryDate.getTime() - startDate.getTime()) /
+                (1000 * 60 * 60 * 24),
+            );
+            const position = (daysFromStart / totalDays) * 100;
+
+            return (
+              <div
+                key={index}
+                className="absolute flex flex-col items-center"
+                style={{ left: `${position}%`, transform: "translateX(-50%)" }}
+              >
+                <div className="w-[1px] h-4 bg-gray-400 mb-2"></div>
+                <div className="flex flex-col items-left transform rotate-90 mt-10">
+                  <div className="text-xs text-gray-500 font-medium whitespace-nowrap">
+                    {formatDate(entry.date_entered)}
+                  </div>
+                  <div className="text-xs text-gray-600 whitespace-nowrap">
+                    {entry.status}
+                  </div>
                 </div>
               </div>
+            );
+          })}
+
+          {/* End demarcation */}
+          <div className="absolute right-0 flex flex-col">
+            <div className="w-[1px] h-4 bg-gray-400 mb-2 self-end"></div>
+            <div className="text-xs text-gray-500 font-medium whitespace-nowrap transform rotate-90 origin-right mt-8">
+              {endDate.getFullYear()}
             </div>
-          );
-        })}
+          </div>
+        </div>
       </div>
     </div>
   );
