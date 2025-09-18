@@ -13,7 +13,17 @@ export default function Timeline({ history }: TimelineProps) {
       new Date(a.date_entered).getTime() - new Date(b.date_entered).getTime(),
   );
 
-  const startDate = new Date("2018-01-01");
+  // Find the earliest date from the history
+  const getEarliestDate = (history: AgreementHistory[]) => {
+    if (history.length === 0) return new Date();
+    return new Date(
+      Math.min(
+        ...history.map((entry) => new Date(entry.date_entered).getTime()),
+      ),
+    );
+  };
+
+  const startDate = getEarliestDate(sortedHistory);
   const endDate = new Date();
   const totalDays = Math.ceil(
     (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24),
@@ -53,8 +63,11 @@ export default function Timeline({ history }: TimelineProps) {
 
       let adjustedPosition = originalPosition; // Where the label will actually be after spacing for readability
 
-      // Check for overlap with previous labels
-      if (i > 0) {
+      // Special handling for the first (earliest) item - position it at the start
+      if (i === 0) {
+        adjustedPosition = 0;
+      } else {
+        // Check for overlap with previous labels
         const prevPosition = adjustedPositions[i - 1];
         const minRequiredPosition = prevPosition + minSpacing;
 
@@ -96,8 +109,10 @@ export default function Timeline({ history }: TimelineProps) {
         }
       }
 
-      // Ensure we don't go beyond timeline bounds
-      adjustedPosition = Math.max(2, Math.min(98, adjustedPosition));
+      // Ensure we don't go beyond timeline bounds (except for first item which stays at 0)
+      if (i > 0) {
+        adjustedPosition = Math.max(2, Math.min(98, adjustedPosition));
+      }
 
       adjustedPositions.push(adjustedPosition);
     }
@@ -110,20 +125,6 @@ export default function Timeline({ history }: TimelineProps) {
   // Calculate segment positions and widths based on adjusted positions
   const segments = [];
 
-  // Add light grey segment from start to first status
-  if (sortedHistory.length > 0) {
-    const firstAdjustedPosition = adjustedPositions[0];
-    const firstSegmentWidth = firstAdjustedPosition;
-
-    segments.push({
-      width: firstSegmentWidth,
-      color: "bg-gray-300",
-      status: "Initial Period",
-      startDate: startDate,
-      endDate: new Date(sortedHistory[0].date_entered),
-    });
-  }
-
   // Add segments for each status change using adjusted positions
   for (let i = 0; i < sortedHistory.length; i++) {
     const currentEntry = sortedHistory[i];
@@ -132,7 +133,9 @@ export default function Timeline({ history }: TimelineProps) {
     const currentAdjustedPosition = adjustedPositions[i];
     const nextAdjustedPosition = nextEntry ? adjustedPositions[i + 1] : 100;
 
-    const segmentWidth = nextAdjustedPosition - currentAdjustedPosition;
+    // For the first segment, start from 0% instead of the adjusted position
+    const segmentStart = i === 0 ? 0 : currentAdjustedPosition;
+    const segmentWidth = nextAdjustedPosition - segmentStart;
 
     segments.push({
       width: segmentWidth,
@@ -161,26 +164,24 @@ export default function Timeline({ history }: TimelineProps) {
 
         {/* Demarcations with Date + Status */}
         <div className="relative w-full h-[8rem] mb-8">
-          {/* Start demarcation */}
-          <div className="absolute left-0 flex flex-col">
-            <div className="w-[1px] h-4 bg-gray-400 mb-2 self-start"></div>
-            <div className="text-xs text-gray-500 font-medium whitespace-nowrap transform rotate-90 origin-left">
-              {startDate.getFullYear()}
-            </div>
-          </div>
-
           {/* Status change demarcations */}
           {sortedHistory.map((entry, index) => {
             const position = adjustedPositions[index];
+            const isFirstItem = index === 0;
 
             return (
               <div
                 key={index}
                 className="absolute flex flex-col items-center"
-                style={{ left: `${position}%`, transform: "translateX(-50%)" }}
+                style={{
+                  left: `${position}%`,
+                  transform: "translateX(-50%)",
+                }}
               >
                 <div className="w-[1px] h-4 bg-gray-400 mb-2"></div>
-                <div className="flex flex-col items-left transform rotate-90 mt-10">
+                <div
+                  className={`flex flex-col items-left transform rotate-90 mt-10 ${isFirstItem ? "ml-2" : ""}`}
+                >
                   <div className="text-xs text-gray-500 font-medium whitespace-nowrap">
                     {formatDate(entry.date_entered)}
                   </div>
