@@ -52,6 +52,7 @@ export default function Timeline({ history }: TimelineProps) {
   // Calculate adjusted positions for labels to prevent overlap
   const calculateAdjustedPositions = (entries: AgreementHistory[]) => {
     const minSpacing = 7; // Minimum spacing in percentage
+    const maxPosition = 95; // Maximum position to keep labels in view
     const adjustedPositions: number[] = [];
 
     for (let i = 0; i < entries.length; i++) {
@@ -99,7 +100,7 @@ export default function Timeline({ history }: TimelineProps) {
             );
 
             // If not enough space, space towards the right
-            if (adjustedPosition > 98) {
+            if (adjustedPosition > maxPosition) {
               adjustedPosition = Math.min(
                 minRequiredPosition,
                 centerPoint - minSpacing,
@@ -111,7 +112,7 @@ export default function Timeline({ history }: TimelineProps) {
 
       // Ensure we don't go beyond timeline bounds (except for first item which stays at 0)
       if (i > 0) {
-        adjustedPosition = Math.max(2, Math.min(98, adjustedPosition));
+        adjustedPosition = Math.max(2, Math.min(maxPosition, adjustedPosition));
       }
 
       adjustedPositions.push(adjustedPosition);
@@ -135,7 +136,21 @@ export default function Timeline({ history }: TimelineProps) {
 
     // For the first segment, start from 0% instead of the adjusted position
     const segmentStart = i === 0 ? 0 : currentAdjustedPosition;
-    const segmentWidth = nextAdjustedPosition - segmentStart;
+
+    // If current status is "Deferred", don't create a segment for it
+    const isDeferred = currentEntry.status === "Deferred";
+    if (isDeferred) {
+      // Extend the previous segment to 100% instead of creating a deferred segment
+      if (segments.length > 0) {
+        const lastSegment = segments[segments.length - 1];
+        lastSegment.width = 100 - (i === 1 ? 0 : adjustedPositions[i - 1]);
+        lastSegment.endDate = endDate;
+      }
+      break;
+    }
+
+    const segmentEnd = nextAdjustedPosition;
+    const segmentWidth = segmentEnd - segmentStart;
 
     segments.push({
       width: segmentWidth,
@@ -169,6 +184,9 @@ export default function Timeline({ history }: TimelineProps) {
             const position = adjustedPositions[index];
             const isFirstItem = index === 0;
             const isLastItem = index === sortedHistory.length - 1;
+            const isDeferred = entry.status === "Deferred";
+
+            if (isDeferred) return null; // Deferred label handled in end demarcation
 
             return (
               <div
@@ -181,7 +199,7 @@ export default function Timeline({ history }: TimelineProps) {
               >
                 <div className="w-[1px] h-4 bg-gray-400 mb-2"></div>
                 <div
-                  className={`flex flex-col items-left transform rotate-90 w-36 mt-16 ${isFirstItem ? "ml-2" : ""} ${isLastItem ? "mr-2" : ""}`}
+                  className={`flex flex-col items-left transform rotate-90 w-36 mt-16 ${isFirstItem ? "ml-2" : ""} ${isLastItem ? "mr-4" : ""}`}
                 >
                   <div className="text-xs text-gray-500 font-medium whitespace-nowrap">
                     {formatDate(entry.date_entered)}
@@ -194,11 +212,24 @@ export default function Timeline({ history }: TimelineProps) {
             );
           })}
 
-          {/* End demarcation */}
+          {/* End demarcation - only show if last status is not "Deferred" */}
           <div className="absolute right-0 flex flex-col">
             <div className="w-[1px] h-4 bg-gray-400 mb-2 self-end"></div>
             <div className="text-xs text-gray-500 font-medium whitespace-nowrap transform rotate-90 origin-right mt-8">
-              Today
+              {sortedHistory[sortedHistory.length - 1].status === "Deferred" ? (
+                <div className="relative top-2 left-8">
+                  <div className="text-xs text-gray-500 font-medium whitespace-nowrap ">
+                    {formatDate(
+                      sortedHistory[sortedHistory.length - 1].date_entered,
+                    )}
+                  </div>
+                  <div className="text-xs text-gray-600 whitespace-nowrap">
+                    {sortedHistory[sortedHistory.length - 1].status}
+                  </div>
+                </div>
+              ) : (
+                "Today"
+              )}
             </div>
           </div>
         </div>
