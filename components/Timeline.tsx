@@ -51,7 +51,7 @@ export default function Timeline({ history }: TimelineProps) {
 
   // Calculate adjusted positions for labels to prevent overlap
   const calculateAdjustedPositions = (entries: AgreementHistory[]) => {
-    const minSpacing = 5; // Minimum spacing in percentage
+    const minSpacing = 7; // Minimum spacing in percentage
     const adjustedPositions: number[] = [];
 
     for (let i = 0; i < entries.length; i++) {
@@ -168,6 +168,7 @@ export default function Timeline({ history }: TimelineProps) {
           {sortedHistory.map((entry, index) => {
             const position = adjustedPositions[index];
             const isFirstItem = index === 0;
+            const isLastItem = index === sortedHistory.length - 1;
 
             return (
               <div
@@ -180,7 +181,7 @@ export default function Timeline({ history }: TimelineProps) {
               >
                 <div className="w-[1px] h-4 bg-gray-400 mb-2"></div>
                 <div
-                  className={`flex flex-col items-left transform rotate-90 w-36 mt-16 ${isFirstItem ? "ml-2" : ""}`}
+                  className={`flex flex-col items-left transform rotate-90 w-36 mt-16 ${isFirstItem ? "ml-2" : ""} ${isLastItem ? "mr-2" : ""}`}
                 >
                   <div className="text-xs text-gray-500 font-medium whitespace-nowrap">
                     {formatDate(entry.date_entered)}
@@ -197,7 +198,7 @@ export default function Timeline({ history }: TimelineProps) {
           <div className="absolute right-0 flex flex-col">
             <div className="w-[1px] h-4 bg-gray-400 mb-2 self-end"></div>
             <div className="text-xs text-gray-500 font-medium whitespace-nowrap transform rotate-90 origin-right mt-8">
-              {endDate.getFullYear()}
+              Today
             </div>
           </div>
         </div>
