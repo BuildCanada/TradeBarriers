@@ -180,7 +180,7 @@ export default function Timeline({ history }: TimelineProps) {
               >
                 <div className="w-[1px] h-4 bg-gray-400 mb-2"></div>
                 <div
-                  className={`flex flex-col items-left transform rotate-90 mt-10 ${isFirstItem ? "ml-2" : ""}`}
+                  className={`flex flex-col items-left transform rotate-90 w-36 mt-16 ${isFirstItem ? "ml-2" : ""}`}
                 >
                   <div className="text-xs text-gray-500 font-medium whitespace-nowrap">
                     {formatDate(entry.date_entered)}
