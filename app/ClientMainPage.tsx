@@ -71,6 +71,7 @@ export default function ClientMainPage({
             src="/trade-barriers/buildcanada-logo.svg"
             alt="Build Canada"
             width={60}
+            height={36}
           />
         </div>
 
