@@ -197,7 +197,10 @@ export default function ClientMainPage({
           <div className="mt-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-mono font-semibold text-foreground">
-                {((stats.implemented / stats.total) * 100).toFixed(0)}% COMPLETE
+                {stats.total > 0
+                  ? ((stats.implemented / stats.total) * 100).toFixed(0)
+                  : 0}
+                % COMPLETE
               </span>
             </div>
             <div className="relative h-3 bg-gray-200 rounded-lg overflow-hidden">
