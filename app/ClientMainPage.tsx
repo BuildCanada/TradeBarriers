@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Agreement } from "@/lib/types";
 import { getAgreementStats } from "@/lib/utils";
-import { Search, ChevronDown, ChevronUp, Mail } from "lucide-react";
+import { Search, ChevronDown, ChevronUp, Mail, CircleHelp } from "lucide-react";
 import AgreementsList from "@/components/AgreementsList";
 import FiltersPanel from "@/components/FiltersPanel";
 import ActivityChart from "@/components/ActivityChart";
+import FAQModal from "@/components/FAQModal";
 
 interface ClientMainPageProps {
   initialAgreements: Agreement[];
@@ -25,6 +27,7 @@ export default function ClientMainPage({
   const [stats, setStats] = useState(initialStats);
   const [searchQuery, setSearchQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [faqOpen, setFaqOpen] = useState(false);
 
   useEffect(() => {
     setStats(getAgreementStats(filteredAgreements));
@@ -63,6 +66,15 @@ export default function ClientMainPage({
     <div className="flex flex-col lg:flex-row min-h-screen bg-background">
       {/* Left Column - Branding, Title, and Filters */}
       <div className="w-full lg:w-80 flex-shrink-0 p-6 border-r border-border">
+        <div className="mb-6">
+          <Image
+            src="/trade-barriers/buildcanada-logo.svg"
+            alt="Build Canada"
+            width={60}
+            height={36}
+          />
+        </div>
+
         <div className="mb-8">
           <h1 className="text-3xl lg:text-4xl font-bold mb-3 font-mono uppercase tracking-wider text-foreground">
             Trade Barriers Tracker
@@ -72,7 +84,16 @@ export default function ClientMainPage({
           </p>
         </div>
 
-        {/* Feedback Button */}
+        {/* FAQ and Feedback Button */}
+        <div className="mb-2">
+          <button
+            onClick={() => setFaqOpen(true)}
+            className="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-mono uppercase tracking-wide border border-border bg-card text-foreground hover:bg-muted transition-colors rounded-md"
+          >
+            <CircleHelp className="w-4 h-4 mr-2" />
+            FAQ
+          </button>
+        </div>
         <div className="mb-6">
           <a
             href="mailto:hi@buildcanada.com?subject=Trade Barriers Feedback"
@@ -335,6 +356,9 @@ export default function ClientMainPage({
           )}
         </div>
       </div>
+
+      {/* FAQ Modal */}
+      <FAQModal isOpen={faqOpen} onClose={() => setFaqOpen(false)} />
     </div>
   );
 }
