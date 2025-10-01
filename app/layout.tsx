@@ -65,11 +65,25 @@ export default function RootLayout({
           <footer className="border-t border-border bg-background px-4 py-6">
             <div className="text-center">
               <p className="text-foreground text-sm font-mono uppercase tracking-wider">
+                Built by{" "}
+                <Link
+                  href="https://www.linkedin.com/in/ryan-manucha-a914a7a1/"
+                  className="text-bloomberg-blue hover:underline"
+                >
+                  Ryan
+                </Link>{" "}
+                and{" "}
+                <Link
+                  href="https://github.com/0xsnafu"
+                  className="text-bloomberg-blue hover:underline"
+                >
+                  Marty
+                </Link>{" "}
                 🏗️🇨🇦 A{" "}
                 <Link href="/" className="text-bloomberg-blue hover:underline">
-                  BUILD CANADA
+                  Build Canada
                 </Link>{" "}
-                PROJECT
+                Project
               </p>
             </div>
           </footer>

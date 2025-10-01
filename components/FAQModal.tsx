@@ -109,14 +109,26 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
         </div>
 
         <div className="mt-6 pt-4 border-t border-border">
-          <p className="text-xs text-muted-foreground font-mono uppercase tracking-wide text-center">
-            For additional questions, please contact us at{" "}
+          <p className="text-muted-foreground text-xs font-mono uppercase tracking-wider text-center">
+            Built by{" "}
             <a
-              href="mailto:hi@buildcanada.com"
+              href="https://www.linkedin.com/in/ryan-manucha-a914a7a1/"
               className="text-bloomberg-blue hover:underline"
             >
-              hi@buildcanada.com
-            </a>
+              Ryan
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://github.com/0xsnafu"
+              className="text-bloomberg-blue hover:underline"
+            >
+              Marty
+            </a>{" "}
+            🏗️🇨🇦 A{" "}
+            <a href="/" className="text-bloomberg-blue hover:underline">
+              Build Canada
+            </a>{" "}
+            Project
           </p>
         </div>
       </DialogContent>
