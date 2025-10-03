@@ -31,6 +31,11 @@ const faqData: FAQItem[] = [
       "Internal trade barriers should not be thought of as light switches (i.e. either trade is permitted or it is not). Rather, they are costs incurred on account of transacting across internal borders.\n\nExamples include: varying driver qualifications for long-combination vehicles, inconsistent definition of sunrise and sunset for trucking restrictions, divergent technical safety rules, duplicative end-of-life reporting requirements for producers of electronics.",
   },
   {
+    question: "What do the statuses mean?",
+    answer:
+      "- Awaiting Sponsorship: These are known barriers that have not been added as an item to an agenda\n- Under Negotiation: Jurisdictions are negotiating the item, but an agreement has not yet been reached\n- Agreement Reached: The jurisdictions have reached an agreement to address the item\n- Partially Implemented: At least one jurisdiction has implemented the agreement\n- Implemented: All jurisdictions have fully implemented the agreement\n- Deferred: Jurisdictions have deferred addressing the item",
+  },
+  {
     question: "Why does this matter?",
     answer:
       "Canada's internal trade barriers are estimated to cost over <a href='https://www.bnnbloomberg.ca/business/economics/2025/02/04/interprovincial-trade-barriers-what-they-are-why-they-exist-and-how-to-cut-them/' target='_blank' rel='noopener noreferrer' class='text-bloomberg-blue hover:underline'>$200 billion</a> each year (equivalent to 7.9% of Canada's GDP) by limiting the free movement of goods, services, and people across provincial borders.\n\nTracking agreements helps citizens, businesses, and policymakers see where progress is being made—and where more work is needed.",
@@ -109,14 +114,26 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
         </div>
 
         <div className="mt-6 pt-4 border-t border-border">
-          <p className="text-xs text-muted-foreground font-mono uppercase tracking-wide text-center">
-            For additional questions, please contact us at{" "}
+          <p className="text-muted-foreground text-xs font-mono uppercase tracking-wider text-center">
+            Built by{" "}
             <a
-              href="mailto:hi@buildcanada.com"
+              href="https://www.linkedin.com/in/ryan-manucha-a914a7a1/"
               className="text-bloomberg-blue hover:underline"
             >
-              hi@buildcanada.com
-            </a>
+              Ryan
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://github.com/0xsnafu"
+              className="text-bloomberg-blue hover:underline"
+            >
+              Marty
+            </a>{" "}
+            🏗️🇨🇦 A{" "}
+            <a href="/" className="text-bloomberg-blue hover:underline">
+              Build Canada
+            </a>{" "}
+            Project
           </p>
         </div>
       </DialogContent>
