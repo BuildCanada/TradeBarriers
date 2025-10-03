@@ -154,7 +154,7 @@ export default function AgreementsList({
               </div>
               <div className="w-fit">
                 <div
-                  className={`text-xs p-1 rounded-md border ${getStatusColor(item.status)}`}
+                  className={`text-xs p-1 w-fit rounded-md border ${getStatusColor(item.status)}`}
                 >
                   {item.status}
                 </div>
