@@ -24,7 +24,7 @@ export const getStatusColor = (status: AgreementStatus) => {
     case "Agreement Reached":
       return "bg-orange-100 text-orange-400 border-orange-300";
     case "Partially Implemented":
-      return "bg-green-100 text-green-400 border-green-300";
+      return "bg-blue-100 text-blue-600 border-blue-300";
     case "Implemented":
       return "bg-green-100 text-green-600 border-green-300";
     default:
