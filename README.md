@@ -19,6 +19,19 @@
 
 - 🎉 **Time to explore!** Head over to [http://localhost:4444](http://localhost:4444) to see your local instance in action!
 
+## Sample .env
+
+This project uses Supabase for storage. To set up your own developer environment, add these variables to a .env file at the root of the project:
+
+```bash
+DATABASE_TABLE_NAME = 
+DATABASE_TABLE_NAME_THEMES = 
+
+SUPABASE_URL = 
+SUPABASE_ANON_KEY = 
+SUPABASE_SERVICE_ROLE_KEY = 
+```
+
 ## Linting
 
 This project uses ESLint with Next.js configuration. Run linting with:
