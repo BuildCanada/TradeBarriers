@@ -198,7 +198,7 @@ export default function ClientMainPage({
                   {stats.implemented}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Complete
+                  Implemented
                 </div>
               </CardContent>
             </Card>
@@ -221,7 +221,7 @@ export default function ClientMainPage({
                 {stats.total > 0
                   ? ((stats.implemented / stats.total) * 100).toFixed(0)
                   : 0}
-                % COMPLETE
+                % Implemented
               </span>
             </div>
             <div className="relative h-3 bg-gray-200 rounded-lg overflow-hidden">
