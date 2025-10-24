@@ -9,6 +9,7 @@ import { Search, ChevronDown, ChevronUp, Mail, CircleHelp } from "lucide-react";
 import AgreementsList from "@/components/AgreementsList";
 import FiltersPanel from "@/components/FiltersPanel";
 import ActivityChart from "@/components/ActivityChart";
+import KPICards from "@/components/KPICards";
 import FAQModal from "@/components/FAQModal";
 
 interface ClientMainPageProps {
@@ -285,6 +286,9 @@ export default function ClientMainPage({
         <div className="mb-8">
           <ActivityChart agreements={filteredAgreements} />
         </div>
+
+        {/* KPI Cards */}
+        <KPICards agreements={filteredAgreements} />
 
         {/* Agreements Section */}
         <div>
