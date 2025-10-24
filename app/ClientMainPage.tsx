@@ -168,7 +168,7 @@ export default function ClientMainPage({
                   {stats.underNegotiation}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Negotiation
+                  Negotiations Initiated
                 </div>
               </CardContent>
             </Card>
@@ -178,7 +178,7 @@ export default function ClientMainPage({
                   {stats.agreementReached}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Reached
+                  Agreements Reached
                 </div>
               </CardContent>
             </Card>
@@ -188,7 +188,7 @@ export default function ClientMainPage({
                   {stats.partiallyImplemented}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Partial
+                  Partially Implemented
                 </div>
               </CardContent>
             </Card>
@@ -198,7 +198,7 @@ export default function ClientMainPage({
                   {stats.implemented}
                 </div>
                 <div className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                  Implemented
+                  Fully Implemented
                 </div>
               </CardContent>
             </Card>
