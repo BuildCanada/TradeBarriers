@@ -33,7 +33,18 @@ interface MonthlyData {
   year: number;
   monthName: string;
   changes: number;
+  statusBreakdown: Record<string, number>;
 }
+
+// Define colors for each status
+const STATUS_COLORS: Record<string, string> = {
+  "Awaiting Sponsorship": "#f59e0b", // amber-500
+  "Under Negotiation": "#3b82f6", // blue-500
+  "Agreement Reached": "#10b981", // emerald-500
+  "Partially Implemented": "#8b5cf6", // violet-500
+  Implemented: "#059669", // emerald-600
+  Deferred: "#ef4444", // red-500
+};
 
 export default function ActivityChart({ agreements }: ActivityChartProps) {
   const [timeRange, setTimeRange] = useState<"12months" | "alltime">(
@@ -92,13 +103,24 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
     }
   }, [getAllStatusChanges, timeRange, getEarliestDate]);
 
-  // Group changes by month
+  // Group changes by month and status
   const monthlyData = useMemo((): MonthlyData[] => {
-    const monthlyMap = new Map<string, number>();
+    const monthlyMap = new Map<
+      string,
+      { total: number; statusBreakdown: Record<string, number> }
+    >();
 
     getFilteredChanges.forEach((change) => {
       const monthKey = `${change.date.getFullYear()}-${String(change.date.getMonth() + 1).padStart(2, "0")}`;
-      monthlyMap.set(monthKey, (monthlyMap.get(monthKey) || 0) + 1);
+
+      if (!monthlyMap.has(monthKey)) {
+        monthlyMap.set(monthKey, { total: 0, statusBreakdown: {} });
+      }
+
+      const monthData = monthlyMap.get(monthKey)!;
+      monthData.total += 1;
+      monthData.statusBreakdown[change.status] =
+        (monthData.statusBreakdown[change.status] || 0) + 1;
     });
 
     // Generate complete month range
@@ -112,13 +134,17 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
         date.setMonth(now.getMonth() - i);
 
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-        const changes = monthlyMap.get(monthKey) || 0;
+        const monthData = monthlyMap.get(monthKey) || {
+          total: 0,
+          statusBreakdown: {},
+        };
 
         data.push({
           month: monthKey,
           year: date.getFullYear(),
           monthName: date.toLocaleDateString("en-US", { month: "short" }),
-          changes,
+          changes: monthData.total,
+          statusBreakdown: monthData.statusBreakdown,
         });
       }
     } else {
@@ -129,13 +155,17 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
       const date = new Date(startDate);
       while (date <= currentDate) {
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-        const changes = monthlyMap.get(monthKey) || 0;
+        const monthData = monthlyMap.get(monthKey) || {
+          total: 0,
+          statusBreakdown: {},
+        };
 
         data.push({
           month: monthKey,
           year: date.getFullYear(),
           monthName: date.toLocaleDateString("en-US", { month: "short" }),
-          changes,
+          changes: monthData.total,
+          statusBreakdown: monthData.statusBreakdown,
         });
 
         // Move to next month
@@ -156,18 +186,27 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
       return showYear ? `${data.monthName} ${data.year}` : data.monthName;
     });
 
+    // Get all unique statuses that appear in the data
+    const allStatuses = new Set<string>();
+    monthlyData.forEach((data) => {
+      Object.keys(data.statusBreakdown).forEach((status) =>
+        allStatuses.add(status),
+      );
+    });
+
+    // Create datasets for each status
+    const datasets = Array.from(allStatuses).map((status) => ({
+      label: status,
+      data: monthlyData.map((data) => data.statusBreakdown[status] || 0),
+      backgroundColor: STATUS_COLORS[status] || "#6b7280",
+      borderColor: STATUS_COLORS[status] || "#6b7280",
+      borderWidth: 1,
+      borderSkipped: false,
+    }));
+
     return {
       labels,
-      datasets: [
-        {
-          label: "Status Changes",
-          data: monthlyData.map((data) => data.changes),
-          backgroundColor: "#3b82f6",
-          borderColor: "#2563eb",
-          borderWidth: 1,
-          borderSkipped: false,
-        },
-      ],
+      datasets,
     };
   }, [monthlyData]);
 
@@ -176,7 +215,17 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false,
+        display: true,
+        position: "top" as const,
+        labels: {
+          usePointStyle: true,
+          padding: 20,
+          font: {
+            family:
+              'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
+            size: 11,
+          },
+        },
       },
       title: {
         display: false,
@@ -188,21 +237,32 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
         borderColor: "#e5e7eb",
         borderWidth: 1,
         cornerRadius: 0,
-        displayColors: false,
+        displayColors: true,
         callbacks: {
           title: function (context: { dataIndex: number }[]) {
             const dataIndex = context[0].dataIndex;
             const monthData = monthlyData[dataIndex];
             return `${monthData.monthName} ${monthData.year}`;
           },
-          label: function (context: { parsed: { y: number } }) {
-            return `${context.parsed.y} status change${context.parsed.y === 1 ? "" : "s"}`;
+          label: function (context: {
+            parsed: { y: number };
+            dataset: { label?: string };
+          }) {
+            if (context.parsed.y === 0) return "";
+            return `${context.dataset.label || "Unknown"}: ${context.parsed.y} change${context.parsed.y === 1 ? "" : "s"}`;
+          },
+          footer: function (context: { dataIndex: number }[]) {
+            const dataIndex = context[0].dataIndex;
+            const monthData = monthlyData[dataIndex];
+            const total = monthData.changes;
+            return `Total: ${total} change${total === 1 ? "" : "s"}`;
           },
         },
       },
     },
     scales: {
       x: {
+        stacked: true,
         grid: {
           display: false,
         },
@@ -227,6 +287,7 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
         },
       },
       y: {
+        stacked: true,
         title: {
           display: true,
           text: "# of changes",

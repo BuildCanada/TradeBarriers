@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ChevronDown, ChevronRight, Link } from "lucide-react";
 
 interface FAQModalProps {
   isOpen: boolean;
@@ -130,9 +130,9 @@ export default function FAQModal({ isOpen, onClose }: FAQModalProps) {
               Marty
             </a>{" "}
             🏗️🇨🇦 A{" "}
-            <a href="/" className="text-bloomberg-blue hover:underline">
+            <Link href="/" className="text-bloomberg-blue hover:underline">
               Build Canada
-            </a>{" "}
+            </Link>{" "}
             Project
           </p>
         </div>
