@@ -14,8 +14,9 @@ import {
   formatDate,
   checkIfOverdue,
 } from "@/lib/utils";
-import { Calendar, MapPin, ExternalLink, Tag } from "lucide-react";
+import { Calendar, MapPin, ExternalLink, Tag, Share2 } from "lucide-react";
 import Timeline from "./Timeline";
+import { toast } from "./ui/use-toast";
 
 interface AgreementModalProps {
   agreement: Agreement | null;
@@ -31,6 +32,16 @@ export default function AgreementModal({
   if (!agreement) return null;
 
   const isOverdue = checkIfOverdue(agreement.deadline, agreement.status);
+
+  const handleShare = () => {
+    const url = `${window.location.origin}/trade-barriers?agreement=${agreement.id}`;
+    navigator.clipboard.writeText(url);
+
+    toast({
+      title: "Link copied!",
+      description: "The agreement link has been copied to your clipboard.",
+    });
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -204,17 +215,26 @@ export default function AgreementModal({
                   {formatDate(agreement.updated_at)}
                 </div>
               </div>
-              {agreement.source_url && (
-                <a
-                  href={agreement.source_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"
+              <div className="flex gap-2">
+                <button
+                  onClick={handleShare}
+                  className="inline-flex items-center justify-center px-4 py-2 text-sm font-mono uppercase tracking-wide border border-border bg-card text-foreground hover:bg-muted transition-colors rounded-md"
                 >
-                  <ExternalLink className="w-4 h-4" />
-                  View Source
-                </a>
-              )}
+                  <Share2 className="w-4 h-4 mr-2" />
+                  Share
+                </button>
+                {agreement.source_url && (
+                  <a
+                    href={agreement.source_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium font-founders uppercase tracking-wide rounded-md transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    View Source
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

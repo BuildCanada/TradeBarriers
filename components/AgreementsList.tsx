@@ -7,7 +7,7 @@ import {
   checkIfOverdue,
 } from "@/lib/utils";
 import { authenticatedFetch } from "@/lib/api-utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Calendar, Trash2, Edit, Tag } from "lucide-react";
 import AgreementModal from "./AgreementModal";
 import { Button } from "@/components/ui/button";
@@ -45,12 +45,28 @@ export default function AgreementsList({
     null,
   );
 
+  useEffect(() => {
+    checkForSharedAgreement();
+  });
+
+  const checkForSharedAgreement = () => {
+    const queryParams = new URLSearchParams(location.search);
+    const sharedId = queryParams.get("agreement");
+    const sharedAgreement = agreements.find(
+      (agreement) => agreement.id.toString() == sharedId,
+    );
+    if (sharedAgreement) {
+      handleCardClick(sharedAgreement);
+    }
+  };
+
   const handleCardClick = (agreement: Agreement) => {
     setSelectedAgreement(agreement);
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
+    window.history.replaceState({}, "", window.location.pathname); // Clear the query string without reloading the page
     setIsModalOpen(false);
     setSelectedAgreement(null);
   };
