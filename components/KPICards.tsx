@@ -143,10 +143,11 @@ export default function KPICards({ agreements }: KPICardsProps) {
         </CardHeader>
         <CardContent className="pt-0">
           <div className="text-3xl font-bold font-mono text-orange-500 mb-2">
-            {Math.round(
-              (kpiData.staleAgreementsCount / agreements.length) * 100,
-            )}
-            %
+            {agreements.length === 0
+              ? "--%"
+              : `${Math.round(
+                  (kpiData.staleAgreementsCount / agreements.length) * 100,
+                )}%`}
           </div>
           <div className="text-xs text-muted-foreground font-mono uppercase tracking-wide">
             % of Agreements Stagnant for &gt;12 Months
