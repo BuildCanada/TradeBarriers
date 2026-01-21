@@ -7,6 +7,9 @@ const tsParser = require("@typescript-eslint/parser");
 const compat = new FlatCompat();
 
 module.exports = [
+  {
+    ignores: [".next/**", "node_modules/**", "eslint.config.cjs"],
+  },
   js.configs.recommended,
   ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
   {
