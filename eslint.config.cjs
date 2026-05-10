@@ -1,7 +1,6 @@
 const { FlatCompat } = require("@eslint/eslintrc");
 const js = require("@eslint/js");
 const nextPlugin = require("@next/eslint-plugin-next");
-const tsPlugin = require("@typescript-eslint/eslint-plugin");
 const tsParser = require("@typescript-eslint/parser");
 
 const compat = new FlatCompat();
@@ -22,7 +21,6 @@ module.exports = [
       },
     },
     plugins: {
-      "@typescript-eslint": tsPlugin,
       "@next/next": nextPlugin,
     },
     rules: {
