@@ -62,6 +62,13 @@ export default function ClientMainPage({
     setStats(getAgreementStats(visibleAgreements));
   }, [visibleAgreements]);
 
+  // Share of the current result set; 0 when nothing matches so the progress
+  // bar doesn't render `NaN%` widths.
+  const pct = useCallback(
+    (count: number) => (stats.total > 0 ? (count / stats.total) * 100 : 0),
+    [stats.total],
+  );
+
   // Apply search to the filtered results from filters
   useEffect(() => {
     if (searchQuery.trim()) {
@@ -78,6 +85,9 @@ export default function ClientMainPage({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const query = e.target.value;
       setSearchQuery(query);
+      // A search can remove the selected bar from the chart entirely; don't
+      // leave an invisible month filter applied.
+      setChartSelection(null);
     },
     [],
   );
@@ -260,7 +270,7 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 left-0 h-full bg-gray-300"
                 style={{
-                  width: `${(stats.awaitingSponsorship / stats.total) * 100}%`,
+                  width: `${pct(stats.awaitingSponsorship)}%`,
                 }}
               ></div>
 
@@ -268,8 +278,8 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 h-full bg-yellow-400"
                 style={{
-                  left: `${(stats.awaitingSponsorship / stats.total) * 100}%`,
-                  width: `${(stats.underNegotiation / stats.total) * 100}%`,
+                  left: `${pct(stats.awaitingSponsorship)}%`,
+                  width: `${pct(stats.underNegotiation)}%`,
                 }}
               ></div>
 
@@ -277,8 +287,8 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 h-full bg-orange-400"
                 style={{
-                  left: `${((stats.awaitingSponsorship + stats.underNegotiation) / stats.total) * 100}%`,
-                  width: `${(stats.agreementReached / stats.total) * 100}%`,
+                  left: `${pct(stats.awaitingSponsorship + stats.underNegotiation)}%`,
+                  width: `${pct(stats.agreementReached)}%`,
                 }}
               ></div>
 
@@ -286,8 +296,8 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 h-full bg-green-400"
                 style={{
-                  left: `${((stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation) / stats.total) * 100}%`,
-                  width: `${(stats.partiallyImplemented / stats.total) * 100}%`,
+                  left: `${pct(stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation)}%`,
+                  width: `${pct(stats.partiallyImplemented)}%`,
                 }}
               ></div>
 
@@ -295,8 +305,8 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 h-full bg-green-600"
                 style={{
-                  left: `${((stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation + stats.partiallyImplemented) / stats.total) * 100}%`,
-                  width: `${(stats.implemented / stats.total) * 100}%`,
+                  left: `${pct(stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation + stats.partiallyImplemented)}%`,
+                  width: `${pct(stats.implemented)}%`,
                 }}
               ></div>
 
@@ -304,8 +314,8 @@ export default function ClientMainPage({
               <div
                 className="absolute top-0 h-full bg-bloomberg-red"
                 style={{
-                  left: `${((stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation + stats.partiallyImplemented + stats.implemented) / stats.total) * 100}%`,
-                  width: `${(stats.deferred / stats.total) * 100}%`,
+                  left: `${pct(stats.awaitingSponsorship + stats.agreementReached + stats.underNegotiation + stats.partiallyImplemented + stats.implemented)}%`,
+                  width: `${pct(stats.deferred)}%`,
                 }}
               ></div>
             </div>

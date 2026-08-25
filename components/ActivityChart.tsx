@@ -304,7 +304,12 @@ export default function ActivityChart({
     ) => {
       const target = (event?.native?.target ?? null) as HTMLElement | null;
       if (target) {
-        target.style.cursor = elements.length > 0 ? "pointer" : "default";
+        // "index" interaction returns elements for empty months too, but
+        // handleChartClick ignores those — don't advertise a dead click.
+        const clickable =
+          elements.length > 0 &&
+          (monthlyData[elements[0].index]?.changes ?? 0) > 0;
+        target.style.cursor = clickable ? "pointer" : "default";
       }
     },
     plugins: {
@@ -314,6 +319,17 @@ export default function ActivityChart({
         labels: {
           usePointStyle: true,
           padding: 20,
+          // backgroundColor is a per-bar array while a selection is active, and
+          // Chart.js reads index 0 for the swatch. Draw the base status colour.
+          generateLabels: (chart: Chart) =>
+            chart.data.datasets.map((dataset, i) => ({
+              text: dataset.label ?? "",
+              fillStyle: STATUS_COLORS[dataset.label ?? ""] || "#6b7280",
+              strokeStyle: STATUS_COLORS[dataset.label ?? ""] || "#6b7280",
+              lineWidth: 1,
+              hidden: !chart.isDatasetVisible(i),
+              datasetIndex: i,
+            })),
           font: {
             family:
               'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
