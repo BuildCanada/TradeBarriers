@@ -1,14 +1,21 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Agreement } from "@/lib/types";
 import { getAgreementStats } from "@/lib/utils";
-import { Search, ChevronDown, ChevronUp, Mail, CircleHelp } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  ChevronUp,
+  Mail,
+  CircleHelp,
+  X,
+} from "lucide-react";
 import AgreementsList from "@/components/AgreementsList";
 import FiltersPanel from "@/components/FiltersPanel";
-import ActivityChart from "@/components/ActivityChart";
+import ActivityChart, { ChartSelection } from "@/components/ActivityChart";
 import KPICards from "@/components/KPICards";
 import FAQModal from "@/components/FAQModal";
 
@@ -29,10 +36,31 @@ export default function ClientMainPage({
   const [searchQuery, setSearchQuery] = useState("");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [faqOpen, setFaqOpen] = useState(false);
+  const [chartSelection, setChartSelection] = useState<ChartSelection | null>(
+    null,
+  );
+
+  // Agreements narrowed further by a clicked bar in the activity chart. The
+  // chart itself keeps reading `filteredAgreements` so its bars stay put.
+  const visibleAgreements = useMemo(() => {
+    if (!chartSelection) return filteredAgreements;
+
+    return filteredAgreements.filter((agreement) =>
+      (agreement.agreement_history || []).some((history) => {
+        const date = new Date(history.date_entered);
+        if (Number.isNaN(date.getTime())) return false;
+        const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
+        if (monthKey !== chartSelection.month) return false;
+        return (
+          !chartSelection.status || history.status === chartSelection.status
+        );
+      }),
+    );
+  }, [filteredAgreements, chartSelection]);
 
   useEffect(() => {
-    setStats(getAgreementStats(filteredAgreements));
-  }, [filteredAgreements]);
+    setStats(getAgreementStats(visibleAgreements));
+  }, [visibleAgreements]);
 
   // Apply search to the filtered results from filters
   useEffect(() => {
@@ -56,10 +84,12 @@ export default function ClientMainPage({
 
   const handleFiltersChange = useCallback((filteredAgreements: Agreement[]) => {
     setFilteredByFilters(filteredAgreements);
+    setChartSelection(null);
   }, []);
 
   const clearAllFilters = useCallback(() => {
     setSearchQuery("");
+    setChartSelection(null);
     setFilteredByFilters(initialAgreements);
   }, [initialAgreements]);
 
@@ -284,11 +314,15 @@ export default function ClientMainPage({
 
         {/* Activity Chart */}
         <div className="mb-8">
-          <ActivityChart agreements={filteredAgreements} />
+          <ActivityChart
+            agreements={filteredAgreements}
+            selection={chartSelection}
+            onSelectionChange={setChartSelection}
+          />
         </div>
 
         {/* KPI Cards */}
-        <KPICards agreements={filteredAgreements} />
+        <KPICards agreements={visibleAgreements} />
 
         {/* Agreements Section */}
         <div>
@@ -296,7 +330,7 @@ export default function ClientMainPage({
             {/* Desktop layout */}
             <div className="hidden md:flex items-center justify-between mb-2">
               <h2 className="text-xl font-mono font-semibold uppercase tracking-wide text-foreground">
-                Agreements ({filteredAgreements.length})
+                Agreements ({visibleAgreements.length})
               </h2>
 
               {/* Search Bar */}
@@ -316,7 +350,7 @@ export default function ClientMainPage({
             <div className="md:hidden">
               <div className="mb-4">
                 <h2 className="text-xl font-mono font-semibold uppercase tracking-wide text-foreground">
-                  Agreements ({filteredAgreements.length})
+                  Agreements ({visibleAgreements.length})
                 </h2>
               </div>
 
@@ -333,20 +367,32 @@ export default function ClientMainPage({
               </div>
             </div>
 
-            {filteredAgreements.length !== initialAgreements.length && (
+            {chartSelection && (
+              <button
+                onClick={() => setChartSelection(null)}
+                className="mt-3 inline-flex items-center gap-2 px-3 py-1 text-xs font-mono uppercase tracking-wide border border-border bg-card text-foreground hover:bg-muted transition-colors"
+              >
+                {chartSelection.status
+                  ? `${chartSelection.status} · ${chartSelection.label}`
+                  : chartSelection.label}
+                <X className="w-3 h-3" />
+              </button>
+            )}
+
+            {visibleAgreements.length !== initialAgreements.length && (
               <p className="text-sm text-muted-foreground font-mono uppercase tracking-wide">
-                Showing {filteredAgreements.length} of{" "}
-                {initialAgreements.length} agreements
+                Showing {visibleAgreements.length} of {initialAgreements.length}{" "}
+                agreements
               </p>
             )}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <AgreementsList agreements={filteredAgreements} />
+            <AgreementsList agreements={visibleAgreements} />
           </div>
 
           {/* Empty State */}
-          {filteredAgreements.length === 0 && (
+          {visibleAgreements.length === 0 && (
             <Card className="bg-card border border-border text-center py-12">
               <CardContent>
                 <div className="text-muted-foreground text-lg font-mono uppercase tracking-wide">
