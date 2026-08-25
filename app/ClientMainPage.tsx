@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useCallback, useEffect, useMemo } from "react";
-import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Agreement } from "@/lib/types";
 import { getAgreementStats } from "@/lib/utils";
@@ -107,15 +106,6 @@ export default function ClientMainPage({
     <div className="flex flex-col lg:flex-row min-h-screen bg-background">
       {/* Left Column - Branding, Title, and Filters */}
       <div className="w-full lg:w-80 flex-shrink-0 p-6 border-r border-border">
-        <div className="mb-6">
-          <Image
-            src="/trade-barriers/buildcanada-logo.svg"
-            alt="Build Canada"
-            width={60}
-            height={36}
-          />
-        </div>
-
         <div className="mb-8">
           <h1 className="text-3xl lg:text-4xl font-bold mb-3 font-mono uppercase tracking-wider text-foreground">
             Trade Barriers Tracker
