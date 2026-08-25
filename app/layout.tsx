@@ -67,7 +67,11 @@ export default function RootLayout({
             <Navbar />
 
             <main className="bg-background">
-              <div>{children}</div>
+              {/* Inset content panel with a hairline rule — the main site
+                  applies this to each page's own root wrapper. */}
+              <div className="mx-[10px] my-[10px] border border-nav-border-light bg-background overflow-x-clip">
+                {children}
+              </div>
             </main>
 
             <footer className="border-t border-border bg-background px-4 py-6">
