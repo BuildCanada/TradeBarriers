@@ -12,6 +12,9 @@ import {
   Title,
   Tooltip,
   Legend,
+  type ActiveElement,
+  type Chart,
+  type ChartEvent,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
@@ -24,8 +27,16 @@ ChartJS.register(
   Legend,
 );
 
+export interface ChartSelection {
+  month: string; // "YYYY-MM"
+  label: string; // e.g. "Mar 2025"
+  status?: string; // undefined = whole month
+}
+
 interface ActivityChartProps {
   agreements: Agreement[];
+  selection?: ChartSelection | null;
+  onSelectionChange?: (selection: ChartSelection | null) => void;
 }
 
 interface MonthlyData {
@@ -34,6 +45,11 @@ interface MonthlyData {
   monthName: string;
   changes: number;
   statusBreakdown: Record<string, number>;
+}
+
+// Faded version of a bar colour, used when another bar is selected
+function fade(color: string) {
+  return `${color}33`;
 }
 
 // Define colors for each status
@@ -46,7 +62,11 @@ const STATUS_COLORS: Record<string, string> = {
   Deferred: "#ef4444", // red-500
 };
 
-export default function ActivityChart({ agreements }: ActivityChartProps) {
+export default function ActivityChart({
+  agreements,
+  selection = null,
+  onSelectionChange,
+}: ActivityChartProps) {
   const [timeRange, setTimeRange] = useState<"12months" | "alltime">(
     "12months",
   );
@@ -195,24 +215,103 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
     });
 
     // Create datasets for each status
-    const datasets = Array.from(allStatuses).map((status) => ({
-      label: status,
-      data: monthlyData.map((data) => data.statusBreakdown[status] || 0),
-      backgroundColor: STATUS_COLORS[status] || "#6b7280",
-      borderColor: STATUS_COLORS[status] || "#6b7280",
-      borderWidth: 1,
-      borderSkipped: false,
-    }));
+    const datasets = Array.from(allStatuses).map((status) => {
+      const color = STATUS_COLORS[status] || "#6b7280";
+      const isSelectedStatus =
+        !selection || !selection.status || selection.status === status;
+
+      const colors = monthlyData.map((data) =>
+        !selection || (selection.month === data.month && isSelectedStatus)
+          ? color
+          : fade(color),
+      );
+
+      return {
+        label: status,
+        data: monthlyData.map((data) => data.statusBreakdown[status] || 0),
+        backgroundColor: colors,
+        borderColor: colors,
+        borderWidth: 1,
+        borderSkipped: false,
+      };
+    });
 
     return {
       labels,
       datasets,
     };
-  }, [monthlyData]);
+  }, [monthlyData, selection]);
+
+  const handleChartClick = (
+    event: ChartEvent,
+    _elements: ActiveElement[],
+    chart: Chart,
+  ) => {
+    if (!onSelectionChange || !event.native) return;
+
+    // The chart-wide interaction mode is "index", so ask explicitly for the
+    // exact segment under the cursor. Falling back to the whole column lets a
+    // click on the empty space above the bars still select the month.
+    const hit = chart.getElementsAtEventForMode(
+      event.native,
+      "nearest",
+      { intersect: true },
+      true,
+    );
+    const column = hit.length
+      ? hit
+      : chart.getElementsAtEventForMode(
+          event.native,
+          "index",
+          { intersect: false },
+          true,
+        );
+    if (column.length === 0) return;
+
+    const { datasetIndex, index } = column[0];
+    const monthData = monthlyData[index];
+    if (!monthData || monthData.changes === 0) return;
+
+    const status = hit.length
+      ? chartData.datasets[datasetIndex]?.label
+      : undefined;
+    const next: ChartSelection = {
+      month: monthData.month,
+      label: `${monthData.monthName} ${monthData.year}`,
+      status,
+    };
+
+    // Clicking the same segment again clears the filter
+    if (
+      selection &&
+      selection.month === next.month &&
+      selection.status === next.status
+    ) {
+      onSelectionChange(null);
+      return;
+    }
+
+    onSelectionChange(next);
+  };
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    onClick: handleChartClick,
+    onHover: (
+      event: { native?: Event | null },
+      elements: { index: number }[],
+    ) => {
+      const target = (event?.native?.target ?? null) as HTMLElement | null;
+      if (target) {
+        // "index" interaction returns elements for empty months too, but
+        // handleChartClick ignores those — don't advertise a dead click.
+        const clickable =
+          elements.length > 0 &&
+          (monthlyData[elements[0].index]?.changes ?? 0) > 0;
+        target.style.cursor = clickable ? "pointer" : "default";
+      }
+    },
     plugins: {
       legend: {
         display: true,
@@ -220,6 +319,17 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
         labels: {
           usePointStyle: true,
           padding: 20,
+          // backgroundColor is a per-bar array while a selection is active, and
+          // Chart.js reads index 0 for the swatch. Draw the base status colour.
+          generateLabels: (chart: Chart) =>
+            chart.data.datasets.map((dataset, i) => ({
+              text: dataset.label ?? "",
+              fillStyle: STATUS_COLORS[dataset.label ?? ""] || "#6b7280",
+              strokeStyle: STATUS_COLORS[dataset.label ?? ""] || "#6b7280",
+              lineWidth: 1,
+              hidden: !chart.isDatasetVisible(i),
+              datasetIndex: i,
+            })),
           font: {
             family:
               'ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono", Menlo, monospace',
@@ -336,6 +446,24 @@ export default function ActivityChart({ agreements }: ActivityChartProps) {
               {timeRange === "12months"
                 ? "Number of status changes over the last 12 months"
                 : "Number of status changes since earliest recorded agreement"}
+            </div>
+            <div className="text-xs text-muted-foreground font-mono uppercase tracking-wide mt-1">
+              {selection ? (
+                <span className="text-foreground">
+                  Filtering: {selection.status ? `${selection.status} · ` : ""}
+                  {selection.label}
+                  <button
+                    onClick={() => onSelectionChange?.(null)}
+                    className="ml-2 underline hover:no-underline"
+                  >
+                    Clear
+                  </button>
+                </span>
+              ) : (
+                onSelectionChange && (
+                  <span>Click a bar to filter agreements</span>
+                )
+              )}
             </div>
           </div>
           <div className="flex gap-2">
