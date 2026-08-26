@@ -35,10 +35,22 @@
   font-display: swap;
 }
 
+/* Financier Text — body serif, used for the footer pull-quote */
+@font-face {
+  font-family: "Financier Text";
+  src: url("/trade-barriers/fonts/financier-text-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Founders Grotesk Mono";
-  src: url("/trade-barriers/fonts/founders-grotesk-mono.woff2") format("woff2");
-  font-weight: 400;
+  src: url("/trade-barriers/fonts/founders-grotesk-mono-regular.woff2")
+    format("woff2");
+  /* 400-500 range, matching the main site — labels render at 500 and would
+     otherwise get a synthetic bold. */
+  font-weight: 400 500;
   font-style: normal;
   font-display: swap;
 }
@@ -47,6 +59,17 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 26, 26, 26;
   --background-end-rgb: 26, 26, 26;
+
+  /* Site chrome, mirrored from the main buildcanada.com app. Kept here as
+     CSS variables rather than tailwind.config.ts colours: the config is only
+     read at dev-server start, so colours added there go missing until a
+     restart, while arbitrary-value utilities rebuild on save. */
+  --bc-linen: #f6ece3;
+  --bc-charcoal: #272727;
+  --bc-auburn: #932f2f;
+  --bc-border-light: #b0b0b0;
+  --bc-muted: #888888;
+  --bc-frame: #e0e0e0;
 
   /* Bloomberg-style colors */
   --bloomberg-dark: #1a1a1a;
@@ -68,6 +91,21 @@
     text-transform: uppercase;
   }
 
+  /* Label style used by the site nav — matches TradingPost's .type-label */
+  .type-label {
+    font-family: "Founders Grotesk Mono", "Menlo", "Ubuntu Mono", monospace;
+    font-size: 0.75rem;
+    line-height: 1.3;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
+  .font-financier {
+    font-family: "Financier Text", Georgia, serif;
+    text-transform: none;
+  }
+
   .font-soehne {
     font-family: "Soehne", "Inter", "sans-serif";
   }
@@ -76,14 +114,17 @@
 @layer base {
   :root {
     /* Light theme Bloomberg-style */
-    --background: 36 20% 91%;
+    /* Linen, matched to the main site's --color-linen-100 (#f6ece3) so the
+       shared nav chrome sits on exactly the same cream. */
+    --background: 28.4 51.3% 92.7%;
     --foreground: 0 0% 25%;
-    --card: 36 20% 93%;
+    /* linen-50 (#fbf6f1) */
+    --card: 30 55.6% 96.5%;
     --card-foreground: 0 0% 25%;
-    --popover: 36 20% 93%;
+    --popover: 30 55.6% 96.5%;
     --popover-foreground: 0 0% 25%;
     --primary: 210 100% 56%;
-    --primary-foreground: 36 20% 91%;
+    --primary-foreground: 28.4 51.3% 92.7%;
     --secondary: 36 15% 85%;
     --secondary-foreground: 0 0% 25%;
     --muted: 36 15% 85%;
@@ -91,7 +132,7 @@
     --accent: 36 15% 85%;
     --accent-foreground: 0 0% 25%;
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 36 20% 91%;
+    --destructive-foreground: 28.4 51.3% 92.7%;
     --border: 0 0% 60%;
     --input: 36 15% 85%;
     --ring: 210 100% 56%;
@@ -101,10 +142,10 @@
     --chart-4: 120 84% 56%;
     --chart-5: 280 84% 56%;
     --radius: 0;
-    --sidebar-background: 36 20% 91%;
+    --sidebar-background: 28.4 51.3% 92.7%;
     --sidebar-foreground: 0 0% 35%;
     --sidebar-primary: 210 100% 56%;
-    --sidebar-primary-foreground: 36 20% 91%;
+    --sidebar-primary-foreground: 28.4 51.3% 92.7%;
     --sidebar-accent: 36 15% 85%;
     --sidebar-accent-foreground: 0 0% 25%;
     --sidebar-border: 0 0% 60%;
@@ -248,5 +289,15 @@ html.mouse-active ::-webkit-scrollbar-thumb {
   html.mouse-active {
     scrollbar-color: rgba(64, 64, 64, 0.8) transparent;
     transition: scrollbar-color 1s ease-in;
+  }
+}
+
+/* Footer maple-leaf outline draw-in */
+@keyframes drawLeaf {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
