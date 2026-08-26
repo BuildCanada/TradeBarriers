@@ -35,6 +35,15 @@
   font-display: swap;
 }
 
+/* Financier Text — body serif, used for the footer pull-quote */
+@font-face {
+  font-family: "Financier Text";
+  src: url("/trade-barriers/fonts/financier-text-regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Founders Grotesk Mono";
   src: url("/trade-barriers/fonts/founders-grotesk-mono-regular.woff2")
@@ -50,6 +59,17 @@
   --foreground-rgb: 255, 255, 255;
   --background-start-rgb: 26, 26, 26;
   --background-end-rgb: 26, 26, 26;
+
+  /* Site chrome, mirrored from the main buildcanada.com app. Kept here as
+     CSS variables rather than tailwind.config.ts colours: the config is only
+     read at dev-server start, so colours added there go missing until a
+     restart, while arbitrary-value utilities rebuild on save. */
+  --bc-linen: #f6ece3;
+  --bc-charcoal: #272727;
+  --bc-auburn: #932f2f;
+  --bc-border-light: #b0b0b0;
+  --bc-muted: #888888;
+  --bc-frame: #e0e0e0;
 
   /* Bloomberg-style colors */
   --bloomberg-dark: #1a1a1a;
@@ -79,6 +99,11 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.14em;
+  }
+
+  .font-financier {
+    font-family: "Financier Text", Georgia, serif;
+    text-transform: none;
   }
 
   .font-soehne {
@@ -264,5 +289,15 @@ html.mouse-active ::-webkit-scrollbar-thumb {
   html.mouse-active {
     scrollbar-color: rgba(64, 64, 64, 0.8) transparent;
     transition: scrollbar-color 1s ease-in;
+  }
+}
+
+/* Footer maple-leaf outline draw-in */
+@keyframes drawLeaf {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

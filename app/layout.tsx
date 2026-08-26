@@ -4,8 +4,8 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { SimpleAnalytics } from "@/components/SimpleAnalytics";
 import AutoHideScrollbar from "@/components/AutoHideScrollbar";
-import Link from "next/link";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 // SVG for the emoji favicon: 🏗️🇨🇦 using separate text elements, further reduced font
 // and Unicode escape for the Canadian flag emoji.
@@ -55,7 +55,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="bg-nav-frame text-foreground">
+      <body className="bg-[var(--bc-frame)] text-foreground">
         {/* Keeps the top gutter the page colour so the sticky nav slides
             under linen rather than the grey frame. Mirrors the main site. */}
         <div className="fixed top-0 left-0 right-0 h-[10px] bg-background z-40" />
@@ -63,45 +63,18 @@ export default function RootLayout({
         {/* The gutter lives here, not on <body> — the overlay-scrollbar rules
             below force `body { padding-right: 0 }`, which ate the right edge. */}
         <div className="p-[10px]">
-          <div className="bg-background border-x-2 border-b-2 border-nav-border min-h-[calc(100vh_-_20px)]">
+          <div className="bg-background border-x-2 border-b-2 border-[var(--bc-charcoal)] min-h-[calc(100vh_-_20px)]">
             <Navbar />
 
             <main className="bg-background">
               {/* Inset content panel with a hairline rule — the main site
                   applies this to each page's own root wrapper. */}
-              <div className="mx-[10px] my-[10px] border border-nav-border-light bg-background overflow-x-clip">
+              <div className="mx-[10px] my-[10px] border border-[var(--bc-border-light)] bg-background overflow-x-clip">
                 {children}
               </div>
             </main>
 
-            <footer className="border-t border-border bg-background px-4 py-6">
-              <div className="text-center">
-                <p className="text-foreground text-sm font-mono uppercase tracking-wider">
-                  Built by{" "}
-                  <Link
-                    href="https://www.linkedin.com/in/ryan-manucha-a914a7a1/"
-                    className="text-bloomberg-blue hover:underline"
-                  >
-                    Ryan
-                  </Link>{" "}
-                  and{" "}
-                  <Link
-                    href="https://github.com/0xsnafu"
-                    className="text-bloomberg-blue hover:underline"
-                  >
-                    Marty
-                  </Link>{" "}
-                  🏗️🇨🇦 A{" "}
-                  <Link
-                    href="/"
-                    className="text-bloomberg-blue hover:underline"
-                  >
-                    Build Canada
-                  </Link>{" "}
-                  Project
-                </p>
-              </div>
-            </footer>
+            <Footer />
           </div>
         </div>
         <Toaster />

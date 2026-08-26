@@ -90,15 +90,6 @@ const config: Config = {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
-        // Site-nav palette, mirrored from the main buildcanada.com app so the
-        // navigation reads identically across both sites.
-        "nav-bg": "#f6ece3",
-        "nav-dark": "#272727",
-        "nav-accent": "#932f2f",
-        "nav-border": "#272727",
-        "nav-border-light": "#b0b0b0",
-        // The grey gutter the content card floats on.
-        "nav-frame": "#e0e0e0",
         // Bloomberg-style color scheme
         "bloomberg-dark": "#1a1a1a",
         "bloomberg-blue": "#1e90ff",
