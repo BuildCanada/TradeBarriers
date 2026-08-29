@@ -150,8 +150,10 @@ export default function ActivityChart({
     if (timeRange === "12months") {
       // Show last 12 months
       for (let i = 11; i >= 0; i--) {
-        const date = new Date();
-        date.setMonth(now.getMonth() - i);
+        // Start at the first day of the month. Using today's day can overflow
+        // shorter months (e.g. Feb 31 becomes Mar), which creates duplicate
+        // month keys and labels in the chart.
+        const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
 
         const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
         const monthData = monthlyMap.get(monthKey) || {
@@ -355,11 +357,12 @@ export default function ActivityChart({
             return `${monthData.monthName} ${monthData.year}`;
           },
           label: function (context: {
-            parsed: { y: number };
+            parsed: { y: number | null };
             dataset: { label?: string };
           }) {
-            if (context.parsed.y === 0) return "";
-            return `${context.dataset.label || "Unknown"}: ${context.parsed.y} change${context.parsed.y === 1 ? "" : "s"}`;
+            const value = context.parsed.y ?? 0;
+            if (value === 0) return "";
+            return `${context.dataset.label || "Unknown"}: ${value} change${value === 1 ? "" : "s"}`;
           },
           footer: function (context: { dataIndex: number }[]) {
             const dataIndex = context[0].dataIndex;
